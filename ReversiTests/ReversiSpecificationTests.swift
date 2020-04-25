@@ -13,8 +13,7 @@ import XCTest
 class ReversiSpecificationTests: XCTestCase {
     func testWhenPlaceDiskOnValidPlaceThenCanPlaceDisk() {
         typealias TestCase = (line: UInt, x: Int, y: Int, disk: Disk, expectedResult: Bool)
-        let spec = ReversiSpecification()
-        let board = Board(specification: spec)
+        let board = Board()
 
         let edge = Board.Position(x: 0, y: 0)
         do {
@@ -24,7 +23,9 @@ class ReversiSpecificationTests: XCTestCase {
             board.setDisk(.dark, atX: edge.x + 1, y: edge.y + 1)
         }
 
-        let center = Board.Position(x: spec.width / 2, y: spec.height / 2)
+        let center = Board.Position(
+            x: ReversiSpecification.width / 2,
+            y: ReversiSpecification.height / 2)
         do {
             board.setDisk(.dark, atX: center.x, y: center.y)
             board.setDisk(.light, atX: center.x + 1, y: center.y)
@@ -69,16 +70,9 @@ class ReversiSpecificationTests: XCTestCase {
         for testCase in testCases {
             let (line, x, y, disk, expected) = testCase
             XCTAssertEqual(
-                spec.canPlaceDisk(disk, atX: x, y: y, on: board),
+                ReversiSpecification.canPlaceDisk(disk, atX: x, y: y, on: board),
                 expected,
                 line: line)
         }
-    }
-
-    private func makeTestTatgets() -> (ReversiSpecification, Board) {
-        let spec = ReversiSpecification()
-        let board = Board(specification: spec)
-        board.reset()
-        return (spec, board)
     }
 }
