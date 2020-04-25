@@ -34,12 +34,6 @@ enum PlayerType: Int {
     case computer = 1
 }
 
-protocol ViewControllerDelegate: AnyObject {
-    func changedPlayerType(_ type: PlayerType)
-    func wentNextTurn()
-    func resettedGame()
-}
-
 final class GameManager {
     weak var delegate: GameManagerDelegate?
     weak var computerDelegate: ComputerPlayerDelegate?
@@ -169,10 +163,9 @@ extension GameManager {
             return lightPlayer
         }
     }
-
 }
 
-extension GameManager: ViewControllerDelegate {
+extension GameManager {
     func changedPlayerType(_ type: PlayerType) {
         guard let player = self.activePlayer else {
             return

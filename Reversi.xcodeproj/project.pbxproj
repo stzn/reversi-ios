@@ -23,6 +23,7 @@
 		D67E44D22453EAC100C0164F /* BoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44D12453EAC100C0164F /* BoardTests.swift */; };
 		D67E44D42453F89F00C0164F /* GameManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44D32453F89F00C0164F /* GameManagerTests.swift */; };
 		D67E44D624543D5200C0164F /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44D524543D5200C0164F /* GameManager.swift */; };
+		D67E44D82454E35600C0164F /* UserInputDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44D72454E35600C0164F /* UserInputDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		D67E44D12453EAC100C0164F /* BoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTests.swift; sourceTree = "<group>"; };
 		D67E44D32453F89F00C0164F /* GameManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManagerTests.swift; sourceTree = "<group>"; };
 		D67E44D524543D5200C0164F /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
+		D67E44D72454E35600C0164F /* UserInputDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInputDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 				D642BDDB23AA137C00396732 /* BoardView.swift */,
 				D642BDD523AA0B3900396732 /* CellView.swift */,
 				D636B39E23D35043007F370F /* DiskView.swift */,
+				D67E44D72454E35600C0164F /* UserInputDelegate.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 				D642BDB823A9FE4500396732 /* ViewController.swift in Sources */,
 				D642BDDC23AA137C00396732 /* BoardView.swift in Sources */,
 				D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */,
+				D67E44D82454E35600C0164F /* UserInputDelegate.swift in Sources */,
 				D67E44CE2453E8A500C0164F /* Board.swift in Sources */,
 				D67E44D02453E8C500C0164F /* ReversiSpecification.swift in Sources */,
 				D642BDB623A9FE4500396732 /* SceneDelegate.swift in Sources */,
