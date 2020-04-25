@@ -21,6 +21,8 @@
 		D67E44CE2453E8A500C0164F /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44CD2453E8A500C0164F /* Board.swift */; };
 		D67E44D02453E8C500C0164F /* ReversiSpecification.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44CF2453E8C500C0164F /* ReversiSpecification.swift */; };
 		D67E44D22453EAC100C0164F /* BoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44D12453EAC100C0164F /* BoardTests.swift */; };
+		D67E44D42453F89F00C0164F /* GameManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44D32453F89F00C0164F /* GameManagerTests.swift */; };
+		D67E44D624543D5200C0164F /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44D524543D5200C0164F /* GameManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,8 @@
 		D67E44CD2453E8A500C0164F /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		D67E44CF2453E8C500C0164F /* ReversiSpecification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReversiSpecification.swift; sourceTree = "<group>"; };
 		D67E44D12453EAC100C0164F /* BoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTests.swift; sourceTree = "<group>"; };
+		D67E44D32453F89F00C0164F /* GameManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManagerTests.swift; sourceTree = "<group>"; };
+		D67E44D524543D5200C0164F /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +136,7 @@
 				D642BDCC23A9FE4700396732 /* Info.plist */,
 				D61E95582453A72100F77B2D /* ReversiSpecificationTests.swift */,
 				D67E44D12453EAC100C0164F /* BoardTests.swift */,
+				D67E44D32453F89F00C0164F /* GameManagerTests.swift */,
 			);
 			path = ReversiTests;
 			sourceTree = "<group>";
@@ -140,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				D67E44CF2453E8C500C0164F /* ReversiSpecification.swift */,
+				D67E44D524543D5200C0164F /* GameManager.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -254,6 +260,7 @@
 				D67E44CE2453E8A500C0164F /* Board.swift in Sources */,
 				D67E44D02453E8C500C0164F /* ReversiSpecification.swift in Sources */,
 				D642BDB623A9FE4500396732 /* SceneDelegate.swift in Sources */,
+				D67E44D624543D5200C0164F /* GameManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +269,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D67E44D22453EAC100C0164F /* BoardTests.swift in Sources */,
+				D67E44D42453F89F00C0164F /* GameManagerTests.swift in Sources */,
 				D61E95592453A72100F77B2D /* ReversiSpecificationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
