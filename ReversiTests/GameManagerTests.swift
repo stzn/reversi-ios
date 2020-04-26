@@ -9,40 +9,6 @@
 import XCTest
 @testable import Reversi
 
-class MockComputerPlayerDelegate: ComputerPlayerDelegate {
-    var startedTurnCalled = false
-    func startedTurn(of player: GamePlayer) {
-        startedTurnCalled = true
-    }
-
-    var endedTurnCalled = false
-    func endedTurn(of player: GamePlayer) {
-        endedTurnCalled = true
-    }
-}
-
-class MockGameManagerDelegate: GameManagerDelegate {
-    var setDiskCalled = false
-    func setDisk(_ disk: Disk, atX: Int, y: Int) {
-        setDiskCalled = false
-    }
-
-    var changedTurnCalled = false
-    func changedTurn(to player: GamePlayer) {
-        changedTurnCalled = true
-    }
-
-    var passedTurnCalled = false
-    func passedTurn(of player: GamePlayer) {
-        passedTurnCalled = true
-    }
-
-    var finishedGameCalled = false
-    func finishedGame(wonBy player: GamePlayer?) {
-        finishedGameCalled = true
-    }
-}
-
 class GameManagerTests: XCTestCase {
     func testWhenCallNewGameThenEverythingIsInitial() {
         let gameManager = startNewGame()
@@ -161,6 +127,49 @@ class GameManagerTests: XCTestCase {
         let gameManager = GameManager(store: store)
         gameManager.newGame()
         return gameManager
+    }
+}
+
+// MARK: ComputerPlayerDelegate for test
+
+final class MockComputerPlayerDelegate: ComputerPlayerDelegate {
+    var startedTurnCalled = false
+    func startedTurn(of player: GamePlayer) {
+        startedTurnCalled = true
+    }
+
+    var endedTurnCalled = false
+    func endedTurn(of player: GamePlayer) {
+        endedTurnCalled = true
+    }
+}
+
+// MARK: GameManagerDelegate for test
+
+final class MockGameManagerDelegate: GameManagerDelegate {
+    var startedGameCalled = false
+    func startedGame(_ state: GameState) {
+        startedGameCalled = true
+    }
+
+    var setDiskCalled = false
+    func setDisk(_ disk: Disk, at: Board.Position) {
+        setDiskCalled = true
+    }
+
+    var changedTurnCalled = false
+    func movedTurn(to player: GamePlayer) {
+        changedTurnCalled = true
+    }
+
+    var passedTurnCalled = false
+    func passedTurn(of player: GamePlayer) {
+        passedTurnCalled = true
+    }
+
+    var finishedGameCalled = false
+    func finishedGame(wonBy player: GamePlayer?) {
+        finishedGameCalled = true
     }
 }
 

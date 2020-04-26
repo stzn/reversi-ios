@@ -9,8 +9,9 @@
 import Foundation
 
 protocol GameManagerDelegate: AnyObject {
-    func setDisk(_ disk: Disk, atX: Int, y: Int)
-    func changedTurn(to player: GamePlayer)
+    func startedGame(_ state: GameState)
+    func setDisk(_ disk: Disk, at position: Board.Position)
+    func movedTurn(to player: GamePlayer)
     func passedTurn(of player: GamePlayer)
     func finishedGame(wonBy player: GamePlayer?)
 }
@@ -111,7 +112,8 @@ final class GameManager {
             ReversiSpecification
                 .validMoves(for: player.side, on: self.board)
                 .randomElement()!
-        self.delegate?.setDisk(player.side, atX: x, y: y)
+        self.delegate?.setDisk(player.side,
+                               at: Board.Position(x: x, y: y))
     }
 }
 
@@ -146,7 +148,7 @@ extension GameManager {
 
     private func changeTurn(to player: GamePlayer) {
         self.turnPlayer()
-        self.delegate?.changedTurn(to: player)
+        self.delegate?.movedTurn(to: player)
         waitForPlayer()
     }
 

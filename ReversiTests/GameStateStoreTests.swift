@@ -53,11 +53,6 @@ class GameStateStoreTests: XCTestCase {
         return FileGameStateStore(path: path)
     }
 
-    private var defaultPlayers: [GamePlayer] = [
-        GamePlayer(type: .manual, side: .dark),
-        GamePlayer(type: .manual, side: .light),
-    ]
-
     private func save(data: GameState, to store: FileGameStateStore) -> Result<Void, Error> {
         var result: Result<Void, Error> =
             .failure(FileGameStateStore.FileIOError.write(path: path, cause: nil))
