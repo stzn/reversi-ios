@@ -9,7 +9,6 @@
 import Foundation
 
 final class Board {
-    static let shared = Board()
     struct Position: Hashable {
         let x: Int
         let y: Int
