@@ -32,7 +32,7 @@ class FileGameStateStoreTests: XCTestCase {
         }
     }
 
-    func testWhenLoadGameWithStoredDataThenNoDataGot() {
+    func testWhenLoadGameWithStoredDataThenDataGot() {
         let store = makeTestFileGameStore()
         let saveData = GameState(
             activePlayerDisk: .dark,
