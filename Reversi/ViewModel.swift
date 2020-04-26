@@ -9,17 +9,22 @@
 import Foundation
 
 protocol ViewModelDelegate: AnyObject {
-    func setInitialDisks(on board: Board)
+    func setInitialState(_ state: GameState)
     func setPlayerType(_ type: Int, of side: Disk)
-    func setDisk(_ disk: Disk, atX x: Int, y: Int)
+    func setDisk(_ disk: Disk, atX x: Int, y: Int, on board: Board)
     func movedTurn(to player: GamePlayer)
     func passedTurn(of player: GamePlayer)
     func finishedGame(wonBy player: GamePlayer?)
+    func startedComputerTurn(of player: GamePlayer)
+    func endedComputerTurn(of player: GamePlayer)
 }
 
 final class ViewModel {
     weak var userActionDelegate: UserActionDelegate?
     weak var delegate: ViewModelDelegate?
+
+    /// 非同期処理のキャンセルを管理します。
+    private var playerCancellers: [GamePlayer: Canceller] = [:]
 
     func requestGameStart() {
         userActionDelegate?.startGame()
@@ -37,7 +42,7 @@ final class ViewModel {
     }
 
     func requestNextTurn() {
-        userActionDelegate?.goToNextTurn()
+        userActionDelegate?.requestNextTurn()
     }
 
     func requestGameReset() {
@@ -45,27 +50,72 @@ final class ViewModel {
     }
 }
 
-extension ViewModel: GameManagerDelegate {
-    func startedGame(_ state: GameState) {
-        delegate?.setInitialDisks(on: state.board)
-        state.players.forEach { player in
-            delegate?.setPlayerType(player.type.rawValue, of: player.side)
+// MARK: User Action
+
+extension ViewModel {
+    /// プレイヤーの行動を待ちます。
+    func waitForPlayer(_ player: GamePlayer, on board: Board) {
+        switch player.type {
+        case .manual:
+            break
+        case .computer:
+            let canceller = playTurnOfComputer(player) { [weak self] in
+                guard let self = self else { return }
+                self.setDiskAtRandom(by: player, on: board)
+            }
+            playerCancellers[player] = canceller
         }
     }
 
-    func setDisk(_ disk: Disk, at position: Board.Position) {
-        delegate?.setDisk(disk, atX: position.x, y: position.y)
+    /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
+    func playTurnOfComputer(_ player: GamePlayer, action: @escaping () -> Void) -> Canceller {
+        self.delegate?.startedComputerTurn(of: player)
+        let cleanUp: () -> Void = { [weak self, player] in
+            guard let self = self else { return }
+            self.delegate?.endedComputerTurn(of: player)
+            self.playerCancellers[player] = nil
+        }
+        let canceller = Canceller(cleanUp)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            if canceller.isCancelled { return }
+            cleanUp()
+            action()
+        }
+        return canceller
     }
 
-    func movedTurn(to player: GamePlayer) {
-        delegate?.movedTurn(to: player)
+    private func setDiskAtRandom(by player: GamePlayer, on board: Board) {
+        let (x, y) =
+            ReversiSpecification
+                .validMoves(for: player.side, on: board)
+                .randomElement()!
+        self.delegate?.setDisk(player.side, atX: x, y: y, on: board)
     }
 
-    func passedTurn(of player: GamePlayer) {
-        delegate?.passedTurn(of: player)
+    func resettedGame() {
+        playerCancellers.forEach { (player, canceller) in
+            canceller.cancel()
+            playerCancellers[player] = nil
+        }
+    }
+}
+
+extension ViewModel: GameManagerDelegate {
+    func update(_ action: NextAction) {
+        switch action {
+        case let .set(disk, position, board):
+            delegate?.setDisk(disk, atX: position.x, y: position.y, on: board)
+        case .next(let player, let board):
+            delegate?.movedTurn(to: player)
+            waitForPlayer(player, on: board)
+        case .pass(let player):
+            delegate?.passedTurn(of: player)
+        case .finish(let winner):
+            delegate?.finishedGame(wonBy: winner)
+        }
     }
 
-    func finishedGame(wonBy player: GamePlayer?) {
-        delegate?.finishedGame(wonBy: player)
+    func startedGame(_ state: GameState) {
+        delegate?.setInitialState(state)
     }
 }

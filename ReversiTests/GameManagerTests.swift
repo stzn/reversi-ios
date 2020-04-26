@@ -12,52 +12,39 @@ import XCTest
 class GameManagerTests: XCTestCase {
     func testWhenCallNewGameThenEverythingIsInitial() {
         let gameManager = startNewGame()
-        XCTAssertEqual(gameManager.activePlayer?.side, .dark)
         XCTAssertEqual(gameManager.board.disks, Board.initialDisks)
     }
 
-    func testWhenCallWaitForPlayerThenManualPlayerDoesNothing() {
-        let gameManager = startNewGame()
-        let computerDelegate = MockComputerPlayerDelegate()
-        gameManager.computerDelegate = computerDelegate
-        gameManager.changedPlayerType(.manual)
-
-        gameManager.waitForPlayer()
-
-        XCTAssertEqual(computerDelegate.startedTurnCalled, false)
-        XCTAssertEqual(computerDelegate.endedTurnCalled, false)
-    }
-
-    func testWhenCallWaitForPlayerThenComputerPlayerStartsPlayTurn() {
-        let gameManager = startNewGame()
-        let computerDelegate = MockComputerPlayerDelegate()
-        gameManager.computerDelegate = computerDelegate
-        gameManager.changedPlayerType(.computer)
-
-        gameManager.waitForPlayer()
-
-        XCTAssertEqual(computerDelegate.startedTurnCalled, true)
-    }
-
-    func testWhenCallNextTurnAndBothPlayersHavePlaceThenChangeTurn() {
+    func testWhenCallNextTurnAndBothPlayersHavePlaceThenMoveTurn() {
         let gameManager = startNewGame()
         let delegate = MockGameManagerDelegate()
         gameManager.delegate = delegate
 
-        gameManager.nextTurn()
+        let player = gameManager.activePlayer
+        gameManager.nextTurn(from: player)
 
-        XCTAssertEqual(delegate.changedTurnCalled, true)
+        let action = delegate.receivedNextActions.first!
+        if case .next(let receivedPlayer, let receivedBoard) = action {
+            XCTAssertEqual(receivedPlayer, gameManager.inactivePlayer)
+            XCTAssertEqual(receivedBoard.disks, gameManager.board.disks)
+        } else {
+            XCTFail("invalid case")
+        }
     }
 
-    func testWhenCallNextTurnAndBothPlayersHaveNoPlaceThenGameFinishes() {
+    func testWhenCallNextTurnAndBothPlayersHaveNoPlaceThenFinishGame() {
         let gameManager = startNewGame()
         gameManager.fullfill(with: .dark)
         let delegate = MockGameManagerDelegate()
         gameManager.delegate = delegate
 
-        gameManager.nextTurn()
+        gameManager.nextTurn(from: gameManager.activePlayer)
 
-        XCTAssertEqual(delegate.finishedGameCalled, true)
+        let action = delegate.receivedNextActions.first!
+        if case .finish = action {
+        } else {
+            XCTFail("invalid case")
+        }
     }
 
     func testWhenCallNextTurnAndNextPlayerHasPlaceThenPassNextTurn() {
@@ -80,9 +67,14 @@ class GameManagerTests: XCTestCase {
         let delegate = MockGameManagerDelegate()
         gameManager.delegate = delegate
 
-        gameManager.nextTurn()
+        gameManager.nextTurn(from: gameManager.activePlayer)
 
-        XCTAssertEqual(delegate.passedTurnCalled, true)
+        let action = delegate.receivedNextActions.first!
+        if case .pass(let receivedPlayer) = action {
+            XCTAssertEqual(receivedPlayer, gameManager.inactivePlayer)
+        } else {
+            XCTFail("invalid case")
+        }
     }
 
     // TODO: 時間がかかるのでCI上のみで実行する
@@ -125,28 +117,19 @@ class GameManagerTests: XCTestCase {
     private func startNewGame() -> GameManager {
         let store = MemoryGameStateStore()
         let gameManager = GameManager(store: store)
-        gameManager.newGame()
+        _ = gameManager.newGame()
         return gameManager
-    }
-}
-
-// MARK: ComputerPlayerDelegate for test
-
-final class MockComputerPlayerDelegate: ComputerPlayerDelegate {
-    var startedTurnCalled = false
-    func startedTurn(of player: GamePlayer) {
-        startedTurnCalled = true
-    }
-
-    var endedTurnCalled = false
-    func endedTurn(of player: GamePlayer) {
-        endedTurnCalled = true
     }
 }
 
 // MARK: GameManagerDelegate for test
 
 final class MockGameManagerDelegate: GameManagerDelegate {
+    var receivedNextActions: [NextAction] = []
+    func update(_ action: NextAction) {
+        receivedNextActions.append(action)
+    }
+
     var startedGameCalled = false
     func startedGame(_ state: GameState) {
         startedGameCalled = true
@@ -155,21 +138,6 @@ final class MockGameManagerDelegate: GameManagerDelegate {
     var setDiskCalled = false
     func setDisk(_ disk: Disk, at: Board.Position) {
         setDiskCalled = true
-    }
-
-    var changedTurnCalled = false
-    func movedTurn(to player: GamePlayer) {
-        changedTurnCalled = true
-    }
-
-    var passedTurnCalled = false
-    func passedTurn(of player: GamePlayer) {
-        passedTurnCalled = true
-    }
-
-    var finishedGameCalled = false
-    func finishedGame(wonBy player: GamePlayer?) {
-        finishedGameCalled = true
     }
 }
 
@@ -198,6 +166,18 @@ class MemoryGameStateStore: GameStateStore {
 // MARK: File-private extensions
 
 extension GameManager {
+    var activePlayer: GamePlayer {
+        return state.players
+            .filter { $0.side == state.activePlayerDisk }
+            .first!
+    }
+
+    var inactivePlayer: GamePlayer {
+        return state.players
+            .filter { $0.side != state.activePlayerDisk }
+            .first!
+    }
+
     func fullfill(with disk: Disk) {
         for y in ReversiSpecification.yRange {
             for x in ReversiSpecification.xRange {

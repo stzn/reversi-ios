@@ -41,7 +41,7 @@ class ViewModelTests: XCTestCase {
 
         viewModel.startedGame(expected)
 
-        XCTAssertEqual(delegate.setInitialDisksReceivedData?.disks,
+        XCTAssertEqual(delegate.setInitialStateReceivedData?.board.disks,
                        expected.board.disks)
         delegate.setPlayerTypeReceivedData.enumerated().forEach { (index, received) in
             let (type, side) = received
@@ -63,19 +63,29 @@ class ViewModelTests: XCTestCase {
 // MARK: ViewModelDelegate for test
 
 final class MockViewModelDelegate: ViewModelDelegate {
-    var setInitialDisksReceivedData: Board?
-    func setInitialDisks(on board: Board) {
-        setInitialDisksReceivedData = board
+    var setInitialStateReceivedData: GameState?
+    func setInitialState(_ state: GameState) {
+        setInitialStateReceivedData = state
+    }
+
+    var setDiskReceivedData: [(disk: Disk, x: Int, y: Int, board: Board)] = []
+    func setDisk(_ disk: Disk, atX x: Int, y: Int, on board: Board) {
+        setDiskReceivedData.append((disk, x, y, board))
+    }
+
+    var startedComputerReceivedData: [GamePlayer] = []
+    func startedComputerTurn(of player: GamePlayer) {
+        startedComputerReceivedData.append(player)
+    }
+
+    var endedComputerReceivedData: [GamePlayer] = []
+    func endedComputerTurn(of player: GamePlayer) {
+        endedComputerReceivedData.append(player)
     }
 
     var setPlayerTypeReceivedData: [(type: Int, side: Disk)] = []
     func setPlayerType(_ type: Int, of side: Disk) {
         setPlayerTypeReceivedData.append((type, side))
-    }
-
-    var setDiskReceivedData: [(disk: Disk, x: Int, y: Int)] = []
-    func setDisk(_ disk: Disk, atX x: Int, y: Int) {
-        setDiskReceivedData.append((disk, x, y))
     }
 
     var movedTurnReceivedData: [GamePlayer] = []
@@ -113,7 +123,7 @@ final class MockUserActionDelegate: UserActionDelegate {
     }
 
     var goToNextTurnCalled = false
-    func goToNextTurn() {
+    func requestNextTurn() {
         goToNextTurnCalled = true
     }
 
