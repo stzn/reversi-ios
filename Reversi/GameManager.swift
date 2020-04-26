@@ -98,7 +98,8 @@ final class GameManager {
     }
 }
 
-/// MARK: next action
+/// MARK: next turn
+
 extension GameManager {
     /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
     /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
