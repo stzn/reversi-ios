@@ -47,7 +47,7 @@ final class GameManager {
     func newGame() -> GameState {
         let board = Board()
         board.reset()
-        return GameState(activePlayerDisk: .dark, players: [darkPlayer, lightPlayer], board: board)
+        return GameState(activePlayer: darkPlayer, players: [darkPlayer, lightPlayer], board: board)
     }
 }
 
@@ -79,13 +79,13 @@ extension GameManager {
     }
 
     private func moveTurn(to player: GamePlayer) {
-        let newPlayer = self.turnPlayer(from: player.side)
-        self.delegate?.update(.next(newPlayer, board))
+        self.turnPlayer(from: player.side)
+        self.delegate?.update(.next(self.state.activePlayer, board))
     }
 
     private func passTurn(to player: GamePlayer) {
-        let newPlayer = self.turnPlayer(from: player.side)
-        self.delegate?.update(.pass(newPlayer))
+        self.turnPlayer(from: player.side)
+        self.delegate?.update(.pass(self.state.activePlayer))
     }
 
     private func finishGame() {
@@ -93,13 +93,8 @@ extension GameManager {
         self.delegate?.update(.finish(winner))
     }
 
-    private func turnPlayer(from side: Disk) -> GamePlayer {
-        switch side {
-        case .dark:
-            return lightPlayer
-        case .light:
-            return darkPlayer
-        }
+    private func turnPlayer(from side: Disk) {
+        self.state.activePlayer = self.state.players[side.flipped.index]
     }
 
     private func judgeWinner() -> GamePlayer? {

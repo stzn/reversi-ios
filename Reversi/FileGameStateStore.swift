@@ -143,7 +143,7 @@ final class FileGameStateStore: GameStateStore {
             }
         }
         let storedData = GameState(
-            activePlayerDisk: turn,
+            activePlayer: players[turn.index],
             players: players,
             board: board)
         completion(.success(storedData))

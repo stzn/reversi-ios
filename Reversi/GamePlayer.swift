@@ -15,7 +15,7 @@ struct GamePlayer: Equatable, Hashable {
     var type: PlayerType
     let side: Disk
 
-    func setType(_ type: PlayerType) -> GamePlayer {
-        return .init(type: type, side: side)
+    mutating func setType(_ type: PlayerType) {
+        self.type = type
     }
 }

@@ -20,12 +20,12 @@ class GameManagerTests: XCTestCase {
         let delegate = MockGameManagerDelegate()
         gameManager.delegate = delegate
 
-        let player = gameManager.activePlayer
-        gameManager.nextTurn(from: player)
+        let activePlayer = gameManager.state.activePlayer
+        gameManager.nextTurn(from: activePlayer)
 
         let action = delegate.receivedNextActions.first!
         if case .next(let receivedPlayer, let receivedBoard) = action {
-            XCTAssertEqual(receivedPlayer, gameManager.inactivePlayer)
+            XCTAssertEqual(receivedPlayer, activePlayer.flipped)
             XCTAssertEqual(receivedBoard.disks, gameManager.board.disks)
         } else {
             XCTFail("invalid case")
@@ -38,7 +38,7 @@ class GameManagerTests: XCTestCase {
         let delegate = MockGameManagerDelegate()
         gameManager.delegate = delegate
 
-        gameManager.nextTurn(from: gameManager.activePlayer)
+        gameManager.nextTurn(from:  gameManager.state.activePlayer)
 
         let action = delegate.receivedNextActions.first!
         if case .finish = action {
@@ -67,11 +67,12 @@ class GameManagerTests: XCTestCase {
         let delegate = MockGameManagerDelegate()
         gameManager.delegate = delegate
 
-        gameManager.nextTurn(from: gameManager.activePlayer)
+        let activePlayer = gameManager.state.activePlayer
+        gameManager.nextTurn(from: activePlayer)
 
         let action = delegate.receivedNextActions.first!
         if case .pass(let receivedPlayer) = action {
-            XCTAssertEqual(receivedPlayer, gameManager.inactivePlayer)
+            XCTAssertEqual(receivedPlayer, activePlayer.flipped)
         } else {
             XCTFail("invalid case")
         }
@@ -150,7 +151,8 @@ class MemoryGameStateStore: GameStateStore {
 
     var state: GameState?
     func saveGame(turn: Disk, players: [GamePlayer], board: Board, completion: @escaping (Result<Void, Error>) -> Void) {
-        state = GameState(activePlayerDisk: turn, players: players, board: board)
+        state = GameState(activePlayer: players[turn.index],
+                          players: players, board: board)
         completion(.success(()))
     }
 
@@ -165,19 +167,13 @@ class MemoryGameStateStore: GameStateStore {
 
 // MARK: File-private extensions
 
+extension GamePlayer {
+    var flipped: GamePlayer {
+        return .init(type: type, side: side.flipped)
+    }
+}
+
 extension GameManager {
-    var activePlayer: GamePlayer {
-        return state.players
-            .filter { $0.side == state.activePlayerDisk }
-            .first!
-    }
-
-    var inactivePlayer: GamePlayer {
-        return state.players
-            .filter { $0.side != state.activePlayerDisk }
-            .first!
-    }
-
     func fullfill(with disk: Disk) {
         for y in ReversiSpecification.yRange {
             for x in ReversiSpecification.xRange {

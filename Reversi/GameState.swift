@@ -14,7 +14,7 @@ enum NextAction {
 }
 
 struct GameState {
-    let activePlayerDisk: Disk
-    let players: [GamePlayer]
-    let board: Board
+    var activePlayer: GamePlayer
+    var players: [GamePlayer]
+    var board: Board
 }
