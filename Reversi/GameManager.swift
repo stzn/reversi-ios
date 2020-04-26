@@ -20,20 +20,6 @@ protocol ComputerPlayerDelegate: AnyObject {
     func endedTurn(of player: GamePlayer)
 }
 
-struct GamePlayer: Equatable, Hashable {
-    var type: PlayerType
-    let turn: Disk
-
-    func setType(_ type: PlayerType) -> GamePlayer {
-        return .init(type: type, turn: turn)
-    }
-}
-
-enum PlayerType: Int {
-    case manual = 0
-    case computer = 1
-}
-
 final class GameManager {
     weak var delegate: GameManagerDelegate?
     weak var computerDelegate: ComputerPlayerDelegate?

@@ -27,6 +27,7 @@
 		D67E44DB2454F9AC00C0164F /* GameStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44DA2454F9AC00C0164F /* GameStateStore.swift */; };
 		D67E44DD2454FA0A00C0164F /* GameStateStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44DC2454FA0A00C0164F /* GameStateStoreTests.swift */; };
 		D67E44DF2455187D00C0164F /* FileGameStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44DE2455187D00C0164F /* FileGameStateStore.swift */; };
+		D67E44E12455196600C0164F /* GamePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44E02455196600C0164F /* GamePlayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,7 @@
 		D67E44DA2454F9AC00C0164F /* GameStateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStateStore.swift; sourceTree = "<group>"; };
 		D67E44DC2454FA0A00C0164F /* GameStateStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStateStoreTests.swift; sourceTree = "<group>"; };
 		D67E44DE2455187D00C0164F /* FileGameStateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileGameStateStore.swift; sourceTree = "<group>"; };
+		D67E44E02455196600C0164F /* GamePlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamePlayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 			children = (
 				D642BDD723AA0B5700396732 /* Disk.swift */,
 				D67E44CD2453E8A500C0164F /* Board.swift */,
+				D67E44E02455196600C0164F /* GamePlayer.swift */,
 			);
 			name = DataTypes;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D67E44E12455196600C0164F /* GamePlayer.swift in Sources */,
 				D636B39F23D35043007F370F /* DiskView.swift in Sources */,
 				D67E44DF2455187D00C0164F /* FileGameStateStore.swift in Sources */,
 				D642BDD623AA0B3900396732 /* CellView.swift in Sources */,
