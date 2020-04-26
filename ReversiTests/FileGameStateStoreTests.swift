@@ -34,10 +34,7 @@ class FileGameStateStoreTests: XCTestCase {
 
     func testWhenLoadGameWithStoredDataThenDataGot() {
         let store = makeTestFileGameStore()
-        let saveData = GameState(
-            activePlayerDisk: .dark,
-            players: defaultPlayers,
-            board: Board())
+        let saveData = anyGameState
         let saveResult = save(data: saveData, to: store)
         if case .failure = saveResult {
             XCTFail("expected success, but got \(saveResult)")
@@ -46,6 +43,18 @@ class FileGameStateStoreTests: XCTestCase {
         let loadResult = load(from: store)
         if case .success(let storedData) = loadResult {
             XCTAssertEqual(storedData.isEqual(saveData), true)
+        }
+    }
+
+    func testWhenSaveGameWithErrorThenProvideErrorResult() {
+        let store = FileGameStateStore(path: "invalid path")
+        let result = save(data: anyGameState, to: store)
+
+        switch result {
+        case .success:
+            XCTFail("expected failure, but got \(result)")
+        case .failure(let error):
+            XCTAssertTrue(error is FileGameStateStore.FileIOError)
         }
     }
 

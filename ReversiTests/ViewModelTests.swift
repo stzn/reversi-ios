@@ -14,7 +14,9 @@ class ViewModelTests: XCTestCase {
     func testWhenCallSelectedCellThenSendValiadData() {
         let expected = Board.Position(x: 0, y: 0)
         let (viewModel, _, userActionDelegate) = makeTestTarget()
+
         viewModel.selectedCell(atX: expected.x, y: expected.y)
+
         XCTAssertEqual(userActionDelegate.placeDiskReceivedData.first!,
                        expected)
     }
@@ -22,6 +24,7 @@ class ViewModelTests: XCTestCase {
     func testWhenCallChangedPlayerTypeThenSendValidData() {
         let expected = (type: PlayerType.manual, side: Disk.dark)
         let (viewModel, _, userActionDelegate) = makeTestTarget()
+
         viewModel.changedPlayerType(expected.type.rawValue, of: expected.side)
 
         guard let receivedData = userActionDelegate.changePlayerTypeReceivedData.first else {
@@ -33,10 +36,9 @@ class ViewModelTests: XCTestCase {
     }
 
     func testWhenCallstartedGameThenSendValidData() {
-        let expected = GameState(activePlayerDisk: .dark,
-                                 players: defaultPlayers,
-                                 board: Board())
+        let expected = anyGameState
         let (viewModel, delegate, _) = makeTestTarget()
+
         viewModel.startedGame(expected)
 
         XCTAssertEqual(delegate.setInitialDisksReceivedData?.disks,
