@@ -74,7 +74,7 @@ final class FileGameStateStore: GameStateStore {
     }
 
     /// ゲームの状態をファイルから読み込み、復元します。
-    func loadGame(completion: @escaping (Result<StoredData, Error>) -> Void) {
+    func loadGame(completion: @escaping (Result<GameState, Error>) -> Void) {
         var input: String
         do {
             input = try String(contentsOfFile: path, encoding: .utf8)
@@ -142,7 +142,7 @@ final class FileGameStateStore: GameStateStore {
                 return
             }
         }
-        let storedData = StoredData(
+        let storedData = GameState(
             activePlayerDisk: turn,
             players: players,
             board: board)

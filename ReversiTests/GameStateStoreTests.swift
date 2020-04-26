@@ -34,7 +34,7 @@ class GameStateStoreTests: XCTestCase {
 
     func testWhenLoadGameWithStoredDataThenNoDataGot() {
         let store = makeTestFileGameStore()
-        let saveData = StoredData(
+        let saveData = GameState(
             activePlayerDisk: .dark,
             players: defaultPlayers,
             board: Board())
@@ -58,7 +58,7 @@ class GameStateStoreTests: XCTestCase {
         GamePlayer(type: .manual, turn: .light),
     ]
 
-    private func save(data: StoredData, to store: FileGameStateStore) -> Result<Void, Error> {
+    private func save(data: GameState, to store: FileGameStateStore) -> Result<Void, Error> {
         var result: Result<Void, Error> =
             .failure(FileGameStateStore.FileIOError.write(path: path, cause: nil))
         let exp = expectation(description: "wait for save")
@@ -74,8 +74,8 @@ class GameStateStoreTests: XCTestCase {
         return result
     }
 
-    private func load(from store: FileGameStateStore) -> Result<StoredData, Error> {
-        var result: Result<StoredData, Error> =
+    private func load(from store: FileGameStateStore) -> Result<GameState, Error> {
+        var result: Result<GameState, Error> =
             .failure(FileGameStateStore.FileIOError.read(path: path, cause: nil))
         let exp = expectation(description: "wait for load")
         store.loadGame {
@@ -87,10 +87,8 @@ class GameStateStoreTests: XCTestCase {
     }
 }
 
-extension StoredData {
-    func isEqual(_ other: StoredData) -> Bool {
-        print(self.players)
-        print(other.players)
+extension GameState {
+    func isEqual(_ other: GameState) -> Bool {
         return self.board.disks == other.board.disks
             && self.activePlayerDisk.index == other.activePlayerDisk.index
             && self.players == other.players
