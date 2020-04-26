@@ -63,7 +63,7 @@ final class GameManager {
         case .computer:
             let canceller = playTurnOfComputer { [weak self] in
                 guard let self = self else { return }
-                self.setDisk(by: player)
+                self.setDiskAtRandom(by: player)
             }
             playerCancellers[player] = canceller
         }
@@ -106,7 +106,7 @@ final class GameManager {
         }
     }
 
-    private func setDisk(by player: GamePlayer) {
+    private func setDiskAtRandom(by player: GamePlayer) {
         let (x, y) =
             ReversiSpecification
                 .validMoves(for: player.turn, on: self.board)
