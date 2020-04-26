@@ -54,8 +54,8 @@ class GameStateStoreTests: XCTestCase {
     }
 
     private var defaultPlayers: [GamePlayer] = [
-        GamePlayer(type: .manual, turn: .dark),
-        GamePlayer(type: .manual, turn: .light),
+        GamePlayer(type: .manual, side: .dark),
+        GamePlayer(type: .manual, side: .light),
     ]
 
     private func save(data: GameState, to store: FileGameStateStore) -> Result<Void, Error> {

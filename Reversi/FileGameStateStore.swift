@@ -112,7 +112,7 @@ final class FileGameStateStore: GameStateStore {
                 completion(.failure(FileIOError.read(path: path, cause: nil)))
                 return
             }
-            players.append(GamePlayer(type: playerType, turn: side))
+            players.append(GamePlayer(type: playerType, side: side))
         }
 
         let board = Board()

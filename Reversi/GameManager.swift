@@ -24,8 +24,8 @@ final class GameManager {
     weak var delegate: GameManagerDelegate?
     weak var computerDelegate: ComputerPlayerDelegate?
 
-    private var darkPlayer = GamePlayer(type: .manual, turn: .dark)
-    private var lightPlayer = GamePlayer(type: .manual, turn: .light)
+    private var darkPlayer = GamePlayer(type: .manual, side: .dark)
+    private var lightPlayer = GamePlayer(type: .manual, side: .light)
     /// どちらの色のプレイヤーのターンかを表します。ゲーム終了時は `nil` です。
     private(set) var activePlayer: GamePlayer?
     /// 非同期処理のキャンセルを管理します。
@@ -90,7 +90,7 @@ final class GameManager {
     private func setLoadedGame(state: GameState) {
         self.board = state.board
         state.players.forEach { player in
-            switch player.turn {
+            switch player.side {
             case .dark:
                 self.darkPlayer = player
             case .light:
@@ -109,9 +109,9 @@ final class GameManager {
     private func setDiskAtRandom(by player: GamePlayer) {
         let (x, y) =
             ReversiSpecification
-                .validMoves(for: player.turn, on: self.board)
+                .validMoves(for: player.side, on: self.board)
                 .randomElement()!
-        self.delegate?.setDisk(player.turn, atX: x, y: y)
+        self.delegate?.setDisk(player.side, atX: x, y: y)
     }
 }
 
@@ -137,11 +137,11 @@ extension GameManager {
     }
 
     private func canDoNextTurn(_ player: GamePlayer) -> Bool {
-        return !ReversiSpecification.validMoves(for: player.turn, on: board).isEmpty
+        return !ReversiSpecification.validMoves(for: player.side, on: board).isEmpty
     }
 
     private func shouldPassNextTurn(_ player: GamePlayer) -> Bool {
-        return !ReversiSpecification.validMoves(for: player.turn.flipped, on: board).isEmpty
+        return !ReversiSpecification.validMoves(for: player.side.flipped, on: board).isEmpty
     }
 
     private func changeTurn(to player: GamePlayer) {

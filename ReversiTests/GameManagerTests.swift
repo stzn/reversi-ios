@@ -46,7 +46,7 @@ class MockGameManagerDelegate: GameManagerDelegate {
 class GameManagerTests: XCTestCase {
     func testWhenCallNewGameThenEverythingIsInitial() {
         let gameManager = startNewGame()
-        XCTAssertEqual(gameManager.activePlayer?.turn, .dark)
+        XCTAssertEqual(gameManager.activePlayer?.side, .dark)
         XCTAssertEqual(gameManager.board.disks, Board.initialDisks)
     }
 

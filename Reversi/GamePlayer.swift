@@ -13,9 +13,9 @@ enum PlayerType: Int {
 
 struct GamePlayer: Equatable, Hashable {
     var type: PlayerType
-    let turn: Disk
+    let side: Disk
 
     func setType(_ type: PlayerType) -> GamePlayer {
-        return .init(type: type, turn: turn)
+        return .init(type: type, side: side)
     }
 }
