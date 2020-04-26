@@ -1,5 +1,5 @@
 //
-//  GameStateStoreTests.swift
+//  FileGameStateStoreTests.swift
 //  ReversiTests
 //
 //  Created by Shinzan Takata on 2020/04/26.
