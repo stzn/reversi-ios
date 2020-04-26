@@ -7,10 +7,10 @@
 //
 
 protocol UserActionDelegate: AnyObject {
-    func startGame()
-    func placeDisk(at position: Board.Position)
+    func requestStartGame()
+    func placeDisk(at position: Board.Position, of side: Disk)
     func changePlayerType(_ type: PlayerType, of side: Disk)
     func requestNextTurn()
-    func resetGame()
+    func requestResetGame()
 }
 

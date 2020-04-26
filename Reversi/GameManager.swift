@@ -9,7 +9,6 @@
 import Foundation
 
 protocol GameManagerDelegate: AnyObject {
-    func startedGame(_ state: GameState)
     func update(_ action: NextAction)
 }
 
@@ -38,7 +37,6 @@ final class GameManager {
                 // TODO: error handling
                 state = self.newGame()
             }
-            self.delegate?.startedGame(state)
             self.state = state
         }
     }
@@ -57,8 +55,8 @@ extension GameManager {
     /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
     /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
     /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
-    func nextTurn(from player: GamePlayer) {
-        if canDoNextTurn(player) {
+    private func nextTurn(from player: GamePlayer) {
+        if self.canDoNextTurn(player) {
             self.moveTurn(to: player)
             return
         }
@@ -71,11 +69,13 @@ extension GameManager {
     }
 
     private func canDoNextTurn(_ player: GamePlayer) -> Bool {
-        return !ReversiSpecification.validMoves(for: player.side, on: board).isEmpty
+        return !ReversiSpecification
+            .validMoves(for: player.side, on: self.board).isEmpty
     }
 
     private func shouldPassNextTurn(_ player: GamePlayer) -> Bool {
-        return !ReversiSpecification.validMoves(for: player.side.flipped, on: board).isEmpty
+        return !ReversiSpecification
+            .validMoves(for: player.side.flipped, on: self.board).isEmpty
     }
 
     private func moveTurn(to player: GamePlayer) {
@@ -103,21 +103,35 @@ extension GameManager {
         }
         switch side {
         case .dark:
-            return darkPlayer
+            return self.darkPlayer
         case .light:
-            return lightPlayer
+            return self.lightPlayer
         }
     }
 }
 
-extension GameManager {
-    func changedPlayerType(_ type: PlayerType, of side: Disk) {
-        switch side {
-        case .dark:
-            darkPlayer = darkPlayer.setType(type)
-        case .light:
-            lightPlayer = lightPlayer.setType(type)
-        }
+// MARK: UserActionDelegate
+
+extension GameManager: UserActionDelegate {
+    func requestStartGame() {
+        self.delegate?.update(.start(self.state))
+    }
+
+    func placeDisk(at position: Board.Position, of side: Disk) {
+        self.state.board.setDisk(side, atX: position.x, y: position.y)
+        self.delegate?.update(.set(side, position, self.board))
+    }
+
+    func changePlayerType(_ type: PlayerType, of side: Disk) {
+        self.state.players[side.index].setType(type)
+    }
+
+    func requestNextTurn() {
+        self.nextTurn(from: self.state.activePlayer)
+    }
+
+    func requestResetGame() {
+        self.state = self.newGame()
+        self.delegate?.update(.start(self.state))
     }
 }
-

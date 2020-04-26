@@ -27,11 +27,11 @@ final class ViewModel {
     private var playerCancellers: [GamePlayer: Canceller] = [:]
 
     func requestGameStart() {
-        userActionDelegate?.startGame()
+        userActionDelegate?.requestStartGame()
     }
 
-    func selectedCell(atX x: Int, y: Int) {
-        userActionDelegate?.placeDisk(at: Board.Position(x: x, y: y))
+    func selectedCell(atX x: Int, y: Int, of side: Disk) {
+        userActionDelegate?.placeDisk(at: Board.Position(x: x, y: y), of: side)
     }
 
     func changedPlayerType(_ type: Int, of side: Disk) {
@@ -46,7 +46,7 @@ final class ViewModel {
     }
 
     func requestGameReset() {
-        userActionDelegate?.resetGame()
+        userActionDelegate?.requestResetGame()
     }
 }
 
@@ -54,7 +54,7 @@ final class ViewModel {
 
 extension ViewModel {
     /// プレイヤーの行動を待ちます。
-    func waitForPlayer(_ player: GamePlayer, on board: Board) {
+    private func waitForPlayer(_ player: GamePlayer, on board: Board) {
         switch player.type {
         case .manual:
             break
@@ -68,7 +68,7 @@ extension ViewModel {
     }
 
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
-    func playTurnOfComputer(_ player: GamePlayer, action: @escaping () -> Void) -> Canceller {
+    private func playTurnOfComputer(_ player: GamePlayer, action: @escaping () -> Void) -> Canceller {
         self.delegate?.startedComputerTurn(of: player)
         let cleanUp: () -> Void = { [weak self, player] in
             guard let self = self else { return }
@@ -87,12 +87,12 @@ extension ViewModel {
     private func setDiskAtRandom(by player: GamePlayer, on board: Board) {
         let (x, y) =
             ReversiSpecification
-                .validMoves(for: player.side, on: board)
-                .randomElement()!
+            .validMoves(for: player.side, on: board)
+            .randomElement()!
         self.delegate?.setDisk(player.side, atX: x, y: y, on: board)
     }
 
-    func resettedGame() {
+    private func resettedGame() {
         playerCancellers.forEach { (player, canceller) in
             canceller.cancel()
             playerCancellers[player] = nil
@@ -103,19 +103,19 @@ extension ViewModel {
 extension ViewModel: GameManagerDelegate {
     func update(_ action: NextAction) {
         switch action {
+        case .start(let state):
+            self.delegate?.setInitialState(state)
         case let .set(disk, position, board):
-            delegate?.setDisk(disk, atX: position.x, y: position.y, on: board)
+            self.delegate?.setDisk(disk, atX: position.x, y: position.y, on: board)
         case .next(let player, let board):
-            delegate?.movedTurn(to: player)
-            waitForPlayer(player, on: board)
+            self.delegate?.movedTurn(to: player)
+            self.waitForPlayer(player, on: board)
         case .pass(let player):
-            delegate?.passedTurn(of: player)
+            self.delegate?.passedTurn(of: player)
         case .finish(let winner):
-            delegate?.finishedGame(wonBy: winner)
+            self.delegate?.finishedGame(wonBy: winner)
+        case .reset:
+            self.resettedGame()
         }
-    }
-
-    func startedGame(_ state: GameState) {
-        delegate?.setInitialState(state)
     }
 }

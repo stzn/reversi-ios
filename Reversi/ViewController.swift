@@ -1,6 +1,131 @@
 import UIKit
 
+extension ViewController: ViewModelDelegate {
+    func startedComputerTurn(of player: GamePlayer) {
+        playerActivityIndicators[player.side.index].startAnimating()
+    }
+
+    func endedComputerTurn(of player: GamePlayer) {
+        playerActivityIndicators[player.side.index].stopAnimating()
+    }
+
+    func setInitialState(_ state: GameState) {
+        state.board.disks.forEach {
+            let (position, disk) = $0
+            boardView.setDisk(disk, atX: position.x, y: position.y, animated: false)
+        }
+        state.players.forEach { player in
+            playerControls[player.side.index].selectedSegmentIndex = player.type.rawValue
+        }
+
+        setTurnMessages(for: state.activePlayer.side)
+    }
+
+    private func setTurnMessages(for side: Disk) {
+        messageDiskSizeConstraint.constant = messageDiskSize
+        messageDiskView.disk = side
+        messageLabel.text = "'s turn"
+    }
+
+    func setPlayerType(_ type: Int, of side: Disk) {
+        playerControls[side.index].selectedSegmentIndex = type
+    }
+
+    func setDisk(_ disk: Disk, atX x: Int, y: Int, on board: Board) {
+        try! self.placeDisk(disk, atX: x, y: y, animated: true) { [weak self] _ in
+            self?.delegate?.requestNextTurn()
+            self?.updateCountLabels(on: board)
+        }
+    }
+
+    func movedTurn(to player: GamePlayer) {
+        setTurnMessages(for: player.side)
+    }
+
+    private func updateCountLabels(on board: Board) {
+        for side in Disk.sides {
+            countLabels[side.index].text = "\(board.countDisks(of: side))"
+        }
+    }
+
+    func passedTurn(of player: GamePlayer) {
+        let alertController = UIAlertController(
+            title: "Pass",
+            message: "Cannot place a disk.",
+            preferredStyle: .alert
+        )
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: .default) { [weak self] _ in
+            self?.delegate?.requestNextTurn()
+        })
+        present(alertController, animated: true)
+    }
+
+    func finishedGame(wonBy player: GamePlayer?) {
+        if let winner = player {
+            setFinishedMessages(for: winner)
+        } else {
+            setTiedMessages()
+        }
+    }
+
+    private func setFinishedMessages(for winner: GamePlayer) {
+        messageDiskSizeConstraint.constant = messageDiskSize
+        messageDiskView.disk = winner.side
+        messageLabel.text = " won"
+    }
+
+    private func setTiedMessages() {
+        messageDiskSizeConstraint.constant = 0
+        messageLabel.text = "Tied"
+    }
+
+    private func animationCoordinates(_ disk: Disk, atX x: Int, y: Int) -> [(Int, Int)] {
+        let directions = [
+            (x: -1, y: -1),
+            (x:  0, y: -1),
+            (x:  1, y: -1),
+            (x:  1, y:  0),
+            (x:  1, y:  1),
+            (x:  0, y:  1),
+            (x: -1, y:  0),
+            (x: -1, y:  1),
+        ]
+
+        guard boardView.diskAt(x: x, y: y) == nil else {
+            return []
+        }
+
+        var diskCoordinates: [(Int, Int)] = []
+
+        for direction in directions {
+            var x = x
+            var y = y
+
+            var diskCoordinatesInLine: [(Int, Int)] = []
+            flipping: while true {
+                x += direction.x
+                y += direction.y
+
+                switch (disk, boardView.diskAt(x: x, y: y)) { // Uses tuples to make patterns exhaustive
+                case (.dark, .some(.dark)), (.light, .some(.light)):
+                    diskCoordinates.append(contentsOf: diskCoordinatesInLine)
+                    break flipping
+                case (.dark, .some(.light)), (.light, .some(.dark)):
+                    diskCoordinatesInLine.append((x, y))
+                case (_, .none):
+                    break flipping
+                }
+            }
+        }
+
+        return diskCoordinates
+    }
+
+}
+
 class ViewController: UIViewController {
+    weak var delegate: UserActionDelegate?
+
     @IBOutlet private var boardView: BoardView!
     
     @IBOutlet private var messageDiskView: DiskView!

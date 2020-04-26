@@ -21,7 +21,7 @@ class GameManagerTests: XCTestCase {
         gameManager.delegate = delegate
 
         let activePlayer = gameManager.state.activePlayer
-        gameManager.nextTurn(from: activePlayer)
+        gameManager.requestNextTurn()
 
         let action = delegate.receivedNextActions.first!
         if case .next(let receivedPlayer, let receivedBoard) = action {
@@ -38,7 +38,7 @@ class GameManagerTests: XCTestCase {
         let delegate = MockGameManagerDelegate()
         gameManager.delegate = delegate
 
-        gameManager.nextTurn(from:  gameManager.state.activePlayer)
+        gameManager.requestNextTurn()
 
         let action = delegate.receivedNextActions.first!
         if case .finish = action {
@@ -68,7 +68,7 @@ class GameManagerTests: XCTestCase {
         gameManager.delegate = delegate
 
         let activePlayer = gameManager.state.activePlayer
-        gameManager.nextTurn(from: activePlayer)
+        gameManager.requestNextTurn()
 
         let action = delegate.receivedNextActions.first!
         if case .pass(let receivedPlayer) = action {
@@ -129,16 +129,6 @@ final class MockGameManagerDelegate: GameManagerDelegate {
     var receivedNextActions: [NextAction] = []
     func update(_ action: NextAction) {
         receivedNextActions.append(action)
-    }
-
-    var startedGameCalled = false
-    func startedGame(_ state: GameState) {
-        startedGameCalled = true
-    }
-
-    var setDiskCalled = false
-    func setDisk(_ disk: Disk, at: Board.Position) {
-        setDiskCalled = true
     }
 }
 

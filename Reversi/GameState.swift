@@ -7,10 +7,12 @@
 //
 
 enum NextAction {
+    case start(GameState)
     case set(Disk, Board.Position, Board)
     case next(GamePlayer, Board)
     case pass(GamePlayer)
     case finish(GamePlayer?)
+    case reset
 }
 
 struct GameState {

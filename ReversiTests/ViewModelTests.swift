@@ -15,7 +15,7 @@ class ViewModelTests: XCTestCase {
         let expected = Board.Position(x: 0, y: 0)
         let (viewModel, _, userActionDelegate) = makeTestTarget()
 
-        viewModel.selectedCell(atX: expected.x, y: expected.y)
+        viewModel.selectedCell(atX: expected.x, y: expected.y, of: .dark)
 
         XCTAssertEqual(userActionDelegate.placeDiskReceivedData.first!,
                        expected)
@@ -35,11 +35,25 @@ class ViewModelTests: XCTestCase {
         XCTAssertEqual(receivedData.side, expected.side)
     }
 
-    func testWhenCallstartedGameThenSendValidData() {
+    func testWhenCallRequestNextTurnThenDelegateAction() {
+        let (viewModel, _, userActionDelegate) = makeTestTarget()
+
+        viewModel.requestNextTurn()
+        XCTAssertEqual(userActionDelegate.requestNextTurnCalled, true)
+    }
+
+    func testWhenCallRequestResetGameThenDelegateAction() {
+        let (viewModel, _, userActionDelegate) = makeTestTarget()
+
+        viewModel.requestGameReset()
+        XCTAssertEqual(userActionDelegate.requestResetGameCalled, true)
+    }
+
+    func testWhenCallStartActionThenSendValidData() {
         let expected = anyGameState
         let (viewModel, delegate, _) = makeTestTarget()
 
-        viewModel.startedGame(expected)
+        viewModel.update(.start(expected))
 
         XCTAssertEqual(delegate.setInitialStateReceivedData?.board.disks,
                        expected.board.disks)
@@ -50,6 +64,65 @@ class ViewModelTests: XCTestCase {
         }
     }
 
+    func testWhenCallSetActionThenSendValidData() {
+        let expected = (disk: Disk.dark,
+                        position: Board.Position(x: 0, y: 0),
+                        board: Board())
+        let (viewModel, delegate, _) = makeTestTarget()
+
+        viewModel.update(.set(expected.disk, expected.position, expected.board))
+
+        let receivedData = delegate.setDiskReceivedData.first!
+        XCTAssertEqual(receivedData.board.disks,
+                       expected.board.disks)
+        XCTAssertEqual(Board.Position(x: receivedData.x, y: receivedData.y),
+                       expected.position)
+        XCTAssertEqual(receivedData.disk,
+                       expected.disk)
+    }
+
+    func testWhenCallNextActionThenSendValidData() {
+        let expected = (player: defaultPlayers[0],
+                        board: Board())
+        let (viewModel, delegate, _) = makeTestTarget()
+
+        viewModel.update(.next(expected.player, expected.board))
+
+        let receivedData = delegate.movedTurnReceivedData.first!
+        XCTAssertEqual(receivedData, expected.player)
+    }
+
+    func testWhenCallPassActionThenSendValidData() {
+        let expected = (player: defaultPlayers[0],
+                        board: Board())
+        let (viewModel, delegate, _) = makeTestTarget()
+
+        viewModel.update(.pass(expected.player))
+
+        let receivedData = delegate.passedTurnReceivedData.first!
+        XCTAssertEqual(receivedData, expected.player)
+    }
+
+    func testWhenCallFinishActionThenSendValidData() {
+        let expected = defaultPlayers[0]
+        let (viewModel, delegate, _) = makeTestTarget()
+
+        viewModel.update(.finish(expected))
+
+        let receivedData = delegate.finishedGameReceivedData
+        XCTAssertEqual(receivedData, expected)
+    }
+
+    func testWhenCallTiedFinishActionThenSendValidData() {
+        let expected: GamePlayer? = nil
+        let (viewModel, delegate, _) = makeTestTarget()
+
+        viewModel.update(.finish(expected))
+
+        let receivedData = delegate.finishedGameReceivedData
+        XCTAssertEqual(receivedData, expected)
+    }
+    
     private func makeTestTarget() -> (ViewModel, MockViewModelDelegate, MockUserActionDelegate) {
         let viewModel = ViewModel()
         let delegate = MockViewModelDelegate()
@@ -108,12 +181,12 @@ final class MockViewModelDelegate: ViewModelDelegate {
 
 final class MockUserActionDelegate: UserActionDelegate {
     var startGameCalled = false
-    func startGame() {
+    func requestStartGame() {
         startGameCalled = true
     }
 
     var placeDiskReceivedData: [Board.Position] = []
-    func placeDisk(at position: Board.Position) {
+    func placeDisk(at position: Board.Position, of side: Disk) {
         placeDiskReceivedData.append(position)
     }
 
@@ -122,13 +195,13 @@ final class MockUserActionDelegate: UserActionDelegate {
         changePlayerTypeReceivedData.append((type, side))
     }
 
-    var goToNextTurnCalled = false
+    var requestNextTurnCalled = false
     func requestNextTurn() {
-        goToNextTurnCalled = true
+        requestNextTurnCalled = true
     }
 
-    var resetGameCalled = false
-    func resetGame() {
-        resetGameCalled = true
+    var requestResetGameCalled = false
+    func requestResetGame() {
+        requestResetGameCalled = true
     }
 }
