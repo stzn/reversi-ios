@@ -92,7 +92,6 @@
 				D642BDDB23AA137C00396732 /* BoardView.swift */,
 				D642BDD523AA0B3900396732 /* CellView.swift */,
 				D636B39E23D35043007F370F /* DiskView.swift */,
-				D67E44D72454E35600C0164F /* UserInputDelegate.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -128,17 +127,16 @@
 		D642BDB223A9FE4500396732 /* Reversi */ = {
 			isa = PBXGroup;
 			children = (
-				D67E44D92454F7A900C0164F /* Store */,
-				D67E44CC2453E88800C0164F /* Core */,
 				D642BDB323A9FE4500396732 /* AppDelegate.swift */,
-				D642BDB523A9FE4500396732 /* SceneDelegate.swift */,
-				D642BDB723A9FE4500396732 /* ViewController.swift */,
-				D642BDB923A9FE4500396732 /* Main.storyboard */,
 				D642BDBC23A9FE4700396732 /* Assets.xcassets */,
-				D642BDBE23A9FE4700396732 /* LaunchScreen.storyboard */,
-				D642BDC123A9FE4700396732 /* Info.plist */,
-				D636B3A123D43203007F370F /* Views */,
+				D67E44CC2453E88800C0164F /* Core */,
 				D636B3A423D432D3007F370F /* DataTypes */,
+				D642BDC123A9FE4700396732 /* Info.plist */,
+				D642BDBE23A9FE4700396732 /* LaunchScreen.storyboard */,
+				D642BDB923A9FE4500396732 /* Main.storyboard */,
+				D642BDB523A9FE4500396732 /* SceneDelegate.swift */,
+				D67E44D92454F7A900C0164F /* Store */,
+				D67E44E424551A8A00C0164F /* UI */,
 			);
 			path = Reversi;
 			sourceTree = "<group>";
@@ -171,6 +169,16 @@
 				D67E44DE2455187D00C0164F /* FileGameStateStore.swift */,
 			);
 			name = Store;
+			sourceTree = "<group>";
+		};
+		D67E44E424551A8A00C0164F /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				D642BDB723A9FE4500396732 /* ViewController.swift */,
+				D67E44D72454E35600C0164F /* UserInputDelegate.swift */,
+				D636B3A123D43203007F370F /* Views */,
+			);
+			name = UI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
