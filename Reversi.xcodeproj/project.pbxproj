@@ -24,6 +24,9 @@
 		D67E44D42453F89F00C0164F /* GameManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44D32453F89F00C0164F /* GameManagerTests.swift */; };
 		D67E44D624543D5200C0164F /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44D524543D5200C0164F /* GameManager.swift */; };
 		D67E44D82454E35600C0164F /* UserInputDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44D72454E35600C0164F /* UserInputDelegate.swift */; };
+		D67E44DB2454F9AC00C0164F /* GameStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44DA2454F9AC00C0164F /* GameStateStore.swift */; };
+		D67E44DD2454FA0A00C0164F /* GameStateStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44DC2454FA0A00C0164F /* GameStateStoreTests.swift */; };
+		D67E44DF2455187D00C0164F /* FileGameStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44DE2455187D00C0164F /* FileGameStateStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +61,9 @@
 		D67E44D32453F89F00C0164F /* GameManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManagerTests.swift; sourceTree = "<group>"; };
 		D67E44D524543D5200C0164F /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
 		D67E44D72454E35600C0164F /* UserInputDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInputDelegate.swift; sourceTree = "<group>"; };
+		D67E44DA2454F9AC00C0164F /* GameStateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStateStore.swift; sourceTree = "<group>"; };
+		D67E44DC2454FA0A00C0164F /* GameStateStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStateStoreTests.swift; sourceTree = "<group>"; };
+		D67E44DE2455187D00C0164F /* FileGameStateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileGameStateStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +125,7 @@
 		D642BDB223A9FE4500396732 /* Reversi */ = {
 			isa = PBXGroup;
 			children = (
+				D67E44D92454F7A900C0164F /* Store */,
 				D67E44CC2453E88800C0164F /* Core */,
 				D642BDB323A9FE4500396732 /* AppDelegate.swift */,
 				D642BDB523A9FE4500396732 /* SceneDelegate.swift */,
@@ -140,6 +147,7 @@
 				D61E95582453A72100F77B2D /* ReversiSpecificationTests.swift */,
 				D67E44D12453EAC100C0164F /* BoardTests.swift */,
 				D67E44D32453F89F00C0164F /* GameManagerTests.swift */,
+				D67E44DC2454FA0A00C0164F /* GameStateStoreTests.swift */,
 			);
 			path = ReversiTests;
 			sourceTree = "<group>";
@@ -151,6 +159,15 @@
 				D67E44D524543D5200C0164F /* GameManager.swift */,
 			);
 			name = Core;
+			sourceTree = "<group>";
+		};
+		D67E44D92454F7A900C0164F /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				D67E44DA2454F9AC00C0164F /* GameStateStore.swift */,
+				D67E44DE2455187D00C0164F /* FileGameStateStore.swift */,
+			);
+			name = Store;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -255,8 +272,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				D636B39F23D35043007F370F /* DiskView.swift in Sources */,
+				D67E44DF2455187D00C0164F /* FileGameStateStore.swift in Sources */,
 				D642BDD623AA0B3900396732 /* CellView.swift in Sources */,
 				D642BDD823AA0B5700396732 /* Disk.swift in Sources */,
+				D67E44DB2454F9AC00C0164F /* GameStateStore.swift in Sources */,
 				D642BDB823A9FE4500396732 /* ViewController.swift in Sources */,
 				D642BDDC23AA137C00396732 /* BoardView.swift in Sources */,
 				D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */,
@@ -275,6 +294,7 @@
 				D67E44D22453EAC100C0164F /* BoardTests.swift in Sources */,
 				D67E44D42453F89F00C0164F /* GameManagerTests.swift in Sources */,
 				D61E95592453A72100F77B2D /* ReversiSpecificationTests.swift in Sources */,
+				D67E44DD2454FA0A00C0164F /* GameStateStoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
