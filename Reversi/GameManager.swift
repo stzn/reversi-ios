@@ -30,10 +30,22 @@ final class GameManager {
     private(set) var activePlayer: GamePlayer?
     /// 非同期処理のキャンセルを管理します。
     private var playerCancellers: [GamePlayer: Canceller] = [:]
-    private(set) var board: Board
+    private(set) var board = Board()
 
-    init(board: Board) {
-        self.board = board
+    private let store: GameStateStore
+    init(store: GameStateStore) {
+        self.store = store
+
+        store.loadGame { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let state):
+                self.setLoadedGame(state: state)
+            case .failure:
+                // TODO: error handling
+                self.newGame()
+            }
+        }
     }
 
     /// ゲームの状態を初期化し、新しいゲームを開始します。
@@ -73,6 +85,25 @@ final class GameManager {
             action()
         }
         return canceller
+    }
+
+    private func setLoadedGame(state: GameState) {
+        self.board = state.board
+        state.players.forEach { player in
+            switch player.turn {
+            case .dark:
+                self.darkPlayer = player
+            case .light:
+                self.lightPlayer = player
+            }
+        }
+
+        switch state.activePlayerDisk {
+        case .dark:
+            self.activePlayer = darkPlayer
+        case .light:
+            self.activePlayer = lightPlayer
+        }
     }
 
     private func setDisk(by player: GamePlayer) {

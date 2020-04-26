@@ -45,13 +45,13 @@ class MockGameManagerDelegate: GameManagerDelegate {
 
 class GameManagerTests: XCTestCase {
     func testWhenCallNewGameThenEverythingIsInitial() {
-        let (gameManager, board) = startNewGame()
+        let gameManager = startNewGame()
         XCTAssertEqual(gameManager.activePlayer?.turn, .dark)
-        XCTAssertEqual(board.disks, Board.initialDisks)
+        XCTAssertEqual(gameManager.board.disks, Board.initialDisks)
     }
 
     func testWhenCallWaitForPlayerThenManualPlayerDoesNothing() {
-        let (gameManager, _) = startNewGame()
+        let gameManager = startNewGame()
         let computerDelegate = MockComputerPlayerDelegate()
         gameManager.computerDelegate = computerDelegate
         gameManager.changedPlayerType(.manual)
@@ -63,7 +63,7 @@ class GameManagerTests: XCTestCase {
     }
 
     func testWhenCallWaitForPlayerThenComputerPlayerStartsPlayTurn() {
-        let (gameManager, _) = startNewGame()
+        let gameManager = startNewGame()
         let computerDelegate = MockComputerPlayerDelegate()
         gameManager.computerDelegate = computerDelegate
         gameManager.changedPlayerType(.computer)
@@ -74,7 +74,7 @@ class GameManagerTests: XCTestCase {
     }
 
     func testWhenCallNextTurnAndBothPlayersHavePlaceThenChangeTurn() {
-        let (gameManager, _) = startNewGame()
+        let gameManager = startNewGame()
         let delegate = MockGameManagerDelegate()
         gameManager.delegate = delegate
 
@@ -84,8 +84,8 @@ class GameManagerTests: XCTestCase {
     }
 
     func testWhenCallNextTurnAndBothPlayersHaveNoPlaceThenGameFinishes() {
-        let (gameManager, board) = startNewGame()
-        board.fullfill(with: .dark)
+        let gameManager = startNewGame()
+        gameManager.fullfill(with: .dark)
         let delegate = MockGameManagerDelegate()
         gameManager.delegate = delegate
 
@@ -95,7 +95,7 @@ class GameManagerTests: XCTestCase {
     }
 
     func testWhenCallNextTurnAndNextPlayerHasPlaceThenPassNextTurn() {
-        let (gameManager, board) = startNewGame()
+        let gameManager = startNewGame()
 
         // 左上を別の色、左下は空にして残りは同じ色で埋める
         for y in ReversiSpecification.yRange {
@@ -104,9 +104,9 @@ class GameManagerTests: XCTestCase {
                     continue
                 }
                 if x == 0, y == 0 {
-                    board.setDisk(.light, atX: x, y: y)
+                    gameManager.board.setDisk(.light, atX: x, y: y)
                 } else {
-                    board.setDisk(.dark, atX: x, y: y)
+                    gameManager.board.setDisk(.dark, atX: x, y: y)
                 }
             }
         }
@@ -156,15 +156,47 @@ class GameManagerTests: XCTestCase {
 
     // MARK: Helper
 
-    private func startNewGame() -> (GameManager, Board) {
-        let board = Board()
-        let gameManager = GameManager(board: board)
+    private func startNewGame() -> GameManager {
+        let store = MemoryGameStateStore()
+        let gameManager = GameManager(store: store)
         gameManager.newGame()
-        return (gameManager, board)
+        return gameManager
+    }
+}
+
+// MARK: GameStateStore for test
+
+class MemoryGameStateStore: GameStateStore {
+    enum StoreError: Error {
+        case noData
+    }
+
+    var state: GameState?
+    func saveGame(turn: Disk, players: [GamePlayer], board: Board, completion: @escaping (Result<Void, Error>) -> Void) {
+        state = GameState(activePlayerDisk: turn, players: players, board: board)
+        completion(.success(()))
+    }
+
+    func loadGame(completion: @escaping (Result<GameState, Error>) -> Void) {
+        guard let state = state else {
+            completion(.failure(StoreError.noData))
+            return
+        }
+        completion(.success(state))
     }
 }
 
 // MARK: File-private extensions
+
+extension GameManager {
+    func fullfill(with disk: Disk) {
+        for y in ReversiSpecification.yRange {
+            for x in ReversiSpecification.xRange {
+                self.board.setDisk(disk, atX: x, y: y)
+            }
+        }
+    }
+}
 
 extension Board {
     static var initialDisks: [Position: Disk] {
@@ -176,13 +208,5 @@ extension Board {
             Position(x: width / 2 - 1, y: height / 2): .dark,
             Position(x: width / 2, y: height / 2): .light,
         ]
-    }
-
-    func fullfill(with disk: Disk) {
-        for y in ReversiSpecification.yRange {
-            for x in ReversiSpecification.xRange {
-                self.setDisk(disk, atX: x, y: y)
-            }
-        }
     }
 }
