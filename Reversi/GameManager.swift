@@ -38,6 +38,7 @@ final class GameManager {
                 state = self.newGame()
             }
             self.state = state
+            self.save()
         }
     }
 
@@ -45,7 +46,21 @@ final class GameManager {
     func newGame() -> GameState {
         let board = Board()
         board.reset()
-        return GameState(activePlayer: darkPlayer, players: [darkPlayer, lightPlayer], board: board)
+        return GameState(
+            activePlayer: self.darkPlayer,
+            players: [self.darkPlayer, self.lightPlayer],
+            board: board)
+    }
+}
+
+/// MARK: save and load
+extension GameManager {
+    private func save(completion: ((Result<Void, Error>) -> Void)? = nil) {
+        self.store.saveGame(
+            turn: self.state.activePlayer.side,
+            players: self.state.players,
+            board: self.board
+        ) { completion?($0) }
     }
 }
 
@@ -69,12 +84,14 @@ extension GameManager {
     }
 
     private func canDoNextTurn(_ player: GamePlayer) -> Bool {
-        return !ReversiSpecification
+        return
+            !ReversiSpecification
             .validMoves(for: player.side, on: self.board).isEmpty
     }
 
     private func shouldPassNextTurn(_ player: GamePlayer) -> Bool {
-        return !ReversiSpecification
+        return
+            !ReversiSpecification
             .validMoves(for: player.side.flipped, on: self.board).isEmpty
     }
 
@@ -120,10 +137,12 @@ extension GameManager: UserActionDelegate {
     func placeDisk(at position: Board.Position, of side: Disk) {
         self.state.board.setDisk(side, atX: position.x, y: position.y)
         self.delegate?.update(.set(side, position, self.board))
+        self.save()
     }
 
     func changePlayerType(_ type: PlayerType, of side: Disk) {
         self.state.players[side.index].setType(type)
+        self.save()
     }
 
     func requestNextTurn() {
