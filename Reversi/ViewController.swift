@@ -63,6 +63,7 @@ extension ViewController: ViewModelDelegate {
 
     func setInitialState(_ state: GameState) {
         boardView.reset()
+
         state.board.disks.forEach {
             let (position, disk) = $0
             boardView.setDisk(disk, atX: position.x, y: position.y, animated: false)
@@ -86,7 +87,7 @@ extension ViewController: ViewModelDelegate {
         }
     }
 
-    func passedTurn(of player: GamePlayer) {
+    func passedTurn() {
         let alertController = UIAlertController(
             title: "Pass",
             message: "Cannot place a disk.",

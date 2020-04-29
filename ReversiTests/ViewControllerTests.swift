@@ -11,6 +11,11 @@ import XCTest
 @testable import Reversi
 
 class ViewControllerTests: XCTestCase {
+    override func setUp() {
+        super.setUp()
+        deleteGame()
+    }
+
     func testWhenNewGameAndPlaceDiskAtValidPoasionThenPlacedDisk() {
         typealias TestCase = (UInt, Disk, Int, Int)
 
@@ -115,8 +120,22 @@ class ViewControllerTests: XCTestCase {
         XCTAssertEqual(viewController.messageLabel.text, "Tied")
     }
 
+    func testWhenNewGameStartAndLeftOnlyOnePlacableDiskThenPassedPlayer() {
+        let viewModel = ViewModel()
+        let store = InMemoryGameStateStore()
+        fullfillForPassed(store: store, width: width, height: height)
+        let viewController = composeViewController(store: store, viewModel: viewModel)
+        (UIApplication.shared.connectedScenes.first!.delegate as? UIWindowSceneDelegate)?
+            .window??.rootViewController = viewController
+
+        viewModel.requestNextTurn()
+
+        XCTAssertNotNil(viewController.presentedViewController)
+    }
+
     private func viewDidAppear(_ viewController: ViewController) {
-        viewController.beginAppearanceTransition(true, animated: false)
+        viewController.loadViewIfNeeded()
+        viewController.beginAppearanceTransition(false, animated: false)
         viewController.endAppearanceTransition()
     }
 
@@ -144,7 +163,7 @@ class ViewControllerTests: XCTestCase {
             (x: ReversiSpecification.width / 2, y: ReversiSpecification.height / 2),
         ]
 
-    func fullfillForWon(store: GameStateStore,
+    private func fullfillForWon(store: GameStateStore,
               width: Int, height: Int) {
         let board = Board()
         for y in 0..<height {
@@ -159,7 +178,7 @@ class ViewControllerTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
 
-    func fullfillForTied(store: GameStateStore,
+    private func fullfillForTied(store: GameStateStore,
               width: Int, height: Int) {
         let board = Board()
         var turn: Disk = .dark
@@ -174,6 +193,38 @@ class ViewControllerTests: XCTestCase {
             exp.fulfill()
         }
         wait(for: [exp], timeout: 1.0)
+    }
+
+    private func fullfillForPassed(store: GameStateStore,
+              width: Int, height: Int) {
+        let lastX = width - 1
+        let lastY = height - 1
+        let board = Board()
+        for y in 0..<height {
+            for x in 0..<width {
+                // 一箇所だけ隙間を空けておく
+                if x == 0 && y == 0
+                    || x == lastX && y == lastY {
+                    continue
+                }
+                board.setDisks(.dark, at: [.init(x: x, y: y)])
+            }
+        }
+        board.setDisks(.light, at: [.init(x: lastX, y: lastY)])
+        let exp = expectation(description: "wait for save")
+        store.saveGame(turn: .light, players: defaultPlayers, board: board) { _ in
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+
+    private func deleteGame() {
+        let path = (NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first!
+            as NSString).appendingPathComponent("Game")
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: path) {
+            try! fileManager.removeItem(atPath: path)
+        }
     }
 }
 

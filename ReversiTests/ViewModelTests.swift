@@ -93,14 +93,12 @@ class ViewModelTests: XCTestCase {
     }
 
     func testWhenCallPassActionThenSendValidData() {
-        let expected = (player: defaultPlayers[0],
-                        board: Board())
         let (viewModel, delegate, _) = makeTestTarget()
 
-        viewModel.update(.pass(expected.player))
+        viewModel.update(.pass)
 
-        let receivedData = delegate.passedTurnReceivedData.first!
-        XCTAssertEqual(receivedData, expected.player)
+        let receivedData = delegate.passedTurnReceivedData.first
+        XCTAssertNotNil(receivedData)
     }
 
     func testWhenCallFinishActionThenSendValidData() {
@@ -166,9 +164,9 @@ final class MockViewModelDelegate: ViewModelDelegate {
         movedTurnReceivedData.append(player)
     }
 
-    var passedTurnReceivedData: [GamePlayer] = []
-    func passedTurn(of player: GamePlayer) {
-        passedTurnReceivedData.append(player)
+    var passedTurnReceivedData: [Int] = []
+    func passedTurn() {
+        passedTurnReceivedData.append(0)
     }
 
     var finishedGameReceivedData: GamePlayer?

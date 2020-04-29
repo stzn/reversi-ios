@@ -28,9 +28,12 @@ final class GameManager {
         self.state.players[self.state.activePlayerSide.index]
     }
 
+    private var inactivePlayer: GamePlayer {
+        self.state.players[self.state.activePlayerSide.flipped.index]
+    }
+
     init(store: GameStateStore) {
         self.store = store
-
         store.loadGame { [weak self] result in
             guard let self = self else { return }
             var state: GameState
@@ -74,17 +77,21 @@ extension GameManager {
     /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
     /// もし、次のプレイヤーに有効な手が存在しない場合、パスとなります。
     /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
-    private func nextTurn(from player: GamePlayer) {
-        if self.canDoNextTurn(player) {
-            self.moveTurn(from: player)
-            return
+    private func nextTurn() {
+        self.turnPlayer()
+        if !self.canDoNextTurn(activePlayer) {
+            if !self.canDoNextTurn(inactivePlayer) {
+                self.finishGame()
+            } else {
+                self.passTurn()
+            }
+        } else {
+            self.moveTurn()
         }
+    }
 
-        if shouldPassNextTurn(player) {
-            self.passTurn(to: player)
-            return
-        }
-        finishGame()
+    private func turnPlayer() {
+        self.state.activePlayerSide = self.state.activePlayerSide.flipped
     }
 
     private func canDoNextTurn(_ player: GamePlayer) -> Bool {
@@ -93,31 +100,19 @@ extension GameManager {
             .validMoves(for: player.side, on: self.board).isEmpty
     }
 
-    private func shouldPassNextTurn(_ player: GamePlayer) -> Bool {
-        return
-            !ReversiSpecification
-            .validMoves(for: player.side.flipped, on: self.board).isEmpty
-    }
-
-    private func moveTurn(from player: GamePlayer) {
-        self.turnPlayer(from: player.side)
+    private func moveTurn() {
         self.delegate?.update(.next(self.activePlayer, board))
         self.save()
     }
 
-    private func passTurn(to player: GamePlayer) {
-        self.turnPlayer(from: player.side)
-        self.delegate?.update(.pass(self.activePlayer))
+    private func passTurn() {
+        self.delegate?.update(.pass)
         self.save()
     }
 
     private func finishGame() {
         let winner = self.judgeWinner()
         self.delegate?.update(.finish(winner))
-    }
-
-    private func turnPlayer(from side: Disk) {
-        self.state.activePlayerSide = side.flipped
     }
 
     private func judgeWinner() -> GamePlayer? {
@@ -164,7 +159,7 @@ extension GameManager: UserActionDelegate {
     }
 
     func requestNextTurn() {
-        self.nextTurn(from: self.activePlayer)
+        self.nextTurn()
     }
 
     func requestResetGame() {

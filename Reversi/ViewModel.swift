@@ -13,7 +13,7 @@ protocol ViewModelDelegate: AnyObject {
     func setPlayerType(_ type: Int, of side: Disk)
     func setDisk(_ disk: Disk, atX x: Int, y: Int, on board: Board)
     func movedTurn(to player: GamePlayer)
-    func passedTurn(of player: GamePlayer)
+    func passedTurn()
     func finishedGame(wonBy player: GamePlayer?)
     func startedComputerTurn(of player: GamePlayer)
     func endedComputerTurn(of player: GamePlayer)
@@ -31,7 +31,11 @@ final class ViewModel {
     }
 
     func selectedCell(atX x: Int, y: Int) {
-        try? userActionDelegate?.placeDisk(at: Board.Position(x: x, y: y))
+        do {
+            try userActionDelegate?.placeDisk(at: Board.Position(x: x, y: y))
+        } catch {
+            userActionDelegate?.requestNextTurn()
+        }
     }
 
     func changedPlayerType(_ type: Int, of side: Disk) {
@@ -89,10 +93,14 @@ extension ViewModel {
             ReversiSpecification
             .validMoves(for: player.side, on: board)
                 .randomElement() else {
-                    delegate?.finishedGame(wonBy: nil)
+                    delegate?.passedTurn()
                     return
         }
-        try? userActionDelegate?.placeDisk(at: .init(x: x, y: y))
+        do {
+            try userActionDelegate?.placeDisk(at: .init(x: x, y: y))
+        } catch {
+            userActionDelegate?.requestNextTurn()
+        }
     }
 
     private func resettedGame(with state: GameState) {
@@ -116,8 +124,8 @@ extension ViewModel: GameManagerDelegate {
         case .next(let player, let board):
             self.delegate?.movedTurn(to: player)
             self.waitForPlayer(player, on: board)
-        case .pass(let player):
-            self.delegate?.passedTurn(of: player)
+        case .pass:
+            self.delegate?.passedTurn()
         case .finish(let winner):
             self.delegate?.finishedGame(wonBy: winner)
         case .reset(let state):
