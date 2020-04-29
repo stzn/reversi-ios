@@ -35,7 +35,7 @@
 		D6ABBAEB2459182C009B28DD /* Canceller.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6ABBAEA2459182C009B28DD /* Canceller.swift */; };
 		D6ABBAED2459190E009B28DD /* DiskPlacementError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6ABBAEC2459190E009B28DD /* DiskPlacementError.swift */; };
 		D6ABBAEF2459206F009B28DD /* InMemoryGameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6ABBAEE2459206F009B28DD /* InMemoryGameStore.swift */; };
-		D6ABBAF124592692009B28DD /* UIControl+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6ABBAF024592692009B28DD /* UIControl+.swift */; };
+		D6ABBAF3245967A5009B28DD /* GameManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6ABBAF2245967A5009B28DD /* GameManagerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,7 +81,7 @@
 		D6ABBAEA2459182C009B28DD /* Canceller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canceller.swift; sourceTree = "<group>"; };
 		D6ABBAEC2459190E009B28DD /* DiskPlacementError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskPlacementError.swift; sourceTree = "<group>"; };
 		D6ABBAEE2459206F009B28DD /* InMemoryGameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryGameStore.swift; sourceTree = "<group>"; };
-		D6ABBAF024592692009B28DD /* UIControl+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+.swift"; sourceTree = "<group>"; };
+		D6ABBAF2245967A5009B28DD /* GameManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManagerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +167,7 @@
 				D67E44DC2454FA0A00C0164F /* FileGameStateStoreTests.swift */,
 				D67E44E92455493F00C0164F /* ViewModelTests.swift */,
 				D6ABBAE824564C5E009B28DD /* ViewControllerTests.swift */,
+				D6ABBAF2245967A5009B28DD /* GameManagerTests.swift */,
 			);
 			path = ReversiTests;
 			sourceTree = "<group>";
@@ -208,7 +209,6 @@
 			children = (
 				D6ABBAE6245550CE009B28DD /* Helper.swift */,
 				D6ABBAEE2459206F009B28DD /* InMemoryGameStore.swift */,
-				D6ABBAF024592692009B28DD /* UIControl+.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -343,8 +343,8 @@
 				D6ABBAEF2459206F009B28DD /* InMemoryGameStore.swift in Sources */,
 				D6ABBAE7245550CE009B28DD /* Helper.swift in Sources */,
 				D67E44EA2455493F00C0164F /* ViewModelTests.swift in Sources */,
+				D6ABBAF3245967A5009B28DD /* GameManagerTests.swift in Sources */,
 				D61E95592453A72100F77B2D /* ReversiSpecificationTests.swift in Sources */,
-				D6ABBAF124592692009B28DD /* UIControl+.swift in Sources */,
 				D67E44DD2454FA0A00C0164F /* FileGameStateStoreTests.swift in Sources */,
 				D6ABBAE924564C5E009B28DD /* ViewControllerTests.swift in Sources */,
 			);

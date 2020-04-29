@@ -70,17 +70,29 @@ class ViewControllerTests: XCTestCase {
         }
     }
 
-//    func testWhenChangePlayerTypeThenPlayerTypeChanged() {
-//        let viewController = composeViewController()
-//        viewDidAppear(viewController)
-//
-//        let index = viewController.playerControls[Disk.dark.index].selectedSegmentIndex
-//        let playerType = PlayerType(rawValue: index)!
-//
-//        viewController.changePlayer(index: index)
-//        XCTAssertEqual(viewController.playerControls[Disk.dark.index].selectedSegmentIndex,
-//                       playerType.flipped.rawValue)
-//    }
+    func testWhenChangePlayerTypeThenPlayerTypeChanged() {
+        let store = InMemoryGameStateStore()
+        let viewController = composeViewController(store: store)
+
+        viewDidAppear(viewController)
+
+        let playerControl = viewController.playerControls[Disk.dark.index]
+        let index = playerControl.selectedSegmentIndex
+        let playerType = PlayerType(rawValue: index)!
+
+        playerControl.selectedSegmentIndex = playerType.flipped.rawValue
+        playerControl.sendActions(for: .valueChanged)
+
+        store.loadGame { result in
+            switch result {
+            case .success(let state):
+                XCTAssertEqual(state.players[Disk.dark.index].type,
+                               PlayerType(rawValue: playerType.flipped.rawValue))
+            case .failure:
+                XCTFail("should be success")
+            }
+        }
+    }
 
     func testWhenResetThenGameWasInInitialState() {
         let viewModel = ViewModel()
@@ -125,6 +137,7 @@ class ViewControllerTests: XCTestCase {
         let store = InMemoryGameStateStore()
         fullfillForPassed(store: store, width: width, height: height)
         let viewController = composeViewController(store: store, viewModel: viewModel)
+
         (UIApplication.shared.connectedScenes.first!.delegate as? UIWindowSceneDelegate)?
             .window??.rootViewController = viewController
 
@@ -132,6 +145,8 @@ class ViewControllerTests: XCTestCase {
 
         XCTAssertNotNil(viewController.presentedViewController)
     }
+
+    // MARK: Helpers
 
     private func viewDidAppear(_ viewController: ViewController) {
         viewController.loadViewIfNeeded()
@@ -225,12 +240,6 @@ class ViewControllerTests: XCTestCase {
         if fileManager.fileExists(atPath: path) {
             try! fileManager.removeItem(atPath: path)
         }
-    }
-}
-
-extension ViewController {
-    func changePlayer(index: Int) {
-        playerControls[index].simulateValueChanged()
     }
 }
 
