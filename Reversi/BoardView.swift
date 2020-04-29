@@ -6,31 +6,20 @@ public class BoardView: UIView {
     private var cellViews: [CellView] = []
     private var actions: [CellSelectionAction] = []
     
-    /// 盤の幅（ `8` ）を表します。
-    public let width: Int = 8
-    
-    /// 盤の高さ（ `8` ）を返します。
-    public let height: Int = 8
-    
-    /// 盤のセルの `x` の範囲（ `0 ..< 8` ）を返します。
-    public let xRange: Range<Int>
-    
-    /// 盤のセルの `y` の範囲（ `0 ..< 8` ）を返します。
-    public let yRange: Range<Int>
+    private let width: Int = ReversiSpecification.width
+    private let height: Int = ReversiSpecification.height
+    private let xRange: Range<Int> = ReversiSpecification.xRange
+    private let yRange: Range<Int> = ReversiSpecification.yRange
     
     /// セルがタップされたときの挙動を移譲するためのオブジェクトです。
     public weak var delegate: BoardViewDelegate?
     
     override public init(frame: CGRect) {
-        xRange = 0 ..< width
-        yRange = 0 ..< height
         super.init(frame: frame)
         setUp()
     }
     
     required public init?(coder: NSCoder) {
-        xRange = 0 ..< width
-        yRange = 0 ..< height
         super.init(coder: coder)
         setUp()
     }
