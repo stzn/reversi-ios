@@ -22,14 +22,14 @@ class ViewControllerTests: XCTestCase {
         let viewController = composeViewController()
         viewDidAppear(viewController)
         let testCases: [TestCase] = [
-            (#line, .light, width / 2 - 2, height / 2),
-            (#line, .light, width / 2, height / 2 - 2),
-            (#line, .light, width / 2 + 1, height / 2 - 1),
-            (#line, .light, width / 2 - 1, height / 2 + 1),
-            (#line, .dark, width / 2 + 1, height / 2),
-            (#line, .dark, width / 2, height / 2 + 1),
-            (#line, .dark, width / 2 - 1, height / 2 - 2),
-            (#line, .dark, width / 2 - 2, height / 2 - 1),
+            (#line, .light, boardWidth / 2 - 2, boardHeight / 2),
+            (#line, .light, boardWidth / 2, boardHeight / 2 - 2),
+            (#line, .light, boardWidth / 2 + 1, boardHeight / 2 - 1),
+            (#line, .light, boardWidth / 2 - 1, boardHeight / 2 + 1),
+            (#line, .dark, boardWidth / 2 + 1, boardHeight / 2),
+            (#line, .dark, boardWidth / 2, boardHeight / 2 + 1),
+            (#line, .dark, boardWidth / 2 - 1, boardHeight / 2 - 2),
+            (#line, .dark, boardWidth / 2 - 2, boardHeight / 2 - 1),
         ]
 
         for testCase in testCases {
@@ -47,19 +47,19 @@ class ViewControllerTests: XCTestCase {
         viewDidAppear(viewController)
 
         let testCases: [TestCase] = [
-            (#line, .dark, width / 2 - 2, height / 2),
-            (#line, .dark, width / 2, height / 2 - 2),
-            (#line, .dark, width / 2 + 1, height / 2 - 1),
-            (#line, .dark, width / 2 - 1, height / 2 + 1),
-            (#line, .light, width / 2 + 1, height / 2),
-            (#line, .light, width / 2, height / 2 + 1),
-            (#line, .light, width / 2 - 1, height / 2 - 2),
-            (#line, .light, width / 2 - 2, height / 2 - 1),
+            (#line, .dark, boardWidth / 2 - 2, boardHeight / 2),
+            (#line, .dark, boardWidth / 2, boardHeight / 2 - 2),
+            (#line, .dark, boardWidth / 2 + 1, boardHeight / 2 - 1),
+            (#line, .dark, boardWidth / 2 - 1, boardHeight / 2 + 1),
+            (#line, .light, boardWidth / 2 + 1, boardHeight / 2),
+            (#line, .light, boardWidth / 2, boardHeight / 2 + 1),
+            (#line, .light, boardWidth / 2 - 1, boardHeight / 2 - 2),
+            (#line, .light, boardWidth / 2 - 2, boardHeight / 2 - 1),
 
-            (#line, .dark, width / 2, height / 2),
-            (#line, .dark, width / 2 - 1, height / 2 - 1),
-            (#line, .light, width / 2 - 1, height / 2),
-            (#line, .light, width / 2, height / 2 - 1),
+            (#line, .dark, boardWidth / 2, boardHeight / 2),
+            (#line, .dark, boardWidth / 2 - 1, boardHeight / 2 - 1),
+            (#line, .light, boardWidth / 2 - 1, boardHeight / 2),
+            (#line, .light, boardWidth / 2, boardHeight / 2 - 1),
         ]
 
         for testCase in testCases {
@@ -97,21 +97,24 @@ class ViewControllerTests: XCTestCase {
     func testWhenResetThenGameWasInInitialState() {
         let viewModel = ViewModel()
         let store = InMemoryGameStateStore()
-        fullfillForWon(store: store,
-                       width: width, height: height)
+        let board = fullfillForWon(width: boardWidth, height: boardHeight)
+        save(to: store,
+             state: .init(activePlayerSide: .dark, players: defaultPlayers, board: board))
         let viewController = composeViewController(store: store,
                                                    viewModel: viewModel)
         viewDidAppear(viewController)
         viewModel.requestGameReset()
-        initialPlacedDisks.forEach { (x, y) in
-            XCTAssertNotNil(viewController.boardView.diskAt(x: x, y: y))
+        initialPlacedDisks.forEach { (position, disk) in
+            XCTAssertEqual(viewController.boardView.diskAt(x: position.x, y: position.y), disk)
         }
     }
 
     func testWhenNewGameStartAndAllDiskPlacedThenGameEnded() {
         let viewModel = ViewModel()
         let store = InMemoryGameStateStore()
-        fullfillForWon(store: store, width: width, height: height)
+        let board = fullfillForWon(width: boardWidth, height: boardHeight)
+        save(to: store,
+             state: .init(activePlayerSide: .dark, players: defaultPlayers, board: board))
         let viewController = composeViewController(store: store, viewModel: viewModel)
         viewDidAppear(viewController)
 
@@ -123,7 +126,9 @@ class ViewControllerTests: XCTestCase {
     func testWhenNewGameStartAndAllDiskPlacedThenGameTied() {
         let viewModel = ViewModel()
         let store = InMemoryGameStateStore()
-        fullfillForTied(store: store, width: width, height: height)
+        let board = fullfillForTied(width: boardWidth, height: boardHeight)
+        save(to: store,
+             state: .init(activePlayerSide: .dark, players: defaultPlayers, board: board))
         let viewController = composeViewController(store: store, viewModel: viewModel)
         viewDidAppear(viewController)
 
@@ -135,7 +140,9 @@ class ViewControllerTests: XCTestCase {
     func testWhenNewGameStartAndLeftOnlyOnePlacableDiskThenPassedPlayer() {
         let viewModel = ViewModel()
         let store = InMemoryGameStateStore()
-        fullfillForPassed(store: store, width: width, height: height)
+        let board = fullfillForPassed(width: boardWidth, height: boardHeight)
+        save(to: store,
+             state: .init(activePlayerSide: .light, players: defaultPlayers, board: board))
         let viewController = composeViewController(store: store, viewModel: viewModel)
 
         (UIApplication.shared.connectedScenes.first!.delegate as? UIWindowSceneDelegate)?
@@ -162,84 +169,6 @@ class ViewControllerTests: XCTestCase {
         viewModel.userActionDelegate = gameManager
         gameManager.delegate = viewModel
         return ViewController.instantiate(viewModel: viewModel)
-    }
-
-    /// 盤の幅（ `8` ）を表します。
-    private let width: Int = 8
-
-    /// 盤の高さ（ `8` ）を返します。
-    private let height: Int = 8
-
-    private let initialPlacedDisks: [(x: Int, y: Int)] =
-        [
-            (x: ReversiSpecification.width / 2 - 1, y: ReversiSpecification.height / 2 - 1),
-            (x: ReversiSpecification.width / 2, y: ReversiSpecification.height / 2 - 1),
-            (x: ReversiSpecification.width / 2 - 1, y: ReversiSpecification.height / 2),
-            (x: ReversiSpecification.width / 2, y: ReversiSpecification.height / 2),
-        ]
-
-    private func fullfillForWon(store: GameStateStore,
-              width: Int, height: Int) {
-        let board = Board()
-        for y in 0..<height {
-            for x in 0..<width {
-                board.setDisks(.dark, at: [.init(x: x, y: y)])
-            }
-        }
-        let exp = expectation(description: "wait for save")
-        store.saveGame(turn: .dark, players: defaultPlayers, board: board) { _ in
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1.0)
-    }
-
-    private func fullfillForTied(store: GameStateStore,
-              width: Int, height: Int) {
-        let board = Board()
-        var turn: Disk = .dark
-        for y in 0..<height {
-            for x in 0..<width {
-                board.setDisks(turn, at: [.init(x: x, y: y)])
-                turn = turn.flipped
-            }
-        }
-        let exp = expectation(description: "wait for save")
-        store.saveGame(turn: .dark, players: defaultPlayers, board: board) { _ in
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1.0)
-    }
-
-    private func fullfillForPassed(store: GameStateStore,
-              width: Int, height: Int) {
-        let lastX = width - 1
-        let lastY = height - 1
-        let board = Board()
-        for y in 0..<height {
-            for x in 0..<width {
-                // 一箇所だけ隙間を空けておく
-                if x == 0 && y == 0
-                    || x == lastX && y == lastY {
-                    continue
-                }
-                board.setDisks(.dark, at: [.init(x: x, y: y)])
-            }
-        }
-        board.setDisks(.light, at: [.init(x: lastX, y: lastY)])
-        let exp = expectation(description: "wait for save")
-        store.saveGame(turn: .light, players: defaultPlayers, board: board) { _ in
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1.0)
-    }
-
-    private func deleteGame() {
-        let path = (NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first!
-            as NSString).appendingPathComponent("Game")
-        let fileManager = FileManager.default
-        if fileManager.fileExists(atPath: path) {
-            try! fileManager.removeItem(atPath: path)
-        }
     }
 }
 

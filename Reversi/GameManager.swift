@@ -19,7 +19,7 @@ final class GameManager {
     private var lightPlayer = GamePlayer(type: .manual, side: .light)
 
     private let store: GameStateStore
-    private var state: GameState!
+    private(set) var state: GameState!
     private var board: Board {
         return state.board
     }
@@ -50,7 +50,7 @@ final class GameManager {
     }
 
     /// ゲームの状態を初期化し、新しいゲームを開始します。
-    func newGame() -> GameState {
+    private func newGame() -> GameState {
         let board = Board()
         board.reset()
         return GameState(
