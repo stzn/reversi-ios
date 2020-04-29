@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import ReversiCore
+
 @testable import Reversi
 
 extension Optional where Wrapped == Disk {

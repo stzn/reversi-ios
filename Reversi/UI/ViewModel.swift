@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ReversiCore
 
 protocol ViewModelDelegate: AnyObject {
     func setInitialState(_ state: GameState)

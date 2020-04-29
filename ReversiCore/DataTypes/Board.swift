@@ -8,16 +8,21 @@
 
 import Foundation
 
-final class Board {
-    struct Position: Hashable {
-        let x: Int
-        let y: Int
+public final class Board {
+    public init() {}
+    public struct Position: Hashable {
+        public let x: Int
+        public let y: Int
+        public init(x: Int, y: Int) {
+            self.x = x
+            self.y = y
+        }
     }
 
-    private(set) var disks: [Position: Disk] = [:]
+    private(set) public var disks: [Position: Disk] = [:]
 
     /// 盤をゲーム開始時に状態に戻します。
-    func reset() {
+    public func reset() {
         disks = [:]
         let width = ReversiSpecification.width
         let height = ReversiSpecification.height
@@ -34,7 +39,7 @@ final class Board {
     /// - Parameter completion: アニメーションの完了通知を受け取るハンドラーです。
     ///     `animated` に `false` が指定された場合は状態が変更された後で即座に同期的に呼び出されます。
     ///     ハンドラーが受け取る `Bool` 値は、 `UIView.animate()`  等に準じます。
-    func setDisk(_ disk: Disk, atX x: Int, y: Int,
+    public func setDisk(_ disk: Disk, atX x: Int, y: Int,
                  completion: ((Bool) -> Void)? = nil) {
         guard ReversiSpecification.isInRange(atX: x, y: y) else {
             completion?(false)
@@ -50,7 +55,7 @@ final class Board {
     /// - Parameter completion: アニメーションの完了通知を受け取るハンドラーです。
     ///     `animated` に `false` が指定された場合は状態が変更された後で即座に同期的に呼び出されます。
     ///     ハンドラーが受け取る `Bool` 値は、 `UIView.animate()`  等に準じます。
-    func setDisks(_ disk: Disk, at positions: [Position],
+    public func setDisks(_ disk: Disk, at positions: [Position],
                  completion: ((Bool) -> Void)? = nil) {
         for position in positions {
             guard ReversiSpecification.isInRange(atX: position.x, y: position.y) else {
@@ -67,7 +72,7 @@ final class Board {
     /// - Parameter x: セルの列です。
     /// - Parameter y: セルの行です。
     /// - Returns: セルにディスクが置かれている場合はそのディスクの値を、置かれていない場合は `nil` を返します。
-    func diskAt(x: Int, y: Int) -> Disk? {
+    public func diskAt(x: Int, y: Int) -> Disk? {
         return disks.first(where: {
             (position, disk) in position == .init(x: x, y: y)
         })?.value
@@ -76,7 +81,7 @@ final class Board {
     /// `side` で指定された色のディスクが盤上に置かれている枚数を返します。
     /// - Parameter side: 数えるディスクの色です。
     /// - Returns: `side` で指定された色のディスクの、盤上の枚数です。
-    func countDisks(of side: Disk) -> Int {
+    public func countDisks(of side: Disk) -> Int {
         return disks.values.filter { disk in
             switch (side, disk) {
             case (.dark, .dark), (.light, .light):

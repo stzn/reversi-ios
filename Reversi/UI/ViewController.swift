@@ -1,4 +1,5 @@
 import UIKit
+import ReversiCore
 
 class ViewController: UIViewController {
     private var viewModel: ViewModel!

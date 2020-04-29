@@ -8,7 +8,7 @@
 
 import XCTest
 
-@testable import Reversi
+@testable import ReversiCore
 
 class BoardTests: XCTestCase {
     func testWhenInitThenDisksAreEmpty() {

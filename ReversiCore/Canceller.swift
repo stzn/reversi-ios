@@ -6,15 +6,15 @@
 //  Copyright © 2020 Yuta Koshizawa. All rights reserved.
 //
 
-final class Canceller {
-    private(set) var isCancelled: Bool = false
+public final class Canceller {
+    private(set) public var isCancelled: Bool = false
     private let body: (() -> Void)?
 
-    init(_ body: (() -> Void)?) {
+    public init(_ body: (() -> Void)?) {
         self.body = body
     }
 
-    func cancel() {
+    public func cancel() {
         if isCancelled { return }
         isCancelled = true
         body?()

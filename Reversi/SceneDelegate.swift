@@ -1,4 +1,5 @@
 import UIKit
+import ReversiCore
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 

@@ -6,7 +6,7 @@
 //  Copyright © 2020 Yuta Koshizawa. All rights reserved.
 //
 
-protocol UserActionDelegate: AnyObject {
+public protocol UserActionDelegate: AnyObject {
     func requestStartGame()
     func placeDisk(at position: Board.Position) throws
     func changePlayerType(_ type: PlayerType, of side: Disk)

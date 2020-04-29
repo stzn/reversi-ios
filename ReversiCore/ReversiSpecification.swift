@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ReversiSpecification {
+public enum ReversiSpecification {
     /// 盤の幅を表します。
     public static let width: Int = 8
 
@@ -21,7 +21,7 @@ enum ReversiSpecification {
     /// 盤のセルの `y` の範囲を返します。
     public static let yRange: Range<Int> = 0..<height
 
-    static func flippedDiskCoordinatesByPlacingDisk(
+    public static func flippedDiskCoordinatesByPlacingDisk(
         _ disk: Disk, atX x: Int, y: Int, on board: Board
     ) -> [(Int, Int)] {
         let directions = [
@@ -70,13 +70,13 @@ enum ReversiSpecification {
     /// - Parameter x: セルの列です。
     /// - Parameter y: セルの行です。
     /// - Returns: 指定されたセルに `disk` を置ける場合は `true` を、置けない場合は `false` を返します。
-    static func canPlaceDisk(_ disk: Disk, atX x: Int, y: Int, on board: Board) -> Bool {
+    public static func canPlaceDisk(_ disk: Disk, atX x: Int, y: Int, on board: Board) -> Bool {
         return !flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y, on: board).isEmpty
     }
 
     /// `side` で指定された色のディスクを置ける盤上のセルの座標をすべて返します。
     /// - Returns: `side` で指定された色のディスクを置ける盤上のすべてのセルの座標の配列です。
-    static func validMoves(for side: Disk, on board: Board) -> [(x: Int, y: Int)] {
+    public static func validMoves(for side: Disk, on board: Board) -> [(x: Int, y: Int)] {
         var coordinates: [(Int, Int)] = []
 
         for y in yRange {
@@ -90,7 +90,7 @@ enum ReversiSpecification {
         return coordinates
     }
 
-    static func isInRange(atX x: Int, y: Int) -> Bool {
+    public static func isInRange(atX x: Int, y: Int) -> Bool {
         return xRange.contains(x) && yRange.contains(y)
     }
 }

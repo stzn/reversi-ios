@@ -24,7 +24,7 @@ extension Disk {
         self = flipped
     }
 
-    init(index: Int) {
+    public init(index: Int) {
         for side in Disk.sides {
             if index == side.index {
                 self = side
@@ -34,7 +34,7 @@ extension Disk {
         preconditionFailure("Illegal index: \(index)")
     }
 
-    var index: Int {
+    public var index: Int {
         switch self {
         case .dark: return 0
         case .light: return 1

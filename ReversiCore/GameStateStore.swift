@@ -6,7 +6,7 @@
 //  Copyright © 2020 Yuta Koshizawa. All rights reserved.
 //
 
-protocol GameStateStore {
+public protocol GameStateStore {
     func saveGame(turn: Disk, players: [GamePlayer], board: Board,
                   completion: @escaping (Result<Void, Error>) -> Void)
     func loadGame(completion: @escaping (Result<GameState, Error>) -> Void)

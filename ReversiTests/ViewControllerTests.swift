@@ -6,6 +6,7 @@
 //  Copyright © 2020 Yuta Koshizawa. All rights reserved.
 //
 
+import ReversiCore
 import XCTest
 
 @testable import Reversi
@@ -86,8 +87,9 @@ class ViewControllerTests: XCTestCase {
         store.loadGame { result in
             switch result {
             case .success(let state):
-                XCTAssertEqual(state.players[Disk.dark.index].type,
-                               PlayerType(rawValue: playerType.flipped.rawValue))
+                XCTAssertEqual(
+                    state.players[Disk.dark.index].type,
+                    PlayerType(rawValue: playerType.flipped.rawValue))
             case .failure:
                 XCTFail("should be success")
             }
@@ -98,10 +100,12 @@ class ViewControllerTests: XCTestCase {
         let viewModel = ViewModel()
         let store = InMemoryGameStateStore()
         let board = fullfillForWon(width: boardWidth, height: boardHeight)
-        save(to: store,
-             state: .init(activePlayerSide: .dark, players: defaultPlayers, board: board))
-        let viewController = composeViewController(store: store,
-                                                   viewModel: viewModel)
+        save(
+            to: store,
+            state: .init(activePlayerSide: .dark, players: defaultPlayers, board: board))
+        let viewController = composeViewController(
+            store: store,
+            viewModel: viewModel)
         viewDidAppear(viewController)
         viewModel.requestGameReset()
         initialPlacedDisks.forEach { (position, disk) in
@@ -113,8 +117,9 @@ class ViewControllerTests: XCTestCase {
         let viewModel = ViewModel()
         let store = InMemoryGameStateStore()
         let board = fullfillForWon(width: boardWidth, height: boardHeight)
-        save(to: store,
-             state: .init(activePlayerSide: .dark, players: defaultPlayers, board: board))
+        save(
+            to: store,
+            state: .init(activePlayerSide: .dark, players: defaultPlayers, board: board))
         let viewController = composeViewController(store: store, viewModel: viewModel)
         viewDidAppear(viewController)
 
@@ -127,8 +132,9 @@ class ViewControllerTests: XCTestCase {
         let viewModel = ViewModel()
         let store = InMemoryGameStateStore()
         let board = fullfillForTied(width: boardWidth, height: boardHeight)
-        save(to: store,
-             state: .init(activePlayerSide: .dark, players: defaultPlayers, board: board))
+        save(
+            to: store,
+            state: .init(activePlayerSide: .dark, players: defaultPlayers, board: board))
         let viewController = composeViewController(store: store, viewModel: viewModel)
         viewDidAppear(viewController)
 
@@ -141,8 +147,9 @@ class ViewControllerTests: XCTestCase {
         let viewModel = ViewModel()
         let store = InMemoryGameStateStore()
         let board = fullfillForPassed(width: boardWidth, height: boardHeight)
-        save(to: store,
-             state: .init(activePlayerSide: .light, players: defaultPlayers, board: board))
+        save(
+            to: store,
+            state: .init(activePlayerSide: .light, players: defaultPlayers, board: board))
         let viewController = composeViewController(store: store, viewModel: viewModel)
 
         (UIApplication.shared.connectedScenes.first!.delegate as? UIWindowSceneDelegate)?

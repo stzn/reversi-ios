@@ -6,6 +6,7 @@
 //  Copyright © 2020 Yuta Koshizawa. All rights reserved.
 //
 
+import ReversiCore
 import XCTest
 
 @testable import Reversi
@@ -17,8 +18,9 @@ class ViewModelTests: XCTestCase {
 
         viewModel.selectedCell(atX: expected.x, y: expected.y)
 
-        XCTAssertEqual(userActionDelegate.placeDiskReceivedData.first!,
-                       expected)
+        XCTAssertEqual(
+            userActionDelegate.placeDiskReceivedData.first!,
+            expected)
     }
 
     func testWhenCallChangedPlayerTypeThenSendValidData() {
@@ -55,8 +57,9 @@ class ViewModelTests: XCTestCase {
 
         viewModel.update(.start(expected))
 
-        XCTAssertEqual(delegate.setInitialStateReceivedData?.board.disks,
-                       expected.board.disks)
+        XCTAssertEqual(
+            delegate.setInitialStateReceivedData?.board.disks,
+            expected.board.disks)
         delegate.setPlayerTypeReceivedData.enumerated().forEach { (index, received) in
             let (type, side) = received
             XCTAssertEqual(type, expected.players[index].type.rawValue)
@@ -65,25 +68,32 @@ class ViewModelTests: XCTestCase {
     }
 
     func testWhenCallSetActionThenSendValidData() {
-        let expected = (disk: Disk.dark,
-                        position: Board.Position(x: 0, y: 0),
-                        board: Board())
+        let expected = (
+            disk: Disk.dark,
+            position: Board.Position(x: 0, y: 0),
+            board: Board()
+        )
         let (viewModel, delegate, _) = makeTestTarget()
 
         viewModel.update(.set(expected.disk, expected.position, expected.board))
 
         let receivedData = delegate.setDiskReceivedData.first!
-        XCTAssertEqual(receivedData.board.disks,
-                       expected.board.disks)
-        XCTAssertEqual(Board.Position(x: receivedData.x, y: receivedData.y),
-                       expected.position)
-        XCTAssertEqual(receivedData.disk,
-                       expected.disk)
+        XCTAssertEqual(
+            receivedData.board.disks,
+            expected.board.disks)
+        XCTAssertEqual(
+            Board.Position(x: receivedData.x, y: receivedData.y),
+            expected.position)
+        XCTAssertEqual(
+            receivedData.disk,
+            expected.disk)
     }
 
     func testWhenCallNextActionThenSendValidData() {
-        let expected = (player: defaultPlayers[0],
-                        board: Board())
+        let expected = (
+            player: defaultPlayers[0],
+            board: Board()
+        )
         let (viewModel, delegate, _) = makeTestTarget()
 
         viewModel.update(.next(expected.player, expected.board))
@@ -120,7 +130,7 @@ class ViewModelTests: XCTestCase {
         let receivedData = delegate.finishedGameReceivedData
         XCTAssertEqual(receivedData, expected)
     }
-    
+
     private func makeTestTarget() -> (ViewModel, MockViewModelDelegate, MockUserActionDelegate) {
         let viewModel = ViewModel()
         let delegate = MockViewModelDelegate()

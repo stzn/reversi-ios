@@ -8,12 +8,12 @@
 
 import Foundation
 
-protocol GameManagerDelegate: AnyObject {
+public protocol GameManagerDelegate: AnyObject {
     func update(_ action: NextAction)
 }
 
-final class GameManager {
-    weak var delegate: GameManagerDelegate?
+public final class GameManager {
+    public weak var delegate: GameManagerDelegate?
 
     private var darkPlayer = GamePlayer(type: .manual, side: .dark)
     private var lightPlayer = GamePlayer(type: .manual, side: .light)
@@ -32,7 +32,7 @@ final class GameManager {
         self.state.players[self.state.activePlayerSide.flipped.index]
     }
 
-    init(store: GameStateStore) {
+    public init(store: GameStateStore) {
         self.store = store
         store.loadGame { [weak self] result in
             guard let self = self else { return }
@@ -131,11 +131,11 @@ extension GameManager {
 // MARK: UserActionDelegate
 
 extension GameManager: UserActionDelegate {
-    func requestStartGame() {
+    public func requestStartGame() {
         self.delegate?.update(.start(self.state))
     }
 
-    func placeDisk(at position: Board.Position) throws {
+    public func placeDisk(at position: Board.Position) throws {
         let side = state.activePlayerSide
         guard ReversiSpecification.canPlaceDisk(side, atX: position.x, y: position.y, on: board)
         else {
@@ -152,17 +152,17 @@ extension GameManager: UserActionDelegate {
         }
     }
 
-    func changePlayerType(_ type: PlayerType, of side: Disk) {
+    public func changePlayerType(_ type: PlayerType, of side: Disk) {
         self.state.players[side.index].setType(type)
         self.delegate?.update(.next(self.activePlayer, self.board))
         self.save()
     }
 
-    func requestNextTurn() {
+    public func requestNextTurn() {
         self.nextTurn()
     }
 
-    func requestResetGame() {
+    public func requestResetGame() {
         self.state = self.newGame()
         self.delegate?.update(.reset(state))
         self.save()

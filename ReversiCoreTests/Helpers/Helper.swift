@@ -1,13 +1,12 @@
 //
 //  Helper.swift
-//  ReversiTests
+//  ReversiCoreTests
 //
 //  Created by Shinzan Takata on 2020/04/26.
 //  Copyright © 2020 Yuta Koshizawa. All rights reserved.
 //
-import ReversiCore
 
-@testable import Reversi
+@testable import ReversiCore
 
 var defaultPlayers: [GamePlayer] = [
     GamePlayer(type: .manual, side: .dark),
