@@ -21,7 +21,7 @@ enum ReversiSpecification {
     /// 盤のセルの `y` の範囲を返します。
     public static let yRange: Range<Int> = 0..<height
 
-    private static func flippedDiskCoordinatesByPlacingDisk(
+    static func flippedDiskCoordinatesByPlacingDisk(
         _ disk: Disk, atX x: Int, y: Int, on board: Board
     ) -> [(Int, Int)] {
         let directions = [
@@ -94,4 +94,3 @@ enum ReversiSpecification {
         return xRange.contains(x) && yRange.contains(y)
     }
 }
-

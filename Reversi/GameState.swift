@@ -12,11 +12,11 @@ enum NextAction {
     case next(GamePlayer, Board)
     case pass(GamePlayer)
     case finish(GamePlayer?)
-    case reset
+    case reset(GameState)
 }
 
 struct GameState {
-    var activePlayer: GamePlayer
+    var activePlayerSide: Disk
     var players: [GamePlayer]
     var board: Board
 }

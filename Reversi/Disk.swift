@@ -23,4 +23,21 @@ extension Disk {
     public mutating func flip() {
         self = flipped
     }
+
+    init(index: Int) {
+        for side in Disk.sides {
+            if index == side.index {
+                self = side
+                return
+            }
+        }
+        preconditionFailure("Illegal index: \(index)")
+    }
+
+    var index: Int {
+        switch self {
+        case .dark: return 0
+        case .light: return 1
+        }
+    }
 }

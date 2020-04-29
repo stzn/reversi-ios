@@ -1,15 +1,16 @@
 //
-//  FileGameStateStore.swift
-//  Reversi
+//  InMemoryGameStore.swift
+//  ReversiTests
 //
-//  Created by Shinzan Takata on 2020/04/26.
+//  Created by Shinzan Takata on 2020/04/29.
 //  Copyright © 2020 Yuta Koshizawa. All rights reserved.
 //
 
 import Foundation
+@testable import Reversi
 
 extension Optional where Wrapped == Disk {
-    fileprivate init?<S: StringProtocol>(symbol: S) {
+    init?<S: StringProtocol>(symbol: S) {
         switch symbol {
         case "x":
             self = .some(.dark)
@@ -22,7 +23,7 @@ extension Optional where Wrapped == Disk {
         }
     }
 
-    fileprivate var symbol: String {
+    var symbol: String {
         switch self {
         case .some(.dark):
             return "x"
@@ -34,15 +35,12 @@ extension Optional where Wrapped == Disk {
     }
 }
 
-final class FileGameStateStore: GameStateStore {
-    private let path: String
-    init(path: String) {
-        self.path = path
-    }
+final class InMemoryGameStateStore: GameStateStore {
+    var savedData: String = ""
 
-    enum FileIOError: Error {
-        case write(path: String, cause: Error?)
-        case read(path: String, cause: Error?)
+    enum IOError: Error {
+        case write(cause: Error?)
+        case read(cause: Error?)
     }
 
     /// ゲームの状態をファイルに書き出し、保存します。
@@ -63,29 +61,17 @@ final class FileGameStateStore: GameStateStore {
             }
             output += "\n"
         }
-
-        do {
-            try output.write(toFile: path, atomically: true, encoding: .utf8)
-        } catch let error {
-            completion(.failure(FileIOError.read(path: path, cause: error)))
-            return
-        }
+        savedData = output
         completion(.success(()))
     }
 
     /// ゲームの状態をファイルから読み込み、復元します。
     func loadGame(completion: @escaping (Result<GameState, Error>) -> Void) {
-        var input: String
-        do {
-            input = try String(contentsOfFile: path, encoding: .utf8)
-        } catch {
-            completion(.failure(FileIOError.read(path: path, cause: error)))
-            return
-        }
+        let input = savedData
         var lines: ArraySlice<Substring> = input.split(separator: "\n")[...]
 
         guard var line = lines.popFirst() else {
-            completion(.failure(FileIOError.read(path: path, cause: nil)))
+            completion(.failure(IOError.read(cause: nil)))
             return
         }
 
@@ -95,7 +81,7 @@ final class FileGameStateStore: GameStateStore {
                 let diskSymbol = line.popFirst(),
                 let disknumber = Int(diskSymbol.description)
             else {
-                completion(.failure(FileIOError.read(path: path, cause: nil)))
+                completion(.failure(IOError.read(cause: nil)))
                 return
             }
             turn = Disk(index: disknumber)
@@ -109,7 +95,7 @@ final class FileGameStateStore: GameStateStore {
                 let playerNumber = Int(playerSymbol.description),
                 let playerType = PlayerType(rawValue: playerNumber)
             else {
-                completion(.failure(FileIOError.read(path: path, cause: nil)))
+                completion(.failure(IOError.read(cause: nil)))
                 return
             }
             players.append(GamePlayer(type: playerType, side: side))
@@ -118,7 +104,7 @@ final class FileGameStateStore: GameStateStore {
         let board = Board()
         do {  // board
             guard lines.count == ReversiSpecification.height else {
-                completion(.failure(FileIOError.read(path: path, cause: nil)))
+                completion(.failure(IOError.read(cause: nil)))
                 return
             }
 
@@ -132,13 +118,13 @@ final class FileGameStateStore: GameStateStore {
                     x += 1
                 }
                 guard x == ReversiSpecification.width else {
-                    completion(.failure(FileIOError.read(path: path, cause: nil)))
+                    completion(.failure(IOError.read(cause: nil)))
                     return
                 }
                 y += 1
             }
             guard y == ReversiSpecification.height else {
-                completion(.failure(FileIOError.read(path: path, cause: nil)))
+                completion(.failure(IOError.read(cause: nil)))
                 return
             }
         }
@@ -147,5 +133,9 @@ final class FileGameStateStore: GameStateStore {
             players: players,
             board: board)
         completion(.success(storedData))
+    }
+
+    func clear() {
+        savedData = ""
     }
 }

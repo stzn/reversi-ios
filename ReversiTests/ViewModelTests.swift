@@ -15,7 +15,7 @@ class ViewModelTests: XCTestCase {
         let expected = Board.Position(x: 0, y: 0)
         let (viewModel, _, userActionDelegate) = makeTestTarget()
 
-        viewModel.selectedCell(atX: expected.x, y: expected.y, of: .dark)
+        viewModel.selectedCell(atX: expected.x, y: expected.y)
 
         XCTAssertEqual(userActionDelegate.placeDiskReceivedData.first!,
                        expected)
@@ -186,7 +186,7 @@ final class MockUserActionDelegate: UserActionDelegate {
     }
 
     var placeDiskReceivedData: [Board.Position] = []
-    func placeDisk(at position: Board.Position, of side: Disk) {
+    func placeDisk(at position: Board.Position) {
         placeDiskReceivedData.append(position)
     }
 

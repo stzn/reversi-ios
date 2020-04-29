@@ -11,15 +11,11 @@ import XCTest
 @testable import Reversi
 
 class ViewControllerTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        deleteGame()
-    }
-
     func testWhenNewGameAndPlaceDiskAtValidPoasionThenPlacedDisk() {
         typealias TestCase = (UInt, Disk, Int, Int)
 
-        let viewController = makeAndShowViewController()
+        let viewController = composeViewController()
+        viewDidAppear(viewController)
         let testCases: [TestCase] = [
             (#line, .light, width / 2 - 2, height / 2),
             (#line, .light, width / 2, height / 2 - 2),
@@ -33,11 +29,8 @@ class ViewControllerTests: XCTestCase {
 
         for testCase in testCases {
             let (line, disk, x, y) = testCase
-            do {
-                try
-                    viewController.placeDisk(disk, atX: x, y: y, animated: false)
-            } catch {
-                XCTFail("\(error)", line: line)
+            viewController.placeDisk(disk, atX: x, y: y, animated: false) { _ in
+                XCTAssertNotNil(viewController.boardView.diskAt(x: x, y: y), line: line)
             }
         }
     }
@@ -45,7 +38,9 @@ class ViewControllerTests: XCTestCase {
     func testWhenNewGameAndPlaceDiskAtInValidPoasionThenNotPlacedDisk() {
         typealias TestCase = (UInt, Disk, Int, Int)
 
-        let viewController = makeAndShowViewController()
+        let viewController = composeViewController()
+        viewDidAppear(viewController)
+
         let testCases: [TestCase] = [
             (#line, .dark, width / 2 - 2, height / 2),
             (#line, .dark, width / 2, height / 2 - 2),
@@ -64,64 +59,75 @@ class ViewControllerTests: XCTestCase {
 
         for testCase in testCases {
             let (line, disk, x, y) = testCase
-            do {
-                try
-                    viewController
-                    .placeDisk(disk, atX: x, y: y, animated: false)
-                XCTFail("should fail", line: line)
-            } catch {
-                XCTAssertTrue(error is DiskPlacementError)
+            viewController.placeDisk(disk, atX: x, y: y, animated: false) { _ in
+                XCTAssertNil(viewController.boardView.diskAt(x: x, y: y), line: line)
             }
         }
     }
 
-    func testWhenNewGameStartAndPlaceDiskThenTurnChanged() {
-        let viewController = makeAndShowViewController()
+//    func testWhenChangePlayerTypeThenPlayerTypeChanged() {
+//        let viewController = composeViewController()
+//        viewDidAppear(viewController)
+//
+//        let index = viewController.playerControls[Disk.dark.index].selectedSegmentIndex
+//        let playerType = PlayerType(rawValue: index)!
+//
+//        viewController.changePlayer(index: index)
+//        XCTAssertEqual(viewController.playerControls[Disk.dark.index].selectedSegmentIndex,
+//                       playerType.flipped.rawValue)
+//    }
 
-        XCTAssertEqual(viewController.turn, .dark)
-
-        try!
-            viewController
-            .placeDisk(.dark, atX: width / 2 + 1, y: height / 2, animated: false)
-        viewController.nextTurn()
-
-        XCTAssertEqual(viewController.turn, .light)
+    func testWhenResetThenGameWasInInitialState() {
+        let viewModel = ViewModel()
+        let store = InMemoryGameStateStore()
+        fullfillForWon(store: store,
+                       width: width, height: height)
+        let viewController = composeViewController(store: store,
+                                                   viewModel: viewModel)
+        viewDidAppear(viewController)
+        viewModel.requestGameReset()
+        initialPlacedDisks.forEach { (x, y) in
+            XCTAssertNotNil(viewController.boardView.diskAt(x: x, y: y))
+        }
     }
 
     func testWhenNewGameStartAndAllDiskPlacedThenGameEnded() {
-        let viewController = makeAndShowViewController()
-        fullfill(of: viewController, width: width, height: height)
-        let darkCount = viewController.countDisks(of: .dark)
-        let lightCount = viewController.countDisks(of: .light)
-        let winner = viewController.sideWithMoreDisks()
-        if darkCount == lightCount {
-            XCTAssertNil(winner)
-        } else {
-            XCTAssertNotNil(winner)
-        }
+        let viewModel = ViewModel()
+        let store = InMemoryGameStateStore()
+        fullfillForWon(store: store, width: width, height: height)
+        let viewController = composeViewController(store: store, viewModel: viewModel)
+        viewDidAppear(viewController)
+
+        viewModel.requestNextTurn()
+
+        XCTAssertEqual(viewController.messageLabel.text, " won")
     }
 
-    func testWhenResetThenGameWasInInitialState() {
-        let viewController = makeAndShowViewController()
-        fullfill(of: viewController, width: width, height: height)
-        viewController.newGame()
-        let darkCount = viewController.countDisks(of: .dark)
-        let lightCount = viewController.countDisks(of: .light)
-        XCTAssertEqual(darkCount, 2)
-        XCTAssertEqual(lightCount, 2)
-        XCTAssertEqual(viewController.turn, .dark)
+    func testWhenNewGameStartAndAllDiskPlacedThenGameTied() {
+        let viewModel = ViewModel()
+        let store = InMemoryGameStateStore()
+        fullfillForTied(store: store, width: width, height: height)
+        let viewController = composeViewController(store: store, viewModel: viewModel)
+        viewDidAppear(viewController)
+
+        viewModel.requestNextTurn()
+
+        XCTAssertEqual(viewController.messageLabel.text, "Tied")
     }
 
-    private func makeAndShowViewController() -> ViewController {
-        guard
-            let viewController = UIStoryboard(name: "Main", bundle: nil)
-                .instantiateInitialViewController() as? ViewController
-        else {
-            fatalError("must not be nil")
-        }
+    private func viewDidAppear(_ viewController: ViewController) {
         viewController.beginAppearanceTransition(true, animated: false)
         viewController.endAppearanceTransition()
-        return viewController
+    }
+
+    private func composeViewController(
+        store: GameStateStore = InMemoryGameStateStore(),
+        viewModel: ViewModel = ViewModel()
+    ) -> ViewController {
+        let gameManager = GameManager(store: store)
+        viewModel.userActionDelegate = gameManager
+        gameManager.delegate = viewModel
+        return ViewController.instantiate(viewModel: viewModel)
     }
 
     /// 盤の幅（ `8` ）を表します。
@@ -130,35 +136,60 @@ class ViewControllerTests: XCTestCase {
     /// 盤の高さ（ `8` ）を返します。
     private let height: Int = 8
 
-    private var path: String {
-        (NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first!
-            as NSString).appendingPathComponent("Game")
+    private let initialPlacedDisks: [(x: Int, y: Int)] =
+        [
+            (x: ReversiSpecification.width / 2 - 1, y: ReversiSpecification.height / 2 - 1),
+            (x: ReversiSpecification.width / 2, y: ReversiSpecification.height / 2 - 1),
+            (x: ReversiSpecification.width / 2 - 1, y: ReversiSpecification.height / 2),
+            (x: ReversiSpecification.width / 2, y: ReversiSpecification.height / 2),
+        ]
+
+    func fullfillForWon(store: GameStateStore,
+              width: Int, height: Int) {
+        let board = Board()
+        for y in 0..<height {
+            for x in 0..<width {
+                board.setDisks(.dark, at: [.init(x: x, y: y)])
+            }
+        }
+        let exp = expectation(description: "wait for save")
+        store.saveGame(turn: .dark, players: defaultPlayers, board: board) { _ in
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
     }
 
-    func deleteGame() {
-        let fileManager = FileManager.default
-        if fileManager.fileExists(atPath: path) {
-            try! fileManager.removeItem(atPath: path)
+    func fullfillForTied(store: GameStateStore,
+              width: Int, height: Int) {
+        let board = Board()
+        var turn: Disk = .dark
+        for y in 0..<height {
+            for x in 0..<width {
+                board.setDisks(turn, at: [.init(x: x, y: y)])
+                turn = turn.flipped
+            }
+        }
+        let exp = expectation(description: "wait for save")
+        store.saveGame(turn: .dark, players: defaultPlayers, board: board) { _ in
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+}
+
+extension ViewController {
+    func changePlayer(index: Int) {
+        playerControls[index].simulateValueChanged()
+    }
+}
+
+extension PlayerType {
+    var flipped: PlayerType {
+        switch self {
+        case .manual:
+            return .computer
+        case .computer:
+            return .manual
         }
     }
-
-    func fullfill(of viewController: ViewController, width: Int, height: Int) {
-        while let turn = viewController.turn {
-            guard let (x, y) = viewController.validMoves(for: turn).randomElement() else {
-                break
-            }
-            let exp = expectation(description: "wait for next turn")
-            do {
-                try viewController.placeDisk(turn, atX: x, y: y, animated: false) { _ in
-                    viewController.nextTurn()
-                    exp.fulfill()
-                }
-            } catch {
-                exp.fulfill()
-                break
-            }
-            wait(for: [exp], timeout: 1.0)
-        }
-    }
-
 }

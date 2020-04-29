@@ -67,7 +67,7 @@ class FileGameStateStoreTests: XCTestCase {
             .failure(FileGameStateStore.FileIOError.write(path: path, cause: nil))
         let exp = expectation(description: "wait for save")
         store.saveGame(
-            turn: data.activePlayer.side,
+            turn: data.activePlayerSide,
             players: data.players,
             board: data.board
         ) {
@@ -94,7 +94,7 @@ class FileGameStateStoreTests: XCTestCase {
 extension GameState {
     func isEqual(_ other: GameState) -> Bool {
         return self.board.disks == other.board.disks
-            && self.activePlayer.side.index == other.activePlayer.side.index
+            && self.activePlayerSide == other.activePlayerSide
             && self.players == other.players
     }
 }

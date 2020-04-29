@@ -44,6 +44,24 @@ final class Board {
         completion?(true)
     }
 
+    /// `position`で指定されたセルの状態を、与えられた `disk` に変更します。
+    /// - Parameter disk: セルに設定される新しい状態です。 `nil` はディスクが置かれていない状態を表します。
+    /// - Parameter positions: セルの行列です。
+    /// - Parameter completion: アニメーションの完了通知を受け取るハンドラーです。
+    ///     `animated` に `false` が指定された場合は状態が変更された後で即座に同期的に呼び出されます。
+    ///     ハンドラーが受け取る `Bool` 値は、 `UIView.animate()`  等に準じます。
+    func setDisks(_ disk: Disk, at positions: [Position],
+                 completion: ((Bool) -> Void)? = nil) {
+        for position in positions {
+            guard ReversiSpecification.isInRange(atX: position.x, y: position.y) else {
+                completion?(false)
+                return
+            }
+            disks[.init(x: position.x, y: position.y)] = disk
+        }
+        completion?(true)
+    }
+
     /// `x`, `y` で指定されたセルの状態を返します。
     /// セルにディスクが置かれていない場合、 `nil` が返されます。
     /// - Parameter x: セルの列です。

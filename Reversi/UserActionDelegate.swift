@@ -8,7 +8,7 @@
 
 protocol UserActionDelegate: AnyObject {
     func requestStartGame()
-    func placeDisk(at position: Board.Position, of side: Disk)
+    func placeDisk(at position: Board.Position) throws
     func changePlayerType(_ type: PlayerType, of side: Disk)
     func requestNextTurn()
     func requestResetGame()

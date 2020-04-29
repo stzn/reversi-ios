@@ -20,7 +20,7 @@ protocol ViewModelDelegate: AnyObject {
 }
 
 final class ViewModel {
-    weak var userActionDelegate: UserActionDelegate?
+    var userActionDelegate: UserActionDelegate?
     weak var delegate: ViewModelDelegate?
 
     /// 非同期処理のキャンセルを管理します。
@@ -30,8 +30,8 @@ final class ViewModel {
         userActionDelegate?.requestStartGame()
     }
 
-    func selectedCell(atX x: Int, y: Int, of side: Disk) {
-        userActionDelegate?.placeDisk(at: Board.Position(x: x, y: y), of: side)
+    func selectedCell(atX x: Int, y: Int) {
+        try? userActionDelegate?.placeDisk(at: Board.Position(x: x, y: y))
     }
 
     func changedPlayerType(_ type: Int, of side: Disk) {
@@ -85,18 +85,22 @@ extension ViewModel {
     }
 
     private func setDiskAtRandom(by player: GamePlayer, on board: Board) {
-        let (x, y) =
+        guard let (x, y) =
             ReversiSpecification
             .validMoves(for: player.side, on: board)
-            .randomElement()!
-        self.delegate?.setDisk(player.side, atX: x, y: y, on: board)
+                .randomElement() else {
+                    delegate?.finishedGame(wonBy: nil)
+                    return
+        }
+        try? userActionDelegate?.placeDisk(at: .init(x: x, y: y))
     }
 
-    private func resettedGame() {
+    private func resettedGame(with state: GameState) {
         playerCancellers.forEach { (player, canceller) in
             canceller.cancel()
             playerCancellers[player] = nil
         }
+        self.delegate?.setInitialState(state)
     }
 }
 
@@ -105,6 +109,8 @@ extension ViewModel: GameManagerDelegate {
         switch action {
         case .start(let state):
             self.delegate?.setInitialState(state)
+            let player = state.players[state.activePlayerSide.index]
+            self.waitForPlayer(player, on: state.board)
         case let .set(disk, position, board):
             self.delegate?.setDisk(disk, atX: position.x, y: position.y, on: board)
         case .next(let player, let board):
@@ -114,8 +120,8 @@ extension ViewModel: GameManagerDelegate {
             self.delegate?.passedTurn(of: player)
         case .finish(let winner):
             self.delegate?.finishedGame(wonBy: winner)
-        case .reset:
-            self.resettedGame()
+        case .reset(let state):
+            self.resettedGame(with: state)
         }
     }
 }

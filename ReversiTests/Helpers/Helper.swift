@@ -13,6 +13,6 @@ var defaultPlayers: [GamePlayer] = [
     GamePlayer(type: .manual, side: .light),
 ]
 
-var anyGameState = GameState(activePlayer: defaultPlayers.first!,
+var anyGameState = GameState(activePlayerSide: defaultPlayers.first!.side,
                              players: defaultPlayers,
                              board: Board())

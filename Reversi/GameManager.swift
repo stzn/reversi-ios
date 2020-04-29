@@ -19,9 +19,13 @@ final class GameManager {
     private var lightPlayer = GamePlayer(type: .manual, side: .light)
 
     private let store: GameStateStore
-    private(set) var state: GameState!
-    var board: Board {
+    private var state: GameState!
+    private var board: Board {
         return state.board
+    }
+
+    private var activePlayer: GamePlayer {
+        self.state.players[self.state.activePlayerSide.index]
     }
 
     init(store: GameStateStore) {
@@ -47,7 +51,7 @@ final class GameManager {
         let board = Board()
         board.reset()
         return GameState(
-            activePlayer: self.darkPlayer,
+            activePlayerSide: self.darkPlayer.side,
             players: [self.darkPlayer, self.lightPlayer],
             board: board)
     }
@@ -57,14 +61,14 @@ final class GameManager {
 extension GameManager {
     private func save(completion: ((Result<Void, Error>) -> Void)? = nil) {
         self.store.saveGame(
-            turn: self.state.activePlayer.side,
+            turn: self.state.activePlayerSide,
             players: self.state.players,
             board: self.board
         ) { completion?($0) }
     }
 }
 
-/// MARK: next turn
+/// MARK: next action judgement
 
 extension GameManager {
     /// プレイヤーの行動後、そのプレイヤーのターンを終了して次のターンを開始します。
@@ -72,7 +76,7 @@ extension GameManager {
     /// 両プレイヤーに有効な手がない場合、ゲームの勝敗を表示します。
     private func nextTurn(from player: GamePlayer) {
         if self.canDoNextTurn(player) {
-            self.moveTurn(to: player)
+            self.moveTurn(from: player)
             return
         }
 
@@ -95,14 +99,16 @@ extension GameManager {
             .validMoves(for: player.side.flipped, on: self.board).isEmpty
     }
 
-    private func moveTurn(to player: GamePlayer) {
+    private func moveTurn(from player: GamePlayer) {
         self.turnPlayer(from: player.side)
-        self.delegate?.update(.next(self.state.activePlayer, board))
+        self.delegate?.update(.next(self.activePlayer, board))
+        self.save()
     }
 
     private func passTurn(to player: GamePlayer) {
         self.turnPlayer(from: player.side)
-        self.delegate?.update(.pass(self.state.activePlayer))
+        self.delegate?.update(.pass(self.activePlayer))
+        self.save()
     }
 
     private func finishGame() {
@@ -111,7 +117,7 @@ extension GameManager {
     }
 
     private func turnPlayer(from side: Disk) {
-        self.state.activePlayer = self.state.players[side.flipped.index]
+        self.state.activePlayerSide = side.flipped
     }
 
     private func judgeWinner() -> GamePlayer? {
@@ -134,23 +140,36 @@ extension GameManager: UserActionDelegate {
         self.delegate?.update(.start(self.state))
     }
 
-    func placeDisk(at position: Board.Position, of side: Disk) {
-        self.state.board.setDisk(side, atX: position.x, y: position.y)
-        self.delegate?.update(.set(side, position, self.board))
-        self.save()
+    func placeDisk(at position: Board.Position) throws {
+        let side = state.activePlayerSide
+        guard ReversiSpecification.canPlaceDisk(side, atX: position.x, y: position.y, on: board)
+        else {
+            throw DiskPlacementError(disk: side, x: position.x, y: position.y)
+        }
+        let positions = ReversiSpecification.flippedDiskCoordinatesByPlacingDisk(
+            side, atX: position.x, y: position.y, on: self.board)
+        self.board.setDisks(side, at: [position] + positions.map(Board.Position.init)) {
+            isSuccess in
+            if isSuccess {
+                self.delegate?.update(.set(side, position, self.board))
+                self.save()
+            }
+        }
     }
 
     func changePlayerType(_ type: PlayerType, of side: Disk) {
         self.state.players[side.index].setType(type)
+        self.delegate?.update(.next(self.activePlayer, self.board))
         self.save()
     }
 
     func requestNextTurn() {
-        self.nextTurn(from: self.state.activePlayer)
+        self.nextTurn(from: self.activePlayer)
     }
 
     func requestResetGame() {
         self.state = self.newGame()
-        self.delegate?.update(.start(self.state))
+        self.delegate?.update(.reset(state))
+        self.save()
     }
 }
