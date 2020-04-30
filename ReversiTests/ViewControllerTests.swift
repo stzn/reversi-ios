@@ -35,13 +35,15 @@ class ViewControllerTests: XCTestCase {
 
         for testCase in testCases {
             let (line, disk, x, y) = testCase
-            viewController.placeDisk(disk, atX: x, y: y, animated: false) { _ in
+            viewController.placeDisk(disk, atX: x, y: y, animated: false) { isSuccess in
+                XCTAssertTrue(isSuccess, line: line)
                 XCTAssertNotNil(viewController.boardView.diskAt(x: x, y: y), line: line)
+                XCTAssertEqual(viewController.messageDiskView.disk, .light, line: line)
             }
         }
     }
 
-    func testWhenNewGameAndPlaceDiskAtInValidPoasionThenNotPlacedDisk() {
+    func testWhenNewGameAndPlaceDiskAtInValidPosionThenNotPlacedDisk() {
         typealias TestCase = (UInt, Disk, Int, Int)
 
         let viewController = composeViewController()
@@ -56,7 +58,25 @@ class ViewControllerTests: XCTestCase {
             (#line, .light, boardWidth / 2, boardHeight / 2 + 1),
             (#line, .light, boardWidth / 2 - 1, boardHeight / 2 - 2),
             (#line, .light, boardWidth / 2 - 2, boardHeight / 2 - 1),
+        ]
 
+        for testCase in testCases {
+            let (line, disk, x, y) = testCase
+            viewController.placeDisk(disk, atX: x, y: y, animated: false) { isSuccess in
+                XCTAssertFalse(isSuccess, line: line)
+                XCTAssertNil(viewController.boardView.diskAt(x: x, y: y), line: line)
+                XCTAssertEqual(viewController.messageDiskView.disk, .dark, line: line)
+            }
+        }
+    }
+
+    func testWhenNewGameAndPlaceDiskAtDuplicatePosionThenNotPlacedDisk() {
+        typealias TestCase = (UInt, Disk, Int, Int)
+
+        let viewController = composeViewController()
+        viewDidAppear(viewController)
+
+        let testCases: [TestCase] = [
             (#line, .dark, boardWidth / 2, boardHeight / 2),
             (#line, .dark, boardWidth / 2 - 1, boardHeight / 2 - 1),
             (#line, .light, boardWidth / 2 - 1, boardHeight / 2),
@@ -65,8 +85,9 @@ class ViewControllerTests: XCTestCase {
 
         for testCase in testCases {
             let (line, disk, x, y) = testCase
-            viewController.placeDisk(disk, atX: x, y: y, animated: false) { _ in
-                XCTAssertNil(viewController.boardView.diskAt(x: x, y: y), line: line)
+            viewController.placeDisk(disk, atX: x, y: y, animated: false) { isSuccess in
+                XCTAssertFalse(isSuccess, line: line)
+                XCTAssertEqual(viewController.messageDiskView.disk, .dark, line: line)
             }
         }
     }

@@ -209,7 +209,6 @@
 				D642BDB323A9FE4500396732 /* AppDelegate.swift */,
 				D642BDB523A9FE4500396732 /* SceneDelegate.swift */,
 				D642BDBC23A9FE4700396732 /* Assets.xcassets */,
-				D67E44CC2453E88800C0164F /* Core */,
 				D642BDBE23A9FE4700396732 /* LaunchScreen.storyboard */,
 				D642BDB923A9FE4500396732 /* Main.storyboard */,
 				D67E44D92454F7A900C0164F /* Store */,
@@ -265,13 +264,6 @@
 				D67B7BEF245A4153005B7B5A /* InMemoryGameStore.swift */,
 			);
 			path = Helpers;
-			sourceTree = "<group>";
-		};
-		D67E44CC2453E88800C0164F /* Core */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Core;
 			sourceTree = "<group>";
 		};
 		D67E44D92454F7A900C0164F /* Store */ = {

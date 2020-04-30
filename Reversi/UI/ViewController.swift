@@ -15,7 +15,7 @@ class ViewController: UIViewController {
 
     @IBOutlet private(set) var boardView: BoardView!
     
-    @IBOutlet private var messageDiskView: DiskView!
+    @IBOutlet private(set) var messageDiskView: DiskView!
     @IBOutlet private(set) var messageLabel: UILabel!
     @IBOutlet private var messageDiskSizeConstraint: NSLayoutConstraint!
     /// Storyboard 上で設定されたサイズを保管します。
@@ -81,7 +81,10 @@ extension ViewController: ViewModelDelegate {
     }
 
     func setDisk(_ disk: Disk, atX x: Int, y: Int, on board: Board) {
-        self.placeDisk(disk, atX: x, y: y, animated: true) { [weak self] _ in
+        self.placeDisk(disk, atX: x, y: y, animated: true) { [weak self] isSuccess in
+            guard isSuccess else {
+                return
+            }
             self?.setTurnMessages(for: disk)
             self?.updateCountLabels(on: board)
             self?.viewModel.requestNextTurn()
@@ -127,6 +130,7 @@ extension ViewController {
     func placeDisk(_ disk: Disk, atX x: Int, y: Int, animated isAnimated: Bool, completion: ((Bool) -> Void)? = nil) {
         let diskCoordinates = animationCoordinates(disk, atX: x, y: y)
         guard !diskCoordinates.isEmpty else {
+            completion?(false)
             return
         }
 
