@@ -293,6 +293,6 @@ extension ViewController: BoardViewDelegate {
     /// - Parameter y: セルの行です。
     func boardView(_ boardView: BoardView, didSelectCellAtX x: Int, y: Int) {
         if isAnimating { return }
-        viewModel.selectedCell(atX: x, y: y)
+        viewModel.selectedCell(for: messageDiskView.disk, atX: x, y: y)
     }
 }

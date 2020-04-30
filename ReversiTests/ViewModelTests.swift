@@ -16,7 +16,7 @@ class ViewModelTests: XCTestCase {
         let expected = Board.Position(x: 0, y: 0)
         let (viewModel, _, userActionDelegate) = makeTestTarget()
 
-        viewModel.selectedCell(atX: expected.x, y: expected.y)
+        viewModel.selectedCell(for: .dark, atX: expected.x, y: expected.y)
 
         XCTAssertEqual(
             userActionDelegate.placeDiskReceivedData.first!,

@@ -31,9 +31,14 @@ final class ViewModel {
         userActionDelegate?.requestStartGame()
     }
 
-    func selectedCell(atX x: Int, y: Int) {
+    func selectedCell(for side: Disk, atX x: Int, y: Int) {
         do {
             try userActionDelegate?.placeDisk(at: Board.Position(x: x, y: y))
+        } catch let error as DiskPlacementError {
+            guard ReversiSpecification.canPlaceDisk(side, atX: x, y: y, on: error.on) else {
+                return
+            }
+            userActionDelegate?.requestNextTurn()
         } catch {
             userActionDelegate?.requestNextTurn()
         }
@@ -73,7 +78,8 @@ extension ViewModel {
     }
 
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
-    private func playTurnOfComputer(_ player: GamePlayer, action: @escaping () -> Void) -> Canceller {
+    private func playTurnOfComputer(_ player: GamePlayer, action: @escaping () -> Void) -> Canceller
+    {
         self.delegate?.startedComputerTurn(of: player)
         let cleanUp: () -> Void = { [weak self, player] in
             guard let self = self else { return }
@@ -90,12 +96,14 @@ extension ViewModel {
     }
 
     private func setDiskAtRandom(by player: GamePlayer, on board: Board) {
-        guard let (x, y) =
-            ReversiSpecification
-            .validMoves(for: player.side, on: board)
-                .randomElement() else {
-                    delegate?.passedTurn()
-                    return
+        guard
+            let (x, y) =
+                ReversiSpecification
+                .validMoves(for: player.side, on: board)
+                .randomElement()
+        else {
+            delegate?.passedTurn()
+            return
         }
         do {
             try userActionDelegate?.placeDisk(at: .init(x: x, y: y))

@@ -6,8 +6,15 @@
 //  Copyright © 2020 Yuta Koshizawa. All rights reserved.
 //
 
-struct DiskPlacementError: Error {
+public struct DiskPlacementError: Error {
     let disk: Disk
     let x: Int
     let y: Int
+    public let on: Board
+    init(disk: Disk, x: Int, y: Int, on: Board) {
+        self.disk = disk
+        self.x = x
+        self.y = y
+        self.on = on
+    }
 }

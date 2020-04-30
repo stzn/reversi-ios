@@ -139,7 +139,7 @@ extension GameManager: UserActionDelegate {
         let side = state.activePlayerSide
         guard ReversiSpecification.canPlaceDisk(side, atX: position.x, y: position.y, on: board)
         else {
-            throw DiskPlacementError(disk: side, x: position.x, y: position.y)
+            throw DiskPlacementError(disk: side, x: position.x, y: position.y, on: board)
         }
         let positions = ReversiSpecification.flippedDiskCoordinatesByPlacingDisk(
             side, atX: position.x, y: position.y, on: self.board)
