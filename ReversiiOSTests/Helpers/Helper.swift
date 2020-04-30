@@ -1,13 +1,12 @@
 //
 //  Helper.swift
-//  ReversiTests
+//  ReversiiOS
 //
-//  Created by Shinzan Takata on 2020/04/26.
+//  Created by Shinzan Takata on 2020/05/01.
 //  Copyright © 2020 Yuta Koshizawa. All rights reserved.
 //
-import ReversiCore
 
-@testable import Reversi
+import ReversiCore
 
 var defaultPlayers: [GamePlayer] = [
     GamePlayer(type: .manual, side: .dark),
@@ -19,12 +18,12 @@ var anyGameState = GameState(activePlayerSide: defaultPlayers.first!.side,
                              board: Board())
 
 let initialPlacedDisks: [Board.Position: Disk] =
-    [
-        Board.Position(x: ReversiSpecification.width / 2 - 1, y: ReversiSpecification.height / 2 - 1): .light,
-        Board.Position(x: ReversiSpecification.width / 2, y: ReversiSpecification.height / 2 - 1): .dark,
-        Board.Position(x: ReversiSpecification.width / 2 - 1, y: ReversiSpecification.height / 2): .dark,
-        Board.Position(x: ReversiSpecification.width / 2, y: ReversiSpecification.height / 2): .light,
-    ]
+[
+    Board.Position(x: ReversiSpecification.width / 2 - 1, y: ReversiSpecification.height / 2 - 1): .light,
+    Board.Position(x: ReversiSpecification.width / 2, y: ReversiSpecification.height / 2 - 1): .dark,
+    Board.Position(x: ReversiSpecification.width / 2 - 1, y: ReversiSpecification.height / 2): .dark,
+    Board.Position(x: ReversiSpecification.width / 2, y: ReversiSpecification.height / 2): .light,
+]
 
 func deleteGame() {
     let path = (NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first!

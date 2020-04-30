@@ -9,7 +9,7 @@
 import ReversiCore
 import XCTest
 
-@testable import Reversi
+@testable import ReversiiOS
 
 class ViewControllerTests: XCTestCase {
     override func setUp() {

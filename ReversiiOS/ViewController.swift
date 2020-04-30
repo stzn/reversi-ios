@@ -1,10 +1,11 @@
 import UIKit
 import ReversiCore
 
-class ViewController: UIViewController {
+public class ViewController: UIViewController {
     private var viewModel: ViewModel!
-    static func instantiate(viewModel: ViewModel) -> ViewController {
-        guard let viewController = UIStoryboard(name: "Main", bundle: nil)
+    public static func instantiate(viewModel: ViewModel) -> ViewController {
+        let bundle = Bundle(for: ViewController.self)
+        guard let viewController = UIStoryboard(name: String(describing: ViewController.self), bundle: bundle)
             .instantiateInitialViewController() as? ViewController else {
                 preconditionFailure("must not be nil")
         }
@@ -33,7 +34,7 @@ class ViewController: UIViewController {
     private var animationCanceller: Canceller?
     private var isAnimating: Bool { animationCanceller != nil }
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         boardView.delegate = self
@@ -43,7 +44,7 @@ class ViewController: UIViewController {
     }
     
     private var viewHasAppeared: Bool = false
-    override func viewDidAppear(_ animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         if viewHasAppeared { return }
@@ -54,15 +55,15 @@ class ViewController: UIViewController {
 // MARK: ViewModelDelegate
 
 extension ViewController: ViewModelDelegate {
-    func startedComputerTurn(of player: GamePlayer) {
+    public func startedComputerTurn(of player: GamePlayer) {
         playerActivityIndicators[player.side.index].startAnimating()
     }
 
-    func endedComputerTurn(of player: GamePlayer) {
+    public func endedComputerTurn(of player: GamePlayer) {
         playerActivityIndicators[player.side.index].stopAnimating()
     }
 
-    func setInitialState(_ state: GameState) {
+    public func setInitialState(_ state: GameState) {
         boardView.reset()
 
         state.board.disks.forEach {
@@ -76,11 +77,11 @@ extension ViewController: ViewModelDelegate {
         updateCountLabels(on: state.board)
     }
 
-    func setPlayerType(_ type: Int, of side: Disk) {
+    public func setPlayerType(_ type: Int, of side: Disk) {
         playerControls[side.index].selectedSegmentIndex = type
     }
 
-    func setDisk(_ disk: Disk, atX x: Int, y: Int, on board: Board) {
+    public func setDisk(_ disk: Disk, atX x: Int, y: Int, on board: Board) {
         self.placeDisk(disk, atX: x, y: y, animated: true) { [weak self] isSuccess in
             guard isSuccess else {
                 return
@@ -91,7 +92,7 @@ extension ViewController: ViewModelDelegate {
         }
     }
 
-    func passedTurn() {
+    public func passedTurn() {
         let alertController = UIAlertController(
             title: "Pass",
             message: "Cannot place a disk.",
@@ -103,11 +104,11 @@ extension ViewController: ViewModelDelegate {
         present(alertController, animated: true)
     }
 
-    func movedTurn(to player: GamePlayer) {
+    public func movedTurn(to player: GamePlayer) {
         setTurnMessages(for: player.side)
     }
 
-    func finishedGame(wonBy player: GamePlayer?) {
+    public func finishedGame(wonBy player: GamePlayer?) {
         if let winner = player {
             setFinishedMessages(for: winner)
         } else {
@@ -295,7 +296,7 @@ extension ViewController: BoardViewDelegate {
     /// - Parameter boardView: セルをタップされた `BoardView` インスタンスです。
     /// - Parameter x: セルの列です。
     /// - Parameter y: セルの行です。
-    func boardView(_ boardView: BoardView, didSelectCellAtX x: Int, y: Int) {
+    public func boardView(_ boardView: BoardView, didSelectCellAtX x: Int, y: Int) {
         if isAnimating { return }
         viewModel.selectedCell(for: messageDiskView.disk, atX: x, y: y)
     }

@@ -9,7 +9,7 @@
 import Foundation
 import ReversiCore
 
-protocol ViewModelDelegate: AnyObject {
+public protocol ViewModelDelegate: AnyObject {
     func setInitialState(_ state: GameState)
     func setPlayerType(_ type: Int, of side: Disk)
     func setDisk(_ disk: Disk, atX x: Int, y: Int, on board: Board)
@@ -20,10 +20,12 @@ protocol ViewModelDelegate: AnyObject {
     func endedComputerTurn(of player: GamePlayer)
 }
 
-final class ViewModel {
-    var userActionDelegate: UserActionDelegate?
-    weak var delegate: ViewModelDelegate?
+public final class ViewModel {
+    public var userActionDelegate: UserActionDelegate?
+    public weak var delegate: ViewModelDelegate?
 
+    public init() {}
+    
     /// 非同期処理のキャンセルを管理します。
     private var playerCancellers: [GamePlayer: Canceller] = [:]
 
@@ -122,7 +124,7 @@ extension ViewModel {
 }
 
 extension ViewModel: GameManagerDelegate {
-    func update(_ action: NextAction) {
+    public func update(_ action: NextAction) {
         switch action {
         case .start(let state):
             self.delegate?.setInitialState(state)

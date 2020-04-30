@@ -1,15 +1,14 @@
 //
 //  InMemoryGameStore.swift
-//  ReversiTests
+//  ReversiiOS
 //
-//  Created by Shinzan Takata on 2020/04/29.
+//  Created by Shinzan Takata on 2020/05/01.
 //  Copyright © 2020 Yuta Koshizawa. All rights reserved.
 //
 
 import Foundation
 import ReversiCore
-
-@testable import Reversi
+import ReversiStore
 
 extension Optional where Wrapped == Disk {
     init?<S: StringProtocol>(symbol: S) {

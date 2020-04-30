@@ -7,15 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D636B39F23D35043007F370F /* DiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D636B39E23D35043007F370F /* DiskView.swift */; };
 		D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDB323A9FE4500396732 /* AppDelegate.swift */; };
 		D642BDB623A9FE4500396732 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDB523A9FE4500396732 /* SceneDelegate.swift */; };
-		D642BDB823A9FE4500396732 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDB723A9FE4500396732 /* ViewController.swift */; };
-		D642BDBB23A9FE4500396732 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D642BDB923A9FE4500396732 /* Main.storyboard */; };
 		D642BDBD23A9FE4700396732 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D642BDBC23A9FE4700396732 /* Assets.xcassets */; };
 		D642BDC023A9FE4700396732 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D642BDBE23A9FE4700396732 /* LaunchScreen.storyboard */; };
-		D642BDD623AA0B3900396732 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDD523AA0B3900396732 /* CellView.swift */; };
-		D642BDDC23AA137C00396732 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDDB23AA137C00396732 /* BoardView.swift */; };
 		D67B7BC7245A18F4005B7B5A /* ReversiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D67B7BBE245A18F4005B7B5A /* ReversiCore.framework */; };
 		D67B7BD0245A18F4005B7B5A /* ReversiCore.h in Headers */ = {isa = PBXBuildFile; fileRef = D67B7BC0245A18F4005B7B5A /* ReversiCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D67B7BD3245A18F4005B7B5A /* ReversiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D67B7BBE245A18F4005B7B5A /* ReversiCore.framework */; };
@@ -42,11 +37,21 @@
 		D67B7C13245B689A005B7B5A /* FileGameStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44DE2455187D00C0164F /* FileGameStateStore.swift */; };
 		D67B7C14245B68A4005B7B5A /* FileGameStateStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44DC2454FA0A00C0164F /* FileGameStateStoreTests.swift */; };
 		D67B7C17245B690B005B7B5A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67B7C16245B690B005B7B5A /* Helper.swift */; };
-		D67E44E8245526D300C0164F /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44E7245526D300C0164F /* ViewModel.swift */; };
-		D67E44EA2455493F00C0164F /* ViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44E92455493F00C0164F /* ViewModelTests.swift */; };
-		D6ABBAE7245550CE009B28DD /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6ABBAE6245550CE009B28DD /* Helper.swift */; };
-		D6ABBAE924564C5E009B28DD /* ViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6ABBAE824564C5E009B28DD /* ViewControllerTests.swift */; };
-		D6ABBAEF2459206F009B28DD /* InMemoryGameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6ABBAEE2459206F009B28DD /* InMemoryGameStore.swift */; };
+		D67B7C26245B6A1E005B7B5A /* ReversiiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D67B7C1D245B6A1E005B7B5A /* ReversiiOS.framework */; };
+		D67B7C2D245B6A1E005B7B5A /* ReversiiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67B7C2C245B6A1E005B7B5A /* ReversiiOSTests.swift */; };
+		D67B7C2F245B6A1E005B7B5A /* ReversiiOS.h in Headers */ = {isa = PBXBuildFile; fileRef = D67B7C1F245B6A1E005B7B5A /* ReversiiOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D67B7C32245B6A1F005B7B5A /* ReversiiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D67B7C1D245B6A1E005B7B5A /* ReversiiOS.framework */; };
+		D67B7C33245B6A1F005B7B5A /* ReversiiOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D67B7C1D245B6A1E005B7B5A /* ReversiiOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D67B7C3A245B6A9B005B7B5A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDB723A9FE4500396732 /* ViewController.swift */; };
+		D67B7C3B245B6A9B005B7B5A /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44E7245526D300C0164F /* ViewModel.swift */; };
+		D67B7C3C245B6ADA005B7B5A /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDDB23AA137C00396732 /* BoardView.swift */; };
+		D67B7C3D245B6ADE005B7B5A /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDD523AA0B3900396732 /* CellView.swift */; };
+		D67B7C3E245B6AE3005B7B5A /* DiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D636B39E23D35043007F370F /* DiskView.swift */; };
+		D67B7C3F245B6B84005B7B5A /* ViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67E44E92455493F00C0164F /* ViewModelTests.swift */; };
+		D67B7C40245B6B84005B7B5A /* ViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6ABBAE824564C5E009B28DD /* ViewControllerTests.swift */; };
+		D67B7C46245B6C4F005B7B5A /* InMemoryGameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67B7C44245B6BEA005B7B5A /* InMemoryGameStore.swift */; };
+		D67B7C47245B6C53005B7B5A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67B7C42245B6B9C005B7B5A /* Helper.swift */; };
+		D67B7C49245B6C96005B7B5A /* ViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D67B7C48245B6C96005B7B5A /* ViewController.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +90,20 @@
 			remoteGlobalIDString = D67B7BF5245B688C005B7B5A;
 			remoteInfo = ReversiStore;
 		};
+		D67B7C27245B6A1E005B7B5A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D642BDA823A9FE4500396732 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D67B7C1C245B6A1E005B7B5A;
+			remoteInfo = ReversiiOS;
+		};
+		D67B7C30245B6A1E005B7B5A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D642BDA823A9FE4500396732 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D67B7C1C245B6A1E005B7B5A;
+			remoteInfo = ReversiiOS;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -96,6 +115,7 @@
 			files = (
 				D67B7BD4245A18F4005B7B5A /* ReversiCore.framework in Embed Frameworks */,
 				D67B7C0C245B688D005B7B5A /* ReversiStore.framework in Embed Frameworks */,
+				D67B7C33245B6A1F005B7B5A /* ReversiiOS.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -109,7 +129,6 @@
 		D642BDB323A9FE4500396732 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D642BDB523A9FE4500396732 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		D642BDB723A9FE4500396732 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		D642BDBA23A9FE4500396732 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D642BDBC23A9FE4700396732 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D642BDBF23A9FE4700396732 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D642BDC123A9FE4700396732 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -131,6 +150,15 @@
 		D67B7BFE245B688D005B7B5A /* ReversiStoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReversiStoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D67B7C07245B688D005B7B5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D67B7C16245B690B005B7B5A /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		D67B7C1D245B6A1E005B7B5A /* ReversiiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReversiiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D67B7C1F245B6A1E005B7B5A /* ReversiiOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReversiiOS.h; sourceTree = "<group>"; };
+		D67B7C20245B6A1E005B7B5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D67B7C25245B6A1E005B7B5A /* ReversiiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReversiiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D67B7C2C245B6A1E005B7B5A /* ReversiiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReversiiOSTests.swift; sourceTree = "<group>"; };
+		D67B7C2E245B6A1E005B7B5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D67B7C42245B6B9C005B7B5A /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		D67B7C44245B6BEA005B7B5A /* InMemoryGameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryGameStore.swift; sourceTree = "<group>"; };
+		D67B7C48245B6C96005B7B5A /* ViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ViewController.storyboard; sourceTree = "<group>"; };
 		D67E44CD2453E8A500C0164F /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		D67E44CF2453E8C500C0164F /* ReversiSpecification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReversiSpecification.swift; sourceTree = "<group>"; };
 		D67E44D12453EAC100C0164F /* BoardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardTests.swift; sourceTree = "<group>"; };
@@ -143,11 +171,9 @@
 		D67E44E524551D4200C0164F /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
 		D67E44E7245526D300C0164F /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		D67E44E92455493F00C0164F /* ViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelTests.swift; sourceTree = "<group>"; };
-		D6ABBAE6245550CE009B28DD /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		D6ABBAE824564C5E009B28DD /* ViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerTests.swift; sourceTree = "<group>"; };
 		D6ABBAEA2459182C009B28DD /* Canceller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canceller.swift; sourceTree = "<group>"; };
 		D6ABBAEC2459190E009B28DD /* DiskPlacementError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskPlacementError.swift; sourceTree = "<group>"; };
-		D6ABBAEE2459206F009B28DD /* InMemoryGameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryGameStore.swift; sourceTree = "<group>"; };
 		D6ABBAF2245967A5009B28DD /* GameManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManagerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -158,6 +184,7 @@
 			files = (
 				D67B7BD3245A18F4005B7B5A /* ReversiCore.framework in Frameworks */,
 				D67B7C0B245B688D005B7B5A /* ReversiStore.framework in Frameworks */,
+				D67B7C32245B6A1F005B7B5A /* ReversiiOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,6 +225,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D67B7C1A245B6A1E005B7B5A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D67B7C22245B6A1E005B7B5A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D67B7C26245B6A1E005B7B5A /* ReversiiOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -231,6 +273,8 @@
 				D67B7BCC245A18F4005B7B5A /* ReversiCoreTests */,
 				D67B7BF7245B688C005B7B5A /* ReversiStore */,
 				D67B7C04245B688D005B7B5A /* ReversiStoreTests */,
+				D67B7C1E245B6A1E005B7B5A /* ReversiiOS */,
+				D67B7C2B245B6A1E005B7B5A /* ReversiiOSTests */,
 				D642BDB123A9FE4500396732 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -244,6 +288,8 @@
 				D67B7BC6245A18F4005B7B5A /* ReversiCoreTests.xctest */,
 				D67B7BF6245B688C005B7B5A /* ReversiStore.framework */,
 				D67B7BFE245B688D005B7B5A /* ReversiStoreTests.xctest */,
+				D67B7C1D245B6A1E005B7B5A /* ReversiiOS.framework */,
+				D67B7C25245B6A1E005B7B5A /* ReversiiOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -256,9 +302,6 @@
 				D642BDB523A9FE4500396732 /* SceneDelegate.swift */,
 				D642BDBC23A9FE4700396732 /* Assets.xcassets */,
 				D642BDBE23A9FE4700396732 /* LaunchScreen.storyboard */,
-				D642BDB923A9FE4500396732 /* Main.storyboard */,
-				D67E44D92454F7A900C0164F /* Store */,
-				D67E44E424551A8A00C0164F /* UI */,
 			);
 			path = Reversi;
 			sourceTree = "<group>";
@@ -266,10 +309,7 @@
 		D642BDC923A9FE4700396732 /* ReversiTests */ = {
 			isa = PBXGroup;
 			children = (
-				D6ABBAE324554EB2009B28DD /* Helpers */,
 				D642BDCC23A9FE4700396732 /* Info.plist */,
-				D67E44E92455493F00C0164F /* ViewModelTests.swift */,
-				D6ABBAE824564C5E009B28DD /* ViewControllerTests.swift */,
 			);
 			path = ReversiTests;
 			sourceTree = "<group>";
@@ -339,28 +379,36 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		D67E44D92454F7A900C0164F /* Store */ = {
+		D67B7C1E245B6A1E005B7B5A /* ReversiiOS */ = {
 			isa = PBXGroup;
 			children = (
-			);
-			path = Store;
-			sourceTree = "<group>";
-		};
-		D67E44E424551A8A00C0164F /* UI */ = {
-			isa = PBXGroup;
-			children = (
+				D67B7C1F245B6A1E005B7B5A /* ReversiiOS.h */,
 				D642BDB723A9FE4500396732 /* ViewController.swift */,
 				D67E44E7245526D300C0164F /* ViewModel.swift */,
 				D636B3A123D43203007F370F /* Views */,
+				D67B7C20245B6A1E005B7B5A /* Info.plist */,
+				D67B7C48245B6C96005B7B5A /* ViewController.storyboard */,
 			);
-			path = UI;
+			path = ReversiiOS;
 			sourceTree = "<group>";
 		};
-		D6ABBAE324554EB2009B28DD /* Helpers */ = {
+		D67B7C2B245B6A1E005B7B5A /* ReversiiOSTests */ = {
 			isa = PBXGroup;
 			children = (
-				D6ABBAE6245550CE009B28DD /* Helper.swift */,
-				D6ABBAEE2459206F009B28DD /* InMemoryGameStore.swift */,
+				D67B7C41245B6B90005B7B5A /* Helpers */,
+				D67E44E92455493F00C0164F /* ViewModelTests.swift */,
+				D6ABBAE824564C5E009B28DD /* ViewControllerTests.swift */,
+				D67B7C2C245B6A1E005B7B5A /* ReversiiOSTests.swift */,
+				D67B7C2E245B6A1E005B7B5A /* Info.plist */,
+			);
+			path = ReversiiOSTests;
+			sourceTree = "<group>";
+		};
+		D67B7C41245B6B90005B7B5A /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				D67B7C42245B6B9C005B7B5A /* Helper.swift */,
+				D67B7C44245B6BEA005B7B5A /* InMemoryGameStore.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -384,6 +432,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D67B7C18245B6A1E005B7B5A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D67B7C2F245B6A1E005B7B5A /* ReversiiOS.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -401,6 +457,7 @@
 			dependencies = (
 				D67B7BD2245A18F4005B7B5A /* PBXTargetDependency */,
 				D67B7C0A245B688D005B7B5A /* PBXTargetDependency */,
+				D67B7C31245B6A1E005B7B5A /* PBXTargetDependency */,
 			);
 			name = Reversi;
 			productName = Reversi;
@@ -497,6 +554,42 @@
 			productReference = D67B7BFE245B688D005B7B5A /* ReversiStoreTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		D67B7C1C245B6A1E005B7B5A /* ReversiiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D67B7C34245B6A1F005B7B5A /* Build configuration list for PBXNativeTarget "ReversiiOS" */;
+			buildPhases = (
+				D67B7C18245B6A1E005B7B5A /* Headers */,
+				D67B7C19245B6A1E005B7B5A /* Sources */,
+				D67B7C1A245B6A1E005B7B5A /* Frameworks */,
+				D67B7C1B245B6A1E005B7B5A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ReversiiOS;
+			productName = ReversiiOS;
+			productReference = D67B7C1D245B6A1E005B7B5A /* ReversiiOS.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		D67B7C24245B6A1E005B7B5A /* ReversiiOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D67B7C37245B6A1F005B7B5A /* Build configuration list for PBXNativeTarget "ReversiiOSTests" */;
+			buildPhases = (
+				D67B7C21245B6A1E005B7B5A /* Sources */,
+				D67B7C22245B6A1E005B7B5A /* Frameworks */,
+				D67B7C23245B6A1E005B7B5A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D67B7C28245B6A1E005B7B5A /* PBXTargetDependency */,
+			);
+			name = ReversiiOSTests;
+			productName = ReversiiOSTests;
+			productReference = D67B7C25245B6A1E005B7B5A /* ReversiiOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -528,6 +621,13 @@
 						CreatedOnToolsVersion = 11.4.1;
 						TestTargetID = D642BDAF23A9FE4500396732;
 					};
+					D67B7C1C245B6A1E005B7B5A = {
+						CreatedOnToolsVersion = 11.4.1;
+					};
+					D67B7C24245B6A1E005B7B5A = {
+						CreatedOnToolsVersion = 11.4.1;
+						TestTargetID = D642BDAF23A9FE4500396732;
+					};
 				};
 			};
 			buildConfigurationList = D642BDAB23A9FE4500396732 /* Build configuration list for PBXProject "Reversi" */;
@@ -549,6 +649,8 @@
 				D67B7BC5245A18F4005B7B5A /* ReversiCoreTests */,
 				D67B7BF5245B688C005B7B5A /* ReversiStore */,
 				D67B7BFD245B688D005B7B5A /* ReversiStoreTests */,
+				D67B7C1C245B6A1E005B7B5A /* ReversiiOS */,
+				D67B7C24245B6A1E005B7B5A /* ReversiiOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -560,7 +662,6 @@
 			files = (
 				D642BDC023A9FE4700396732 /* LaunchScreen.storyboard in Resources */,
 				D642BDBD23A9FE4700396732 /* Assets.xcassets in Resources */,
-				D642BDBB23A9FE4500396732 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -599,6 +700,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D67B7C1B245B6A1E005B7B5A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D67B7C49245B6C96005B7B5A /* ViewController.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D67B7C23245B6A1E005B7B5A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -606,11 +722,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D636B39F23D35043007F370F /* DiskView.swift in Sources */,
-				D642BDD623AA0B3900396732 /* CellView.swift in Sources */,
-				D67E44E8245526D300C0164F /* ViewModel.swift in Sources */,
-				D642BDB823A9FE4500396732 /* ViewController.swift in Sources */,
-				D642BDDC23AA137C00396732 /* BoardView.swift in Sources */,
 				D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */,
 				D642BDB623A9FE4500396732 /* SceneDelegate.swift in Sources */,
 			);
@@ -620,10 +731,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6ABBAEF2459206F009B28DD /* InMemoryGameStore.swift in Sources */,
-				D6ABBAE7245550CE009B28DD /* Helper.swift in Sources */,
-				D67E44EA2455493F00C0164F /* ViewModelTests.swift in Sources */,
-				D6ABBAE924564C5E009B28DD /* ViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -673,6 +780,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D67B7C19245B6A1E005B7B5A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D67B7C3E245B6AE3005B7B5A /* DiskView.swift in Sources */,
+				D67B7C3D245B6ADE005B7B5A /* CellView.swift in Sources */,
+				D67B7C3C245B6ADA005B7B5A /* BoardView.swift in Sources */,
+				D67B7C3B245B6A9B005B7B5A /* ViewModel.swift in Sources */,
+				D67B7C3A245B6A9B005B7B5A /* ViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D67B7C21245B6A1E005B7B5A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D67B7C40245B6B84005B7B5A /* ViewControllerTests.swift in Sources */,
+				D67B7C46245B6C4F005B7B5A /* InMemoryGameStore.swift in Sources */,
+				D67B7C47245B6C53005B7B5A /* Helper.swift in Sources */,
+				D67B7C3F245B6B84005B7B5A /* ViewModelTests.swift in Sources */,
+				D67B7C2D245B6A1E005B7B5A /* ReversiiOSTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -701,17 +832,19 @@
 			target = D67B7BF5245B688C005B7B5A /* ReversiStore */;
 			targetProxy = D67B7C09245B688D005B7B5A /* PBXContainerItemProxy */;
 		};
+		D67B7C28245B6A1E005B7B5A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D67B7C1C245B6A1E005B7B5A /* ReversiiOS */;
+			targetProxy = D67B7C27245B6A1E005B7B5A /* PBXContainerItemProxy */;
+		};
+		D67B7C31245B6A1E005B7B5A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D67B7C1C245B6A1E005B7B5A /* ReversiiOS */;
+			targetProxy = D67B7C30245B6A1E005B7B5A /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		D642BDB923A9FE4500396732 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D642BDBA23A9FE4500396732 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		D642BDBE23A9FE4700396732 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1103,6 +1236,102 @@
 			};
 			name = Release;
 		};
+		D67B7C35245B6A1F005B7B5A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = ReversiiOS/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = shiz.sample.ReversiiOS;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		D67B7C36245B6A1F005B7B5A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = ReversiiOS/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = shiz.sample.ReversiiOS;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		D67B7C38245B6A1F005B7B5A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = L8VFCZLW2Z;
+				INFOPLIST_FILE = ReversiiOSTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = shiz.sample.ReversiiOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Reversi.app/Reversi";
+			};
+			name = Debug;
+		};
+		D67B7C39245B6A1F005B7B5A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = L8VFCZLW2Z;
+				INFOPLIST_FILE = ReversiiOSTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = shiz.sample.ReversiiOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Reversi.app/Reversi";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1165,6 +1394,24 @@
 			buildConfigurations = (
 				D67B7C11245B688D005B7B5A /* Debug */,
 				D67B7C12245B688D005B7B5A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D67B7C34245B6A1F005B7B5A /* Build configuration list for PBXNativeTarget "ReversiiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D67B7C35245B6A1F005B7B5A /* Debug */,
+				D67B7C36245B6A1F005B7B5A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D67B7C37245B6A1F005B7B5A /* Build configuration list for PBXNativeTarget "ReversiiOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D67B7C38245B6A1F005B7B5A /* Debug */,
+				D67B7C39245B6A1F005B7B5A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

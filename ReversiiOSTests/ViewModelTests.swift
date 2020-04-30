@@ -9,7 +9,7 @@
 import ReversiCore
 import XCTest
 
-@testable import Reversi
+@testable import ReversiiOS
 
 class ViewModelTests: XCTestCase {
     func testWhenCallSelectedCellThenSendValiadData() {
