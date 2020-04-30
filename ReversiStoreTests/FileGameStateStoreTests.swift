@@ -8,7 +8,7 @@
 import ReversiCore
 import XCTest
 
-@testable import Reversi
+@testable import ReversiStore
 
 class FileGameStateStoreTests: XCTestCase {
     private var path: String {

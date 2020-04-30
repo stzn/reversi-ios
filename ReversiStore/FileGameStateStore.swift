@@ -35,9 +35,9 @@ extension Optional where Wrapped == Disk {
     }
 }
 
-final class FileGameStateStore: GameStateStore {
+public final class FileGameStateStore: GameStateStore {
     private let path: String
-    init(path: String) {
+    public init(path: String) {
         self.path = path
     }
 
@@ -47,7 +47,7 @@ final class FileGameStateStore: GameStateStore {
     }
 
     /// ゲームの状態をファイルに書き出し、保存します。
-    func saveGame(
+    public func saveGame(
         turn: Disk, players: [GamePlayer], board: Board,
         completion: @escaping (Result<Void, Error>) -> Void
     ) {
@@ -75,7 +75,7 @@ final class FileGameStateStore: GameStateStore {
     }
 
     /// ゲームの状態をファイルから読み込み、復元します。
-    func loadGame(completion: @escaping (Result<GameState, Error>) -> Void) {
+    public func loadGame(completion: @escaping (Result<GameState, Error>) -> Void) {
         var input: String
         do {
             input = try String(contentsOfFile: path, encoding: .utf8)
