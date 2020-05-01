@@ -18,6 +18,7 @@ class FileGameStateStoreTests: XCTestCase {
 
     override func setUpWithError() throws {
         try super.setUpWithError()
+        delete(path: path)
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: path) {
             try fileManager.removeItem(atPath: path)
@@ -47,7 +48,8 @@ class FileGameStateStoreTests: XCTestCase {
     }
 
     func testWhenSaveGameWithErrorThenProvideErrorResult() {
-        let store = FileGameStateStore(path: "invalid path")
+        let invalidPath = ""
+        let store = FileGameStateStore(path: invalidPath)
         let result = save(data: anyGameState, to: store)
 
         switch result {
@@ -88,6 +90,13 @@ class FileGameStateStoreTests: XCTestCase {
         }
         wait(for: [exp], timeout: 1.0)
         return result
+    }
+
+    private func delete(path: String) {
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: path) {
+            try! fileManager.removeItem(atPath: path)
+        }
     }
 }
 

@@ -67,11 +67,10 @@ public final class FileGameStateStore: GameStateStore {
 
         do {
             try output.write(toFile: path, atomically: true, encoding: .utf8)
+            completion(.success(()))
         } catch let error {
             completion(.failure(FileIOError.read(path: path, cause: error)))
-            return
         }
-        completion(.success(()))
     }
 
     /// ゲームの状態をファイルから読み込み、復元します。
