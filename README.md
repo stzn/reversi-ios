@@ -1,4 +1,8 @@
-# リファクタリング・チャレンジ （リバーシ編） iOS版
+# 実装
+
+[challenge1](https://github.com/stzn/reversi-ios/tree/challenge1)
+
+# リファクタリング・チャレンジ （リバーシ編） iOS 版
 
 本チャレンジは、 _Fat View Controller_ として実装された[リバーシ](https://en.wikipedia.org/wiki/Reversi)アプリをリファクタリングし、どれだけクリーンな設計とコードを実現できるかというコンペティションです（ジャッジが優劣を判定するわけではなく、設計の技を競い合うのが目的です）。
 
@@ -244,13 +248,13 @@ x-------
 
 意味のあるコードが書かれているのは次の 5 ファイルです。
 
-| ファイル | 提供する主な型 | 概要 |
-|:--|:--|:--|
-| [ViewController.swift](Reversi/ViewController.swift) | `ViewController` | アプリ本体（ `UIViewController` のサブクラス） |
-| [BoardView.swift](Reversi/BoardView.swift)<br />（ Xcode 上では Views グループの中） | `BoardView` | リバーシの盤を表すビュー（ `UIView` のサブクラス） |
-| [CellView.swift](Reversi/CellView.swift)<br />（ Xcode 上では Views グループの中） | `CellView` | リバーシの盤のセルを表すビュー（ `UIView` のサブクラス） |
-| [DiskView.swift](Reversi/DiskView.swift)<br />（ Xcode 上では Views グループの中） | `DiskView` | リバーシのディスクを表すビュー（ `UIView` のサブクラス） |
-| [Disk.swift](Reversi/Disk.swift)<br />（ Xcode 上では DataTypes グループの中） | `Disk` | リバーシのディスク（黒か白か）を表すデータ構造（ `enum` ） |
+| ファイル                                                                             | 提供する主な型   | 概要                                                       |
+| :----------------------------------------------------------------------------------- | :--------------- | :--------------------------------------------------------- |
+| [ViewController.swift](Reversi/ViewController.swift)                                 | `ViewController` | アプリ本体（ `UIViewController` のサブクラス）             |
+| [BoardView.swift](Reversi/BoardView.swift)<br />（ Xcode 上では Views グループの中） | `BoardView`      | リバーシの盤を表すビュー（ `UIView` のサブクラス）         |
+| [CellView.swift](Reversi/CellView.swift)<br />（ Xcode 上では Views グループの中）   | `CellView`       | リバーシの盤のセルを表すビュー（ `UIView` のサブクラス）   |
+| [DiskView.swift](Reversi/DiskView.swift)<br />（ Xcode 上では Views グループの中）   | `DiskView`       | リバーシのディスクを表すビュー（ `UIView` のサブクラス）   |
+| [Disk.swift](Reversi/Disk.swift)<br />（ Xcode 上では DataTypes グループの中）       | `Disk`           | リバーシのディスク（黒か白か）を表すデータ構造（ `enum` ） |
 
 **基本的に ViewController.swift 以外には手を加える必要はありません** 。 `BoardView`, `CellView`, `DiskView` はリバーシ用に用意されたビュークラスで、 UIKit のコンポーネントと同じ感覚で利用できます。 `UISwitch` に不満があっても `UISwitch` そのものを改変するのではなく、ラッパークラスや `extension` で対応すると思います。 `BoardView` 等についても同様です。また、 `CellView` に関しては課題挑戦者が直接利用することもありません（ `BoardView` が内部的に利用しています）。 `DiskView` についても利用機会は限定的です。 `Disk` は黒か白かを表す小さな `enum` なので、実質的に使い方を覚える必要があるのは `BoardView` だけです。 `BoardView` にしても、 UIKit のビュークラス群と似た API を持つので、すぐに使い方を理解できると思います。
 
@@ -269,11 +273,11 @@ public enum Disk {
 
 `Disk` は補助的にいくつかの API を提供します。 `Disk` が提供する API は次の通りです。
 
-| API | 概要 |
-|:--|:--|
-| `mutating func flip()` | 自身の値を、現在の値が `.dark` なら `.light` に、 `.light` なら `.dark` に反転させます。 |
-| `var flipped: Disk { get }` | 自身の値を反転させた値（ `.dark` なら `.light` 、 `.light` なら `.dark` ）を返します。 |
-| `static var sides: [Disk] { get }` | `[.dark, .light]` を返します。 |
+| API                                | 概要                                                                                     |
+| :--------------------------------- | :--------------------------------------------------------------------------------------- |
+| `mutating func flip()`             | 自身の値を、現在の値が `.dark` なら `.light` に、 `.light` なら `.dark` に反転させます。 |
+| `var flipped: Disk { get }`        | 自身の値を反転させた値（ `.dark` なら `.light` 、 `.light` なら `.dark` ）を返します。   |
+| `static var sides: [Disk] { get }` | `[.dark, .light]` を返します。                                                           |
 
 ### DiskView.swift
 
@@ -301,9 +305,9 @@ diskView.disk.flip()
 
 `DiskView` が提供する API は次の通りです。
 
-| API | 概要 |
-|:--|:--|
-| `var disk: Disk { get set }` | このビューが表示するディスクの色を決定します。 |
+| API                            | 概要                                                                                                            |
+| :----------------------------- | :-------------------------------------------------------------------------------------------------------------- |
+| `var disk: Disk { get set }`   | このビューが表示するディスクの色を決定します。                                                                  |
 | `var name: String { get set }` | Interface Builder からディスクの色を設定するためのプロパティです。 `"dark"` か `"light"` の文字列を設定します。 |
 
 ### BoardView.swift
@@ -329,11 +333,11 @@ boardView.setDisk(.dark, atX: 3, y: 4, animated: false)
 
 `setDisk()` メソッドの引数 `animated` に `true` を渡した場合、セルの状態を変更するアニメーションが実行されます。これは、 `UISwitch` の `setOn(_:animated:)` メソッド（参考: [API リファレンス](https://developer.apple.com/documentation/uikit/uiswitch/1623686-seton)）に類似しています。アニメーションは、変更前後のセルの状態によって 3 種類存在します。
 
-| 前 | 後 | アニメーションの内容 |
-|:--|:--|:--|
-| `nil` | `.dark` または `.light` | ディスクが配置される。 |
-| `.dark` または `.light` | `nil` | ディスクが取り除かれる。 |
-| `.dark` または `.light` | 元と反転 | ディスクが裏返される。 |
+| 前                      | 後                      | アニメーションの内容     |
+| :---------------------- | :---------------------- | :----------------------- |
+| `nil`                   | `.dark` または `.light` | ディスクが配置される。   |
+| `.dark` または `.light` | `nil`                   | ディスクが取り除かれる。 |
+| `.dark` または `.light` | 元と反転                | ディスクが裏返される。   |
 
 どのアニメーションが適用されるかは自動的に決定されるため、この API の利用者がアニメーションの種類を選択する必要はありません。
 
@@ -353,16 +357,16 @@ boardView.setDisk(.dark, atX: 3, y: 4, animated: true) { isFinished in
 
 その他にも、 `BoardView` は補助的にいくつかの API を提供します。 `BoardView` が提供する API は次の通りです。
 
-| API | 概要 |
-|:--|:--|
-| `weak var delegate: BoardViewDelegate?` | セルがタップされたときの挙動を移譲するためのオブジェクトです。 |
-| `func diskAt(x: Int, y: Int) -> Disk?` | `x`, `y` で指定されたセルの状態を返します。セルにディスクが置かれていない場合は `nil` を返します。 |
-| `let height: Int ` | 盤の高さ（ `8` ）を返します。 |
-| `func reset()` | 盤をゲーム開始時に状態に戻します。このメソッドはアニメーションを伴いません。 |
+| API                                                                                                    | 概要                                                                                                                                                                                                                                                                                                                                                                        |
+| :----------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `weak var delegate: BoardViewDelegate?`                                                                | セルがタップされたときの挙動を移譲するためのオブジェクトです。                                                                                                                                                                                                                                                                                                              |
+| `func diskAt(x: Int, y: Int) -> Disk?`                                                                 | `x`, `y` で指定されたセルの状態を返します。セルにディスクが置かれていない場合は `nil` を返します。                                                                                                                                                                                                                                                                          |
+| `let height: Int`                                                                                      | 盤の高さ（ `8` ）を返します。                                                                                                                                                                                                                                                                                                                                               |
+| `func reset()`                                                                                         | 盤をゲーム開始時に状態に戻します。このメソッドはアニメーションを伴いません。                                                                                                                                                                                                                                                                                                |
 | `func setDisk(_ disk: Disk?, atX x: Int, y: Int, animated: Bool, completion: ((Bool) -> Void)? = nil)` | `x`, `y` で指定されたセルの状態を与えられた `disk` に変更します。 `animated` が `true` の場合、アニメーションが実行されます。アニメーションの完了通知は `completion` で受け取ることができます。 `completion` が受け取る `Bool` 値は、 `UIView.animate()` （参考: [API リファレンス](https://developer.apple.com/documentation/uikit/uiview/1622515-animate)）等に準じます。 |
-| `let width: Int` | 盤の幅（ `8` ）を返します。 |
-| `let xRange: Range<Int>` | 盤のセルの `x` の範囲（ `0 ..< 8` ）を返します。 |
-| `let yRange: Range<Int>` | 盤のセルの `y` の範囲（ `0 ..< 8` ）を返します。 |
+| `let width: Int`                                                                                       | 盤の幅（ `8` ）を返します。                                                                                                                                                                                                                                                                                                                                                 |
+| `let xRange: Range<Int>`                                                                               | 盤のセルの `x` の範囲（ `0 ..< 8` ）を返します。                                                                                                                                                                                                                                                                                                                            |
+| `let yRange: Range<Int>`                                                                               | 盤のセルの `y` の範囲（ `0 ..< 8` ）を返します。                                                                                                                                                                                                                                                                                                                            |
 
 `BoardView` は `BoardViewDelegate` を通じて、セルがタップされたことを通知します。
 
@@ -387,8 +391,8 @@ class ViewController: UIViewController {
 
 `BoardViewDelegate` が宣言する API は次の通りです。
 
-| API | 概要 |
-|:--|:--|
+| API                                                                       | 概要                                                                     |
+| :------------------------------------------------------------------------ | :----------------------------------------------------------------------- |
 | `func boardView(_ boardView: BoardView, didSelectCellAtX x: Int, y: Int)` | `boardView` の `x`, `y` で指定されるセルがタップされたときに呼ばれます。 |
 
 ### ViewController.swift
@@ -401,16 +405,16 @@ class ViewController: UIViewController
 
 `ViewController` の実装は主に次の 8 個のパートに分かれています。
 
-| パート | 内容　|
-|:--|:--|
-| 冒頭部 | `ViewController` のプロパティの宣言や `viewDidLoad()` ・ `viewDidAppear()` などの実装 |
-| Reversi logics | マスにディスクがおけるかや、勝敗を判定するメソッドなどの実装 |
-| Game management | 新規ゲームの開始やユーザーの入力待ち、勝敗判定など、リバーシのルール自体の実装 |
-| Views | 状態変更をビューに反映するためのメソッドの実装 |
-| Inputs | ユーザー入力をハンドリングするためのメソッドの実装 |
-| Save and Load | ゲームの状態をファイルに保存・読み込みするためのメソッドの実装 |
-| Additional types | このファイルで利用する補助的な型の実装 |
-| File-private extensions | このファイルで利用する補助的な `extension` の実装 |
+| パート                  | 内容　                                                                                |
+| :---------------------- | :------------------------------------------------------------------------------------ |
+| 冒頭部                  | `ViewController` のプロパティの宣言や `viewDidLoad()` ・ `viewDidAppear()` などの実装 |
+| Reversi logics          | マスにディスクがおけるかや、勝敗を判定するメソッドなどの実装                          |
+| Game management         | 新規ゲームの開始やユーザーの入力待ち、勝敗判定など、リバーシのルール自体の実装        |
+| Views                   | 状態変更をビューに反映するためのメソッドの実装                                        |
+| Inputs                  | ユーザー入力をハンドリングするためのメソッドの実装                                    |
+| Save and Load           | ゲームの状態をファイルに保存・読み込みするためのメソッドの実装                        |
+| Additional types        | このファイルで利用する補助的な型の実装                                                |
+| File-private extensions | このファイルで利用する補助的な `extension` の実装                                     |
 
 `ViewController` の実装で特筆すべきこととして、リバーシの盤の状態が `BoardView` インスタンスで管理されていることが挙げられます。 `boardView` プロパティがその役割を担っていて、モデルとビューのコードが混ざりあった状態です。さらに、ディスクが置かれたときに周辺のディスクをひっくり返す処理を実装した `placeDisk(_:atX:y:animated:completion:)` メソッド（と、その中から呼び出されている `animateSettingDisks(at:to:completion:)` メソッド）では、データの変更とアニメーションが互いに密接に関係した処理を行っています。これらは特に "Reversi logics" に関係が深いです。
 
@@ -432,9 +436,9 @@ class ViewController: UIViewController
 
 チャレンジの結果一覧です。掲載を希望される方は、下記の表に行を追加する Pull Request をお送り下さい。
 
-| リポジトリ | 作者 | アーキテクチャパターン | フレームワーク | UI | 備考 |
-|:--|:--|:--|:--|:--|:--|
-| [refactoring-challenge/reversi-ios](https://github.com/refactoring-challenge/reversi-ios) | [@koher](https://github.com/koher) | Fat View Controller | - | UIKit | 本リポジトリ |
+| リポジトリ                                                                                | 作者                               | アーキテクチャパターン | フレームワーク | UI    | 備考         |
+| :---------------------------------------------------------------------------------------- | :--------------------------------- | :--------------------- | :------------- | :---- | :----------- |
+| [refactoring-challenge/reversi-ios](https://github.com/refactoring-challenge/reversi-ios) | [@koher](https://github.com/koher) | Fat View Controller    | -              | UIKit | 本リポジトリ |
 
 ## License
 
