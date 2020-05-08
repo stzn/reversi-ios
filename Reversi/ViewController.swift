@@ -91,7 +91,6 @@ class ViewController: UIViewController {
                         animated: false)
                 }
                 updateView(true)
-                self.gameStarted()
                 return
             }
 
@@ -109,6 +108,8 @@ class ViewController: UIViewController {
             }
             
         }.store(in: &cancellables)
+
+        viewStore.send(.gameStarted)
     }
 
     private var viewHasAppeared: Bool = false
@@ -117,8 +118,8 @@ class ViewController: UIViewController {
 
         if viewHasAppeared { return }
         viewHasAppeared = true
+        playing = false
 
-        viewStore.send(.viewDidAppear)
     }
 
     func waitForPlayer() {
@@ -130,14 +131,6 @@ class ViewController: UIViewController {
             break
         case .computer:
             viewStore.send(.computerPlay)
-        }
-    }
-
-    // storeのsend中にsendをするとassertionFailureになるのを回避するためのワークアラウンドです。
-    // ここをどうにかしたい😅
-    private func gameStarted() {
-        DispatchQueue.main.async {
-            self.playing = false
         }
     }
 }

@@ -25,7 +25,7 @@ struct AppState: Equatable {
 }
 
 enum AppAction: Equatable {
-    case viewDidAppear
+    case gameStarted
     case diskPlaced(DiskPosition)
     case resetTapped
     case playerChanged(Disk, Player)
@@ -57,7 +57,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
     }
 
     switch action {
-    case .viewDidAppear:
+    case .gameStarted:
         return environment.gameStateManager.loadGame()
             .catchToEffect()
             .map(AppAction.loadGameResponse)
@@ -80,7 +80,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         return environment.gameStateManager.saveGame(state: AppState.intialState)
             .catchToEffect()
             .map(AppAction.saveGameResponse)
-            .flatMap { _ in Effect(value: AppAction.viewDidAppear) }
+            .flatMap { _ in Effect(value: AppAction.gameStarted) }
             .eraseToEffect()
     case .playerChanged(let disk, let player):
         state.players[disk.index] = player
