@@ -50,7 +50,7 @@ final class FileGameStateManager: GameStateManager {
         let path = self.path
         return Effect.future { callback in
             var output: String = ""
-            output += state.turn!.index.description
+            output += state.turn?.index.description ?? ""
             state.players.forEach {
                 output += $0.rawValue.description
             }

@@ -52,8 +52,12 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
             .eraseToEffect()
     }
 
-    guard var turn = state.turn else {
-        return .none
+    var isGameEnd: Bool {
+        guard let turn = state.turn else {
+            return true
+        }
+        return Rule.validMoves(for: turn.flipped, on: state.board).isEmpty
+            && Rule.validMoves(for: turn, on: state.board).isEmpty
     }
 
     switch action {
@@ -62,14 +66,13 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
             .catchToEffect()
             .map(AppAction.loadGameResponse)
     case .diskPlaced(let position):
-        turn.flip()
-
-        if Rule.validMoves(for: turn, on: state.board).isEmpty {
-            if Rule.validMoves(for: turn.flipped, on: state.board).isEmpty {
-                state.turn = nil
-            } else {
-                state.turn = turn
-            }
+        guard var turn = state.turn else {
+            return .none
+        }
+        if isGameEnd {
+            state.turn = nil
+        } else if Rule.validMoves(for: turn.flipped, on: state.board).isEmpty {
+            state.shouldSkip = true
         } else {
             playTurn(&state, position: position)
         }
@@ -110,15 +113,24 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
             .eraseToEffect()
     case .computerPlayResponse(let position):
         if let position = position {
-            return Effect(value: AppAction.diskPlaced(position))
+            playTurn(&state, position: position)
+        } else if isGameEnd {
+            state.turn = nil
         } else {
             state.shouldSkip = true
-            return .none
         }
+        return environment.gameStateManager.saveGame(state: state)
+            .catchToEffect()
+            .map(AppAction.saveGameResponse)
     case .turnSkipped:
         state.shouldSkip = false
         state.turn?.flip()
-        return .none
+        if let turn = state.turn, state.players[turn.index] == .computer {
+            return Effect(value: .computerPlay)
+        }
+        return environment.gameStateManager.saveGame(state: state)
+            .catchToEffect()
+            .map(AppAction.saveGameResponse)
     }
 }
 
