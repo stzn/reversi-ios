@@ -322,7 +322,7 @@ extension ViewController: BoardViewDelegate {
     /// - Parameter y: セルの行です。
     func boardView(_ boardView: BoardView, didSelectCellAtX x: Int, y: Int) {
         if isAnimating { return }
-        self.viewStore.send(.diskPlaced(.init(x: x, y: y)))
+        self.viewStore.send(.manualPlayerDiskPlaced(.init(x: x, y: y)))
     }
 }
 

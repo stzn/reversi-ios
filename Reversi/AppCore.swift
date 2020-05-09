@@ -26,7 +26,7 @@ struct AppState: Equatable {
 
 enum AppAction: Equatable {
     case gameStarted
-    case diskPlaced(DiskPosition)
+    case manualPlayerDiskPlaced(DiskPosition)
     case resetTapped
     case playerChanged(Disk, Player)
     case loadGameResponse(Result<GameStateLoadAction, GameStateManagerError>)
@@ -66,7 +66,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         return environment.gameStateManager.loadGame()
             .catchToEffect()
             .map(AppAction.loadGameResponse)
-    case .diskPlaced(let position):
+    case .manualPlayerDiskPlaced(let position):
         guard var turn = state.turn else {
             return .none
         }
