@@ -108,8 +108,6 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         return .none
     case .computerPlay:
         return playTurnOfComputer()
-            .receive(on: environment.mainQueue)
-            .eraseToEffect()
     case .computerPlayResponse(let position):
         if let position = position {
             playTurn(&state, position: position)
