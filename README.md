@@ -2,8 +2,6 @@
 
 [challenge1](https://github.com/stzn/reversi-ios/tree/challenge1)
 
-[ComposableArchitecture(実験)](https://github.com/stzn/reversi-ios/tree/composable-architecture)
-
 # リファクタリング・チャレンジ （リバーシ編） iOS 版
 
 本チャレンジは、 _Fat View Controller_ として実装された[リバーシ](https://en.wikipedia.org/wiki/Reversi)アプリをリファクタリングし、どれだけクリーンな設計とコードを実現できるかというコンペティションです（ジャッジが優劣を判定するわけではなく、設計の技を競い合うのが目的です）。
