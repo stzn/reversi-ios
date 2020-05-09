@@ -58,8 +58,8 @@ public final class FileGameStateStore: GameStateStore {
         }
         output += "\n"
 
-        for y in ReversiSpecification.yRange {
-            for x in ReversiSpecification.xRange {
+        for y in Rule.yRange {
+            for x in Rule.xRange {
                 output += board.diskAt(x: x, y: y).symbol
             }
             output += "\n"
@@ -117,7 +117,7 @@ public final class FileGameStateStore: GameStateStore {
 
         let board = Board()
         do {  // board
-            guard lines.count == ReversiSpecification.height else {
+            guard lines.count == Rule.height else {
                 completion(.failure(FileIOError.read(path: path, cause: nil)))
                 return
             }
@@ -131,13 +131,13 @@ public final class FileGameStateStore: GameStateStore {
                     }
                     x += 1
                 }
-                guard x == ReversiSpecification.width else {
+                guard x == Rule.width else {
                     completion(.failure(FileIOError.read(path: path, cause: nil)))
                     return
                 }
                 y += 1
             }
-            guard y == ReversiSpecification.height else {
+            guard y == Rule.height else {
                 completion(.failure(FileIOError.read(path: path, cause: nil)))
                 return
             }

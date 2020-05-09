@@ -19,10 +19,10 @@ var anyGameState = GameState(activePlayerSide: defaultPlayers.first!.side,
 
 let initialPlacedDisks: [Board.Position: Disk] =
 [
-    Board.Position(x: ReversiSpecification.width / 2 - 1, y: ReversiSpecification.height / 2 - 1): .light,
-    Board.Position(x: ReversiSpecification.width / 2, y: ReversiSpecification.height / 2 - 1): .dark,
-    Board.Position(x: ReversiSpecification.width / 2 - 1, y: ReversiSpecification.height / 2): .dark,
-    Board.Position(x: ReversiSpecification.width / 2, y: ReversiSpecification.height / 2): .light,
+    Board.Position(x: Rule.width / 2 - 1, y: Rule.height / 2 - 1): .light,
+    Board.Position(x: Rule.width / 2, y: Rule.height / 2 - 1): .dark,
+    Board.Position(x: Rule.width / 2 - 1, y: Rule.height / 2): .dark,
+    Board.Position(x: Rule.width / 2, y: Rule.height / 2): .light,
 ]
 
 func deleteGame() {
@@ -34,8 +34,8 @@ func deleteGame() {
     }
 }
 
-let boardWidth: Int = ReversiSpecification.width
-let boardHeight: Int = ReversiSpecification.height
+let boardWidth: Int = Rule.width
+let boardHeight: Int = Rule.height
 
 import XCTest
 

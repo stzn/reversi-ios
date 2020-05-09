@@ -24,8 +24,8 @@ public final class Board {
     /// 盤をゲーム開始時に状態に戻します。
     public func reset() {
         disks = [:]
-        let width = ReversiSpecification.width
-        let height = ReversiSpecification.height
+        let width = Rule.width
+        let height = Rule.height
         setDisk(.light, atX: width / 2 - 1, y: height / 2 - 1)
         setDisk(.dark, atX: width / 2, y: height / 2 - 1)
         setDisk(.dark, atX: width / 2 - 1, y: height / 2)
@@ -41,7 +41,7 @@ public final class Board {
     ///     ハンドラーが受け取る `Bool` 値は、 `UIView.animate()`  等に準じます。
     public func setDisk(_ disk: Disk, atX x: Int, y: Int,
                  completion: ((Bool) -> Void)? = nil) {
-        guard ReversiSpecification.isInRange(atX: x, y: y) else {
+        guard Rule.isInRange(atX: x, y: y) else {
             completion?(false)
             return
         }
@@ -58,7 +58,7 @@ public final class Board {
     public func setDisks(_ disk: Disk, at positions: [Position],
                  completion: ((Bool) -> Void)? = nil) {
         for position in positions {
-            guard ReversiSpecification.isInRange(atX: position.x, y: position.y) else {
+            guard Rule.isInRange(atX: position.x, y: position.y) else {
                 completion?(false)
                 return
             }

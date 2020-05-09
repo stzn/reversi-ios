@@ -7,10 +7,10 @@ public class BoardView: UIView {
     private var cellViews: [CellView] = []
     private var actions: [CellSelectionAction] = []
     
-    private let width: Int = ReversiSpecification.width
-    private let height: Int = ReversiSpecification.height
-    private let xRange: Range<Int> = ReversiSpecification.xRange
-    private let yRange: Range<Int> = ReversiSpecification.yRange
+    private let width: Int = Rule.width
+    private let height: Int = Rule.height
+    private let xRange: Range<Int> = Rule.xRange
+    private let yRange: Range<Int> = Rule.yRange
     
     /// セルがタップされたときの挙動を移譲するためのオブジェクトです。
     public weak var delegate: BoardViewDelegate?

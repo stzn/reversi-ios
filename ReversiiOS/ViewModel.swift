@@ -37,7 +37,7 @@ public final class ViewModel {
         do {
             try userActionDelegate?.placeDisk(at: Board.Position(x: x, y: y))
         } catch let error as DiskPlacementError {
-            guard ReversiSpecification.canPlaceDisk(side, atX: x, y: y, on: error.on) else {
+            guard Rule.canPlaceDisk(side, atX: x, y: y, on: error.on) else {
                 return
             }
             userActionDelegate?.requestNextTurn()
@@ -100,7 +100,7 @@ extension ViewModel {
     private func setDiskAtRandom(by player: GamePlayer, on board: Board) {
         guard
             let (x, y) =
-                ReversiSpecification
+                Rule
                 .validMoves(for: player.side, on: board)
                 .randomElement()
         else {

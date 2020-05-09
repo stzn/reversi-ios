@@ -1,5 +1,5 @@
 //
-//  ReversiSpecification.swift
+//  Rule.swift
 //  Reversi
 //
 //  Created by Shinzan Takata on 2020/04/25.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum ReversiSpecification {
+public enum Rule {
     /// 盤の幅を表します。
     public static let width: Int = 8
 

@@ -96,7 +96,7 @@ extension GameManager {
 
     private func canDoNextTurn(_ player: GamePlayer) -> Bool {
         return
-            !ReversiSpecification
+            !Rule
             .validMoves(for: player.side, on: self.board).isEmpty
     }
 
@@ -137,11 +137,11 @@ extension GameManager: UserActionDelegate {
 
     public func placeDisk(at position: Board.Position) throws {
         let side = state.activePlayerSide
-        guard ReversiSpecification.canPlaceDisk(side, atX: position.x, y: position.y, on: board)
+        guard Rule.canPlaceDisk(side, atX: position.x, y: position.y, on: board)
         else {
             throw DiskPlacementError(disk: side, x: position.x, y: position.y, on: board)
         }
-        let positions = ReversiSpecification.flippedDiskCoordinatesByPlacingDisk(
+        let positions = Rule.flippedDiskCoordinatesByPlacingDisk(
             side, atX: position.x, y: position.y, on: self.board)
         self.board.setDisks(side, at: [position] + positions.map(Board.Position.init)) {
             isSuccess in

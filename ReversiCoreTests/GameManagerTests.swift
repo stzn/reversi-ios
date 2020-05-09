@@ -63,8 +63,8 @@ class GameManagerTests: XCTestCase {
         let delegate = MockGameManagerDelegate()
         let manager = GameManager(store: store)
         manager.delegate = delegate
-        let expectedX = ReversiSpecification.width / 2 + 1
-        let expectedY = ReversiSpecification.height / 2
+        let expectedX = Rule.width / 2 + 1
+        let expectedY = Rule.height / 2
         let expectedPosition = Board.Position(x: expectedX, y: expectedY)
 
         try! manager.placeDisk(at: expectedPosition)
@@ -132,7 +132,7 @@ class GameManagerTests: XCTestCase {
     func testWhenCannotDoNextAndCallRequestNextTurnThenPassedTurn() {
         let delegate = MockGameManagerDelegate()
         let store = InMemoryGameStateStore()
-        let board = fullfillForPassed(width: ReversiSpecification.width, height: ReversiSpecification.height)
+        let board = fullfillForPassed(width: Rule.width, height: Rule.height)
 
         save(to: store,
              state: .init(activePlayerSide: .light, players: defaultPlayers, board: board))

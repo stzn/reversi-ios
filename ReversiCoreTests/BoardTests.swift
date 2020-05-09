@@ -19,8 +19,8 @@ class BoardTests: XCTestCase {
     func testWhenCallResetThenBoardIsInInitialState() {
         let board = Board()
         board.reset()
-        let width = ReversiSpecification.width
-        let height = ReversiSpecification.height
+        let width = Rule.width
+        let height = Rule.height
         XCTAssertEqual(board.diskAt(x: width / 2 - 1, y: height / 2 - 1), .light)
         XCTAssertEqual(board.diskAt(x: width / 2, y: height / 2 - 1), .dark)
         XCTAssertEqual(board.diskAt(x: width / 2 - 1, y: height / 2), .dark)
@@ -32,8 +32,8 @@ class BoardTests: XCTestCase {
     func testWhenCallSetDiskThenDisksAreSetIfValid() {
         typealias TestCase = (line: UInt, x: Int, y: Int, expectedResult: Bool)
 
-        let width = ReversiSpecification.width
-        let height = ReversiSpecification.height
+        let width = Rule.width
+        let height = Rule.height
 
         let testCases: [TestCase] = [
             (#line, 0, 0, true),
