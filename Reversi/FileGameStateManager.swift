@@ -48,7 +48,7 @@ final class FileGameStateManager: GameStateManager {
 
     func saveGame(state: AppState) -> Effect<GameStateSaveAction, GameStateManagerError> {
         let path = self.path
-        return Effect.future { callback in
+        return Effect.result {
             var output: String = ""
             output += state.turn?.index.description ?? ""
             state.players.forEach {
@@ -65,28 +65,26 @@ final class FileGameStateManager: GameStateManager {
 
             do {
                 try output.write(toFile: path, atomically: true, encoding: .utf8)
-                callback(.success(.saved))
+                return .success(.saved)
             } catch let error {
-                callback(.failure(.write(path: path, cause: error)))
+                return .failure(.write(path: path, cause: error))
             }
         }
     }
 
     func loadGame() -> Effect<GameStateLoadAction, GameStateManagerError> {
         let path = self.path
-        return Effect.future { callback in
+        return Effect.result {
             var input: String
             do {
                 input = try String(contentsOfFile: path, encoding: .utf8)
             } catch {
-                callback(.failure(.read(path: path, cause: error)))
-                return
+                return .failure(.read(path: path, cause: error))
             }
             var lines: ArraySlice<Substring> = input.split(separator: "\n")[...]
 
             guard var line = lines.popFirst() else {
-                callback(.failure(.read(path: path, cause: nil)))
-                return
+                return .failure(.read(path: path, cause: nil))
             }
 
             let turn: Disk
@@ -95,8 +93,7 @@ final class FileGameStateManager: GameStateManager {
                     let diskSymbol = line.popFirst(),
                     let disknumber = Int(diskSymbol.description)
                 else {
-                    callback(.failure(.read(path: path, cause: nil)))
-                    return
+                    return .failure(.read(path: path, cause: nil))
                 }
                 turn = Disk(index: disknumber)
             }
@@ -109,8 +106,7 @@ final class FileGameStateManager: GameStateManager {
                     let playerNumber = Int(playerSymbol.description),
                     let player = Player(rawValue: playerNumber)
                 else {
-                    callback(.failure(.read(path: path, cause: nil)))
-                    return
+                    return .failure(.read(path: path, cause: nil))
                 }
                 players.append(player)
             }
@@ -118,8 +114,7 @@ final class FileGameStateManager: GameStateManager {
             let board = Board()
             do {  // board
                 guard lines.count == Rule.height else {
-                    callback(.failure(.read(path: path, cause: nil)))
-                    return
+                    return .failure(.read(path: path, cause: nil))
                 }
 
                 var y = 0
@@ -132,22 +127,19 @@ final class FileGameStateManager: GameStateManager {
                         x += 1
                     }
                     guard x == Rule.width else {
-                        callback(.failure(.read(path: path, cause: nil)))
-                        return
+                        return .failure(.read(path: path, cause: nil))
                     }
                     y += 1
                 }
                 guard y == Rule.height else {
-                    callback(.failure(.read(path: path, cause: nil)))
-                    return
+                    return .failure(.read(path: path, cause: nil))
                 }
             }
             let storedData = AppState(
                 board: board, players: players,
                 turn: turn,
                 shouldSkip: false)
-
-            callback(.success(.loaded(storedData)))
+            return .success(.loaded(storedData))
         }
     }
 }
