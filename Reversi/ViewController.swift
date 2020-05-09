@@ -62,9 +62,10 @@ class ViewController: UIViewController {
                     message: "Cannot place a disk.",
                     preferredStyle: .alert
                 )
-                alertController.addAction(UIAlertAction(title: "Dismiss", style: .default) { [weak self] _ in
-                    self?.viewStore.send(.turnSkipped)
-                })
+                alertController.addAction(
+                    UIAlertAction(title: "Dismiss", style: .default) { [weak self] _ in
+                        self?.viewStore.send(.turnSkipped)
+                    })
                 self.present(alertController, animated: true)
                 return
             }
@@ -106,7 +107,7 @@ class ViewController: UIViewController {
                     atX: currentTapPosition.x, y: currentTapPosition.y,
                     animated: true, completion: updateView)
             }
-            
+
         }.store(in: &cancellables)
 
         viewStore.send(.gameStarted)
@@ -134,8 +135,6 @@ class ViewController: UIViewController {
         }
     }
 }
-
-
 
 // MARK: Views
 
@@ -242,8 +241,10 @@ extension ViewController {
     }
 
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
-    private func playTurnOfComputer(turn: Disk, position: DiskPosition,
-                                    completion: ((Bool) -> Void)?) {
+    private func playTurnOfComputer(
+        turn: Disk, position: DiskPosition,
+        completion: ((Bool) -> Void)?
+    ) {
         playerActivityIndicators[turn.index].startAnimating()
 
         let cleanUp: () -> Void = { [weak self] in
@@ -257,8 +258,9 @@ extension ViewController {
             guard let self = self else { return }
             if canceller.isCancelled { return }
             cleanUp()
-            self.placeDisk(turn, atX: position.x, y: position.y, animated: true,
-                           completion: completion)
+            self.placeDisk(
+                turn, atX: position.x, y: position.y, animated: true,
+                completion: completion)
         }
         playerCancellers[turn] = canceller
     }
@@ -305,7 +307,9 @@ extension ViewController {
 
         self.viewStore.send(.playerChanged(side, Player(rawValue: sender.selectedSegmentIndex)!))
 
-        if !isAnimating, side == viewStore.turn, case .computer = Player(rawValue: sender.selectedSegmentIndex)! {
+        if !isAnimating, side == viewStore.turn,
+            case .computer = Player(rawValue: sender.selectedSegmentIndex)!
+        {
             viewStore.send(.computerPlay)
         }
     }
