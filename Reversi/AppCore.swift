@@ -30,6 +30,7 @@ enum AppAction: Equatable {
     case resetTapped
     case playerChanged(Disk, Player)
     case loadGameResponse(Result<GameStateLoadAction, GameStateManagerError>)
+    case saveGame
     case saveGameResponse(Result<GameStateSaveAction, GameStateManagerError>)
     case computerPlay
     case computerPlayResponse(DiskPosition?)
@@ -76,28 +77,26 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         } else {
             playTurn(&state, position: position)
         }
-        return environment.gameStateManager.saveGame(state: state)
-            .catchToEffect()
-            .map(AppAction.saveGameResponse)
+        return Effect(value: .saveGame)
     case .resetTapped:
-        return environment.gameStateManager.saveGame(state: AppState.intialState)
-            .catchToEffect()
-            .map(AppAction.saveGameResponse)
-            .flatMap { _ in Effect(value: AppAction.gameStarted) }
-            .eraseToEffect()
+        return Effect.concatenate(
+            // TODO: Effect(value: .saveGame)としたいがsaveGameResponseとgameStartedの順番が逆になる
+            environment.gameStateManager.saveGame(state: AppState.intialState)
+                .catchToEffect()
+                .map(AppAction.saveGameResponse),
+            Effect(value: AppAction.gameStarted)
+        )
     case .playerChanged(let disk, let player):
         state.players[disk.index] = player
-        return environment.gameStateManager.saveGame(state: state)
-            .catchToEffect()
-            .map(AppAction.saveGameResponse)
+        return Effect(value: .saveGame)
     case .loadGameResponse(.success(.loaded(let loadedState))):
         state = loadedState
-        return environment.gameStateManager.saveGame(state: state)
-            .catchToEffect()
-            .map(AppAction.saveGameResponse)
+        return Effect(value: .saveGame)
     case .loadGameResponse(.failure(let error)):
         // TODO: error handling
         state = AppState.intialState
+        return Effect(value: .saveGame)
+    case .saveGame:
         return environment.gameStateManager.saveGame(state: state)
             .catchToEffect()
             .map(AppAction.saveGameResponse)
@@ -119,18 +118,14 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         } else {
             state.shouldSkip = true
         }
-        return environment.gameStateManager.saveGame(state: state)
-            .catchToEffect()
-            .map(AppAction.saveGameResponse)
+        return Effect(value: .saveGame)
     case .turnSkipped:
         state.shouldSkip = false
         state.turn?.flip()
         if let turn = state.turn, state.players[turn.index] == .computer {
             return Effect(value: .computerPlay)
         }
-        return environment.gameStateManager.saveGame(state: state)
-            .catchToEffect()
-            .map(AppAction.saveGameResponse)
+        return Effect(value: .saveGame)
     }
 }
 
@@ -145,6 +140,7 @@ private func playTurn(_ state: inout AppState, position: DiskPosition) {
     if diskCoordinates.isEmpty {
         return
     }
+
     state.currentTapPosition = .init(x: position.x, y: position.y)
     state.board.setDisk(turn, atX: position.x, y: position.y)
 
