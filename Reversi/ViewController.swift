@@ -51,12 +51,22 @@ class ViewController: UIViewController {
         boardView.delegate = self
         messageDiskSize = messageDiskSizeConstraint.constant
 
-        self.viewStore.publisher.sink { [weak self] state in
+        self.viewStore.publisher.players.sink { [weak self] players in
+            guard let self = self else {
+                return
+            }
+            for side in Disk.sides {
+                self.playerControls[side.index].selectedSegmentIndex =
+                    players[side.index].rawValue
+            }
+        }.store(in: &cancellables)
+
+        self.viewStore.publisher.shouldSkip.sink { [weak self] shouldSkip in
             guard let self = self else {
                 return
             }
 
-            if state.shouldSkip {
+            if shouldSkip {
                 let alertController = UIAlertController(
                     title: "Pass",
                     message: "Cannot place a disk.",
@@ -69,17 +79,18 @@ class ViewController: UIViewController {
                 self.present(alertController, animated: true)
                 return
             }
+        }.store(in: &cancellables)
+
+        self.viewStore.publisher.sink { [weak self] state in
+            guard let self = self else {
+                return
+            }
 
             let newState = state
             let updateView: (Bool) -> Void = { isFinished in
                 guard isFinished else {
                     return
                 }
-                for side in Disk.sides {
-                    self.playerControls[side.index].selectedSegmentIndex =
-                        state.players[side.index].rawValue
-                }
-
                 self.updateMessageViews(turn: newState.turn, board: newState.board)
                 self.updateCountLabels(on: newState.board)
             }
@@ -107,7 +118,6 @@ class ViewController: UIViewController {
                     atX: currentTapPosition.x, y: currentTapPosition.y,
                     animated: true, completion: updateView)
             }
-
         }.store(in: &cancellables)
 
         viewStore.send(.gameStarted)
@@ -301,16 +311,11 @@ extension ViewController {
     @IBAction func changePlayerControlSegment(_ sender: UISegmentedControl) {
         let side: Disk = Disk(index: playerControls.firstIndex(of: sender)!)
 
-        if let canceller = playerCancellers[side] {
-            canceller.cancel()
-        }
-
         self.viewStore.send(.playerChanged(side, Player(rawValue: sender.selectedSegmentIndex)!))
 
-        if !isAnimating, side == viewStore.turn,
-            case .computer = Player(rawValue: sender.selectedSegmentIndex)!
+        if !isAnimating, side == viewStore.turn
         {
-            viewStore.send(.computerPlay)
+            waitForPlayer()
         }
     }
 }
