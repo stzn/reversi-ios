@@ -35,6 +35,8 @@ class ViewController: UIViewController {
     private var playing: Bool = false {
         didSet {
             if !playing {
+                self.updateMessageViews(turn: viewStore.turn, board: viewStore.board)
+                self.updateCountLabels(on: viewStore.board)
                 self.waitForPlayer()
             }
         }
@@ -90,15 +92,6 @@ class ViewController: UIViewController {
                 return
             }
 
-            let newState = state
-            let updateView: (Bool) -> Void = { isFinished in
-                guard isFinished else {
-                    return
-                }
-                self.updateMessageViews(turn: newState.turn, board: newState.board)
-                self.updateCountLabels(on: newState.board)
-            }
-
             guard let currentTapPosition = state.currentTapPosition else {
                 for (position, disk) in state.board.disks {
                     self.boardView.setDisk(
@@ -106,7 +99,8 @@ class ViewController: UIViewController {
                         atX: position.x, y: position.y,
                         animated: false)
                 }
-                updateView(true)
+                self.updateMessageViews(turn: state.turn, board: state.board)
+                self.updateCountLabels(on: state.board)
                 return
             }
 
@@ -115,12 +109,12 @@ class ViewController: UIViewController {
             if state.players[currentTurn.index] == .computer {
                 self.playTurnOfComputer(
                     turn: currentTurn,
-                    position: currentTapPosition, completion: updateView)
+                    position: currentTapPosition)
             } else {
                 self.placeDisk(
                     currentTurn,
                     atX: currentTapPosition.x, y: currentTapPosition.y,
-                    animated: true, completion: updateView)
+                    animated: true)
             }
         }.store(in: &cancellables)
 
@@ -257,7 +251,7 @@ extension ViewController {
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
     private func playTurnOfComputer(
         turn: Disk, position: DiskPosition,
-        completion: ((Bool) -> Void)?
+        completion: ((Bool) -> Void)? = nil
     ) {
         playerActivityIndicators[turn.index].startAnimating()
 
