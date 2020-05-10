@@ -86,6 +86,10 @@ class ViewController: UIViewController {
                 return
             }
 
+            if state.playerChanged {
+                return
+            }
+
             let newState = state
             let updateView: (Bool) -> Void = { isFinished in
                 guard isFinished else {
