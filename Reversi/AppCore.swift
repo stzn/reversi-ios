@@ -35,6 +35,8 @@ enum AppAction: Equatable {
     case computerPlay
     case computerPlayResponse(DiskPosition?)
     case turnSkipped
+    case placeDisk(DiskPosition)
+    case updateState(AppState)
 }
 
 struct AppEnvironment {
@@ -46,19 +48,37 @@ struct AppEnvironment {
 let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
     state, action, environment in
 
-    func playTurnOfComputer() -> Effect<AppAction, Never> {
-        return environment.computer(state.board, state.turn!)
-            .map(AppAction.computerPlayResponse)
-            .receive(on: DispatchQueue.main)
-            .eraseToEffect()
-    }
-
     var isGameEnd: Bool {
         guard let turn = state.turn else {
             return true
         }
         return Rule.validMoves(for: turn.flipped, on: state.board).isEmpty
             && Rule.validMoves(for: turn, on: state.board).isEmpty
+    }
+
+    func stateAfterDiskPlaced(state: AppState, position: DiskPosition) -> Effect<AppState, Never> {
+        var newState = state
+        guard var turn = newState.turn else {
+            return .none
+        }
+
+        let diskCoordinates = Rule.flippedDiskCoordinatesByPlacingDisk(
+            turn, atX: position.x, y: position.y, on: newState.board.disks)
+
+        if diskCoordinates.isEmpty {
+            return .none
+        }
+
+        newState.currentTapPosition = .init(x: position.x, y: position.y)
+        newState.board.setDisk(turn, atX: position.x, y: position.y)
+
+        for (x, y) in diskCoordinates {
+            newState.board.setDisk(turn, atX: x, y: y)
+        }
+
+        turn.flip()
+        newState.turn = turn
+        return Effect(value: newState)
     }
 
     switch action {
@@ -75,7 +95,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         } else if Rule.validMoves(for: turn.flipped, on: state.board).isEmpty {
             state.shouldSkip = true
         } else {
-            playTurn(&state, position: position)
+            return Effect(value: .placeDisk(position))
         }
         return Effect(value: .saveGame)
     case .resetTapped:
@@ -88,7 +108,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         )
     case .playerChanged(let disk, let player):
         state.players[disk.index] = player
-        return Effect(value: .saveGame)
+        return .none
     case .loadGameResponse(.success(.loaded(let loadedState))):
         state = loadedState
         return Effect(value: .saveGame)
@@ -107,10 +127,13 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         }
         return .none
     case .computerPlay:
-        return playTurnOfComputer()
+        return environment.computer(state.board, state.turn!)
+            .map(AppAction.computerPlayResponse)
+            .receive(on: DispatchQueue.main)
+            .eraseToEffect()
     case .computerPlayResponse(let position):
         if let position = position {
-            playTurn(&state, position: position)
+            return Effect(value: .placeDisk(position))
         } else if isGameEnd {
             state.turn = nil
         } else {
@@ -124,28 +147,14 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
             return Effect(value: .computerPlay)
         }
         return Effect(value: .saveGame)
+    case .placeDisk(let position):
+        return Effect.concatenate(
+            stateAfterDiskPlaced(state: state, position: position)
+                .map(AppAction.updateState),
+            Effect(value: AppAction.saveGame)
+        )
+    case .updateState(let newState):
+        state = newState
+        return .none
     }
-}
-
-private func playTurn(_ state: inout AppState, position: DiskPosition) {
-    guard var turn = state.turn else {
-        return
-    }
-
-    let diskCoordinates = Rule.flippedDiskCoordinatesByPlacingDisk(
-        turn, atX: position.x, y: position.y, on: state.board.disks)
-
-    if diskCoordinates.isEmpty {
-        return
-    }
-
-    state.currentTapPosition = .init(x: position.x, y: position.y)
-    state.board.setDisk(turn, atX: position.x, y: position.y)
-
-    for (x, y) in diskCoordinates {
-        state.board.setDisk(turn, atX: x, y: y)
-    }
-
-    turn.flip()
-    state.turn = turn
 }
