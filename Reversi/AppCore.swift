@@ -38,6 +38,7 @@ enum AppAction: Equatable {
     case turnSkipped
     case placeDisk(DiskPosition)
     case updateState(AppState)
+    case judgeGameProcess
 }
 
 struct AppEnvironment {
@@ -95,16 +96,8 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         else {
             return .none
         }
-
-        if isGameEnd {
-            state.turn = nil
-        } else if Rule.validMoves(for: turn.flipped, on: state.board).isEmpty {
-            state.shouldSkip = true
-        } else {
-            state.playerChanged = false
-            return Effect(value: .placeDisk(position))
-        }
-        return Effect(value: .saveGame)
+        state.playerChanged = false
+        return Effect(value: .placeDisk(position))
     case .resetTapped:
         return Effect.concatenate(
             // TODO: Effect(value: .saveGame)としたいがsaveGameResponseとgameStartedの順番が逆になる
@@ -143,12 +136,8 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
     case .computerPlayResponse(let position):
         if let position = position {
             return Effect(value: .placeDisk(position))
-        } else if isGameEnd {
-            state.turn = nil
-        } else {
-            state.shouldSkip = true
         }
-        return Effect(value: .saveGame)
+        return Effect(value: AppAction.judgeGameProcess)
     case .turnSkipped:
         state.shouldSkip = false
         state.turn?.flip()
@@ -163,10 +152,21 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
                 .map(AppAction.updateState)
                 .eraseToEffect()
                 .cancellable(id: CancelId()),
-            Effect(value: AppAction.saveGame)
+            Effect(value: AppAction.saveGame),
+            Effect(value: AppAction.judgeGameProcess)
         )
     case .updateState(let newState):
         state = newState
+        return .none
+    case .judgeGameProcess:
+        guard let turn = state.turn else {
+            return .none
+        }
+        if isGameEnd {
+            state.turn = nil
+        } else if Rule.validMoves(for: turn, on: state.board).isEmpty {
+            state.shouldSkip = true
+        }
         return .none
     }
 }
