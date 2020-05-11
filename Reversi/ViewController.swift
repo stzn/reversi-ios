@@ -63,7 +63,7 @@ class ViewController: UIViewController {
             }
         }.store(in: &cancellables)
 
-        self.viewStore.publisher.computerPlayer
+        self.viewStore.publisher.playingAsComputer
             .receive(on: DispatchQueue.main)
             .sink { [weak self] player in
                 guard let self = self else {
@@ -72,6 +72,8 @@ class ViewController: UIViewController {
 
                 if let player = player {
                     self.playerActivityIndicators[player.index].startAnimating()
+                } else {
+                    self.playerActivityIndicators.forEach { $0.stopAnimating() }
                 }
             }.store(in: &cancellables)
 
@@ -114,22 +116,11 @@ class ViewController: UIViewController {
 
             self.playing = true
             let currentTurn = self.messageDiskView.disk
-            if state.players[currentTurn.index] == .computer {
-                self.playTurnOfComputer(
-                    turn: currentTurn,
-                    position: currentTapPosition
-                ) { isFinished in
-                    if isFinished {
-                        self.playerActivityIndicators
-                            .forEach { $0.stopAnimating() }
-                    }
-                }
-            } else {
-                self.placeDisk(
-                    currentTurn,
-                    atX: currentTapPosition.x, y: currentTapPosition.y,
-                    animated: true)
-            }
+            self.placeDisk(
+                currentTurn,
+                atX: currentTapPosition.x, y: currentTapPosition.y,
+                animated: true
+            )
         }.store(in: &cancellables)
 
         viewStore.send(.gameStarted)
@@ -262,18 +253,15 @@ extension ViewController {
         }
     }
 
-    /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
-    private func playTurnOfComputer(
-        turn: Disk, position: DiskPosition,
-        completion: ((Bool) -> Void)?
-    ) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            guard let self = self else { return }
-            self.placeDisk(
-                turn, atX: position.x, y: position.y, animated: true,
-                completion: completion)
-        }
-    }
+    //    /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
+    //    private func playTurnOfComputer(
+    //        turn: Disk, position: DiskPosition,
+    //        completion: ((Bool) -> Void)?
+    //    ) {
+    //        self.placeDisk(
+    //            turn, atX: position.x, y: position.y, animated: true,
+    //            completion: completion)
+    //    }
 }
 
 // MARK: Inputs
