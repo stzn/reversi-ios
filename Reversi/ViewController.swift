@@ -62,7 +62,6 @@ class ViewController: UIViewController {
         }.store(in: &cancellables)
 
         self.viewStore.publisher.playingAsComputer
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] player in
                 guard let self = self else {
                     return
