@@ -45,8 +45,6 @@ class ViewController: UIViewController {
     private var animationCanceller: Canceller?
     private var isAnimating: Bool { animationCanceller != nil }
 
-    private var playerCancellers: [Disk: Canceller] = [:]
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -283,11 +281,6 @@ extension ViewController {
 
                 self.animationCanceller?.cancel()
                 self.animationCanceller = nil
-
-                for side in Disk.sides {
-                    self.playerCancellers[side]?.cancel()
-                    self.playerCancellers.removeValue(forKey: side)
-                }
 
                 self.boardView.reset()
                 self.viewStore.send(.resetTapped)
