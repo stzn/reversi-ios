@@ -63,6 +63,18 @@ class ViewController: UIViewController {
             }
         }.store(in: &cancellables)
 
+        self.viewStore.publisher.computerPlayer
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] player in
+                guard let self = self else {
+                    return
+                }
+
+                if let player = player {
+                    self.playerActivityIndicators[player.index].startAnimating()
+                }
+            }.store(in: &cancellables)
+
         self.viewStore.publisher.shouldSkip.sink { [weak self] shouldSkip in
             guard let self = self else {
                 return
@@ -88,10 +100,6 @@ class ViewController: UIViewController {
                 return
             }
 
-            if state.playerChanged {
-                return
-            }
-
             guard let currentTapPosition = state.currentTapPosition else {
                 for (position, disk) in state.board.disks {
                     self.boardView.setDisk(
@@ -109,7 +117,13 @@ class ViewController: UIViewController {
             if state.players[currentTurn.index] == .computer {
                 self.playTurnOfComputer(
                     turn: currentTurn,
-                    position: currentTapPosition)
+                    position: currentTapPosition
+                ) { isFinished in
+                    if isFinished {
+                        self.playerActivityIndicators
+                            .forEach { $0.stopAnimating() }
+                    }
+                }
             } else {
                 self.placeDisk(
                     currentTurn,
@@ -251,26 +265,14 @@ extension ViewController {
     /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
     private func playTurnOfComputer(
         turn: Disk, position: DiskPosition,
-        completion: ((Bool) -> Void)? = nil
+        completion: ((Bool) -> Void)?
     ) {
-        playerActivityIndicators[turn.index].startAnimating()
-
-        let cleanUp: () -> Void = { [weak self] in
-            guard let self = self else { return }
-            self.playerActivityIndicators[turn.index].stopAnimating()
-            self.playerCancellers[turn] = nil
-            completion?(true)
-        }
-        let canceller = Canceller(cleanUp)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
             guard let self = self else { return }
-            if canceller.isCancelled { return }
-            cleanUp()
             self.placeDisk(
                 turn, atX: position.x, y: position.y, animated: true,
                 completion: completion)
         }
-        playerCancellers[turn] = canceller
     }
 }
 
@@ -311,8 +313,7 @@ extension ViewController {
 
         self.viewStore.send(.playerChanged(side, Player(rawValue: sender.selectedSegmentIndex)!))
 
-        if !isAnimating, side == viewStore.turn
-        {
+        if !isAnimating, side == viewStore.turn {
             waitForPlayer()
         }
     }

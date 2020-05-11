@@ -15,7 +15,7 @@ struct AppState: Equatable {
     var turn: Disk?
     var shouldSkip: Bool
     var currentTapPosition: DiskPosition?
-    var playerChanged: Bool = false
+    var computerPlayer: Disk? = nil
 
     static var intialState: AppState {
         .init(
@@ -96,7 +96,6 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         else {
             return .none
         }
-        state.playerChanged = false
         return Effect(value: .placeDisk(position))
     case .resetTapped:
         return Effect.concatenate(
@@ -107,7 +106,6 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
             Effect(value: AppAction.gameStarted)
         )
     case .playerChanged(let disk, let player):
-        state.playerChanged = true
         state.players[disk.index] = player
         return .cancel(id: CancelId())
     case .loadGameResponse(.success(.loaded(let loadedState))):
@@ -128,8 +126,11 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         }
         return .none
     case .computerPlay:
-        state.playerChanged = false
-        return environment.computer(state.board, state.turn!)
+        guard let turn = state.turn else {
+            return .none
+        }
+        state.computerPlayer = turn
+        return environment.computer(state.board, turn)
             .map(AppAction.computerPlayResponse)
             .eraseToEffect()
             .cancellable(id: CancelId())
@@ -167,6 +168,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         } else if Rule.validMoves(for: turn, on: state.board).isEmpty {
             state.shouldSkip = true
         }
+        state.computerPlayer = nil
         return .none
     }
 }
