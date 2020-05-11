@@ -38,7 +38,6 @@ enum AppAction: Equatable {
     case turnSkipped
     case placeDisk(DiskPosition)
     case updateState(AppState)
-    case judgeGameProcess
 }
 
 struct AppEnvironment {
@@ -146,7 +145,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         if let position = position {
             return Effect(value: .placeDisk(position))
         }
-        return Effect(value: AppAction.judgeGameProcess)
+        return Effect(value: .updateState(state))
     case .turnSkipped:
         state.shouldSkip = false
         state.turn?.flip()
@@ -161,22 +160,20 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
                 .map(AppAction.updateState)
                 .eraseToEffect()
                 .cancellable(id: CancelId()),
-            Effect(value: AppAction.saveGame),
-            Effect(value: AppAction.judgeGameProcess)
+            Effect(value: AppAction.saveGame)
         )
-    case .updateState(let newState):
-        state = newState
-        return .none
-    case .judgeGameProcess:
-        guard let turn = state.turn else {
+    case .updateState(let receivedState):
+        var newState = receivedState
+        guard let turn = newState.turn else {
             return .none
         }
         if isGameEnd {
-            state.turn = nil
-        } else if Rule.validMoves(for: turn, on: state.board).isEmpty {
-            state.shouldSkip = true
+            newState.turn = nil
+        } else if Rule.validMoves(for: turn, on: newState.board).isEmpty {
+            newState.shouldSkip = true
         }
-        state.playingAsComputer = nil
+        newState.playingAsComputer = nil
+        state = newState
         return .none
     }
 }
