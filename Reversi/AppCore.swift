@@ -110,7 +110,10 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
             state.playingAsComputer = nil
         }
         state.players[disk.index] = player
-        return .cancel(id: CancelId())
+        return Effect.concatenate(
+            Effect(value: .saveGame),
+            .cancel(id: CancelId())
+        )
     case .loadGameResponse(.success(.loaded(let loadedState))):
         state = loadedState
         return Effect(value: .saveGame)
