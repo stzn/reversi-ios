@@ -59,17 +59,17 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
             && Rule.validMoves(for: turn, on: state.board).isEmpty
     }
 
-    func stateAfterDiskPlaced(state: AppState, position: DiskPosition) -> Effect<AppState, Never> {
+    func stateAfterDiskPlaced(state: AppState, position: DiskPosition) -> AppState {
         var newState = state
         guard var turn = newState.turn else {
-            return .none
+            return newState
         }
 
         let diskCoordinates = Rule.flippedDiskCoordinatesByPlacingDisk(
             turn, atX: position.x, y: position.y, on: newState.board.disks)
 
         if diskCoordinates.isEmpty {
-            return .none
+            return newState
         }
 
         newState.currentTapPosition = .init(x: position.x, y: position.y)
@@ -81,7 +81,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
 
         turn.flip()
         newState.turn = turn
-        return Effect(value: newState)
+        return newState
     }
 
     switch action {
@@ -154,14 +154,11 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         }
         return Effect(value: .saveGame)
     case .placeDisk(let position):
-        return Effect.concatenate(
-            stateAfterDiskPlaced(state: state, position: position)
-                .receive(on: environment.mainQueue)
-                .map(AppAction.updateState)
-                .eraseToEffect()
-                .cancellable(id: CancelId()),
-            Effect(value: AppAction.saveGame)
-        )
+        let newState = stateAfterDiskPlaced(state: state, position: position)
+        return Effect(value: .updateState(newState))
+            .receive(on: environment.mainQueue)
+            .eraseToEffect()
+            .cancellable(id: CancelId())
     case .updateState(let receivedState):
         var newState = receivedState
         guard let turn = newState.turn else {
@@ -174,6 +171,6 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         }
         newState.playingAsComputer = nil
         state = newState
-        return .none
+        return Effect(value: AppAction.saveGame)
     }
 }

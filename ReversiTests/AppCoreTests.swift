@@ -82,4 +82,54 @@ class AppCoreTests: XCTestCase {
             .receive(.saveGameResponse(.success(.saved)))
         )
     }
+
+    func testPassTurn() {
+        let board = fullfillForPassed(
+            width: Rule.width, height: Rule.height)
+        let testState = AppState(
+            board: board,
+            players: [.manual, .manual],
+            turn: .dark, shouldSkip: false,
+            currentTapPosition: DiskPosition(x: 2, y: 2))
+        let store = TestStore(
+            initialState: testState,
+            reducer: appReducer,
+            environment: AppEnvironment(
+                computer: { _, _ in
+                    Effect(value: DiskPosition(x: 1, y: 0))
+                        .delay(for: 1.0, scheduler: self.scheduler)
+                        .eraseToEffect()
+                },
+                gameStateManager: InMemoryGameStateManager(),
+                mainQueue: scheduler.eraseToAnyScheduler()))
+        store.assert(
+            .send(.manualPlayerDiskPlaced(.init(x: 0, y: 0))),
+            .receive(.placeDisk(.init(x: 0, y: 0))),
+            .do { self.scheduler.advance() },
+            .receive(.updateState(testState)) {
+                $0.shouldSkip = true
+            },
+            .receive(.saveGame),
+            .receive(.saveGameResponse(.success(.saved)))
+        )
+    }
+
+    private func fullfillForPassed(width: Int, height: Int) -> Board {
+        let lastX = width - 1
+        let lastY = height - 1
+        let board = Board()
+        for y in 0..<height {
+            for x in 0..<width {
+                // 一箇所だけ隙間を空けておく
+                if x == 0 && y == 0
+                    || x == lastX && y == lastY {
+                    continue
+                }
+                board.setDisks(.dark, at: [.init(x: x, y: y)])
+            }
+        }
+        board.setDisks(.light, at: [.init(x: lastX, y: lastY)])
+        return board
+    }
+
 }
