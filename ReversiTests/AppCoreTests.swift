@@ -77,13 +77,21 @@ class AppCoreTests: XCTestCase {
         var testState = AppState.intialState
         testState.board = fullfillForPassed(
             width: Rule.width, height: Rule.height)
+
+        let diskPlacedPosition = DiskPosition(x: 0, y: 0)
         let store = anyTestStore(with: testState)
         store.assert(
-            .send(.manualPlayerDiskPlaced(.init(x: 0, y: 0))),
-            .receive(.placeDisk(.init(x: 0, y: 0))),
+            .send(.manualPlayerDiskPlaced(diskPlacedPosition)),
+            .receive(.placeDisk(diskPlacedPosition)),
             .do { self.scheduler.advance() },
             .receive(.updateState(testState)) {
                 $0.shouldSkip = true
+            },
+            .receive(.saveGame),
+            .receive(.saveGameResponse(.success(.saved))),
+            .send(.turnSkipped) {
+                $0.shouldSkip = false
+                $0.turn = .light
             },
             .receive(.saveGame),
             .receive(.saveGameResponse(.success(.saved)))
@@ -106,7 +114,12 @@ class AppCoreTests: XCTestCase {
             .receive(.placeDisk(diskPlacedPosition)),
             // mainQueueでupdateStateを行っているためmainQueueを勧める必要がある
             .do { self.scheduler.advance() },
-            .receive(.updateState(.init(board: testState.board, players: testState.players, turn: .dark, shouldSkip: false, currentTapPosition: diskPlacedPosition))) {
+            .receive(
+                .updateState(
+                    .init(
+                        board: testState.board, players: testState.players, turn: .dark,
+                        shouldSkip: false, currentTapPosition: diskPlacedPosition))
+            ) {
                 // この時点では値は更新はされる
                 XCTAssertNotNil($0.board.diskAt(x: diskPlacedPosition.x, y: diskPlacedPosition.y))
                 $0.turn = nil
@@ -136,9 +149,14 @@ class AppCoreTests: XCTestCase {
         )
     }
 
+    // TODO: コンピュータのテスト
+    // TODO: environmentのテスト
+
     // MARK: -Helpers
-    
-    private func anyTestStore(with state: AppState) -> TestStore<AppState, AppState, AppAction, AppAction, AppEnvironment> {
+
+    private func anyTestStore(with state: AppState) -> TestStore<
+        AppState, AppState, AppAction, AppAction, AppEnvironment
+    > {
         return TestStore(
             initialState: state,
             reducer: appReducer,
