@@ -16,6 +16,7 @@ import XCTest
 final class InMemoryGameStateManager: GameStateManager {
     var savedState: AppState?
     func saveGame(state: AppState) -> Effect<GameStateSaveAction, GameStateManagerError> {
+        print("call")
         savedState = state
         return Effect(value: GameStateSaveAction.saved)
     }
@@ -63,9 +64,12 @@ class AppCoreTests: XCTestCase {
             .receive(.saveGame),
             .receive(.saveGameResponse(.success(.saved))),
             .send(.resetTapped) { $0 = AppState.intialState },
-            // AppCode.swift参照
+            // mapで繋いだactionは検知できない
             // .receive(.saveGame),
-            .receive(.saveGameResponse(.success(.saved))),
+            // .receive(.saveGameResponse(.success(.saved))),
+            .do {
+                self.scheduler.run()
+                },
             .receive(.gameStarted),
             .receive(.loadGameResponse(.success(.loaded(AppState.intialState)))),
             .receive(.saveGame),

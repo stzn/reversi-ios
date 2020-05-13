@@ -97,13 +97,12 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         }
         return Effect(value: .placeDisk(position))
     case .resetTapped:
-        return Effect.concatenate(
-            // TODO: Effect(value: .saveGame)としたいがsaveGameResponseとgameStartedの順番が逆になる
-            environment.gameStateManager.saveGame(state: AppState.intialState)
-                .catchToEffect()
-                .map(AppAction.saveGameResponse),
-            Effect(value: AppAction.gameStarted)
-        )
+        return environment.gameStateManager.saveGame(state: AppState.intialState)
+            .catchToEffect()
+            .map(AppAction.saveGameResponse)
+            .receive(on: environment.mainQueue)
+            .eraseToEffect()
+            .map { _ in AppAction.gameStarted }
     case .playerChanged(let disk, let player):
         state.players[disk.index] = player
         if player == .manual, state.turn == disk {
