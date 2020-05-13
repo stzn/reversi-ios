@@ -31,18 +31,9 @@ final class InMemoryGameStateManager: GameStateManager {
 
 class AppCoreTests: XCTestCase {
     let scheduler = DispatchQueue.testScheduler
+
     func testGameStarted() {
-        let store = TestStore(
-            initialState: AppState.intialState,
-            reducer: appReducer,
-            environment: AppEnvironment(
-                computer: { _, _ in
-                    Effect(value: DiskPosition(x: 0, y: 0))
-                        .delay(for: 1.0, scheduler: self.scheduler)
-                        .eraseToEffect()
-                },
-                gameStateManager: InMemoryGameStateManager(),
-                mainQueue: scheduler.eraseToAnyScheduler()))
+        let store = anyTestStore(with: .intialState)
         store.assert(
             .send(.gameStarted),
             .receive(.loadGameResponse(.failure(.write(path: "", cause: nil)))),
@@ -69,7 +60,7 @@ class AppCoreTests: XCTestCase {
             // .receive(.saveGameResponse(.success(.saved))),
             .do {
                 self.scheduler.run()
-                },
+            },
             .receive(.gameStarted),
             .receive(.loadGameResponse(.success(.loaded(AppState.intialState)))),
             .receive(.saveGame),
@@ -153,8 +144,42 @@ class AppCoreTests: XCTestCase {
         )
     }
 
-    // TODO: コンピュータのテスト
-    // TODO: environmentのテスト
+    func testComputerPlay() {
+        let diskPlacedPosition = DiskPosition(x: 2, y: 3)
+        let testState = AppState.intialState
+        let store = TestStore(
+            initialState: testState,
+            reducer: appReducer,
+            environment: AppEnvironment(
+                computer: { _, _ in Effect(value: diskPlacedPosition) },
+                gameStateManager: InMemoryGameStateManager(),
+                mainQueue: scheduler.eraseToAnyScheduler()))
+        store.assert(
+            .send(.computerPlay) {
+                $0.playingAsComputer = .dark
+            },
+            .do { self.scheduler.run() },
+            .receive(.computerPlayResponse(diskPlacedPosition)),
+            .receive(.placeDisk(diskPlacedPosition)),
+            .do { self.scheduler.advance() },
+            .receive(
+                .updateState(
+                    .init(
+                        board: testState.board,
+                        players: testState.players,
+                        turn: .light,
+                        shouldSkip: false,
+                        currentTapPosition: diskPlacedPosition,
+                        playingAsComputer: .dark))
+            ) {
+                $0.currentTapPosition = diskPlacedPosition
+                $0.turn = .light
+                $0.playingAsComputer = nil
+            },
+            .receive(.saveGame),
+            .receive(.saveGameResponse(.success(.saved)))
+        )
+    }
 
     // MARK: -Helpers
 
