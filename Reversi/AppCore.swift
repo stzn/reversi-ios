@@ -166,6 +166,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         }
         if isGameEnd {
             newState.turn = nil
+            newState.currentTapPosition = nil
         } else if Rule.validMoves(for: turn, on: newState.board).isEmpty {
             newState.shouldSkip = true
         }
