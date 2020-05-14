@@ -181,6 +181,46 @@ class AppCoreTests: XCTestCase {
         )
     }
 
+    func testComputerPlayedThenGameEnd() {
+        var testState = AppState.intialState
+        testState.board = fullfillForTied(
+            width: Rule.width, height: Rule.height)
+        testState.turn = .light
+        let diskPlacedPosition = DiskPosition(x: 0, y: 0)
+        let store = TestStore(
+            initialState: testState,
+            reducer: appReducer,
+            environment: AppEnvironment(
+                computer: { _, _ in Effect(value: diskPlacedPosition) },
+                gameStateManager: InMemoryGameStateManager(),
+                mainQueue: scheduler.eraseToAnyScheduler()))
+        store.assert(
+            .send(.computerPlay) {
+                $0.playingAsComputer = .light
+            },
+            .do { self.scheduler.run() },
+            .receive(.computerPlayResponse(diskPlacedPosition)),
+            .receive(.placeDisk(diskPlacedPosition)),
+            .do { self.scheduler.run() },
+            .receive(
+                .updateState(
+                    .init(
+                        board: testState.board,
+                        players: testState.players,
+                        turn: .light,
+                        shouldSkip: false,
+                        currentTapPosition: nil,
+                        playingAsComputer: .light))
+            ) {
+                $0.turn = nil
+                $0.currentTapPosition = nil
+                $0.playingAsComputer = nil
+            },
+            .receive(.saveGame),
+            .receive(.saveGameResponse(.success(.saved)))
+        )
+    }
+
     // MARK: -Helpers
 
     private func anyTestStore(with state: AppState) -> TestStore<
