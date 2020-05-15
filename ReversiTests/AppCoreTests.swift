@@ -68,7 +68,7 @@ class AppCoreTests: XCTestCase {
         )
     }
 
-    func testTurnPassedThenGameEnd() {
+    func testTurnPassed() {
         var testState = AppState.intialState
         testState.board = fullfillForPassed(
             width: Rule.width, height: Rule.height)
