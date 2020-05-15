@@ -119,6 +119,7 @@ class AppCoreTests: XCTestCase {
                 XCTAssertNotNil($0.board.diskAt(x: diskPlacedPosition.x, y: diskPlacedPosition.y))
                 $0.turn = nil
                 $0.currentTapPosition = nil
+                XCTAssertEqual($0.board.sideWithMoreDisks(), .dark)
             },
             .receive(.saveGame),
             .receive(.saveGameResponse(.success(.saved)))
@@ -138,6 +139,7 @@ class AppCoreTests: XCTestCase {
             .receive(.updateState(testState)) {
                 $0.turn = nil
                 $0.currentTapPosition = nil
+                XCTAssertEqual($0.board.sideWithMoreDisks(), nil)
             },
             .receive(.saveGame),
             .receive(.saveGameResponse(.success(.saved)))
@@ -181,7 +183,7 @@ class AppCoreTests: XCTestCase {
         )
     }
 
-    func testComputerPlayedThenGameEnd() {
+    func testComputerPlayedThenGameEndByTied() {
         var testState = AppState.intialState
         testState.board = fullfillForTied(
             width: Rule.width, height: Rule.height)
@@ -215,6 +217,48 @@ class AppCoreTests: XCTestCase {
                 $0.turn = nil
                 $0.currentTapPosition = nil
                 $0.playingAsComputer = nil
+                XCTAssertEqual($0.board.sideWithMoreDisks(), nil)
+            },
+            .receive(.saveGame),
+            .receive(.saveGameResponse(.success(.saved)))
+        )
+    }
+
+    func testComputerPlayedThenGameEndByWon() {
+        var testState = AppState.intialState
+        testState.board = fullfillForWon(
+            width: Rule.width, height: Rule.height)
+        testState.turn = .light
+        let diskPlacedPosition = DiskPosition(x: 0, y: 0)
+        let store = TestStore(
+            initialState: testState,
+            reducer: appReducer,
+            environment: AppEnvironment(
+                computer: { _, _ in Effect(value: diskPlacedPosition) },
+                gameStateManager: InMemoryGameStateManager(),
+                mainQueue: scheduler.eraseToAnyScheduler()))
+        store.assert(
+            .send(.computerPlay) {
+                $0.playingAsComputer = .light
+            },
+            .do { self.scheduler.run() },
+            .receive(.computerPlayResponse(diskPlacedPosition)),
+            .receive(.placeDisk(diskPlacedPosition)),
+            .do { self.scheduler.run() },
+            .receive(
+                .updateState(
+                    .init(
+                        board: testState.board,
+                        players: testState.players,
+                        turn: .light,
+                        shouldSkip: false,
+                        currentTapPosition: nil,
+                        playingAsComputer: .light))
+            ) {
+                $0.turn = nil
+                $0.currentTapPosition = nil
+                $0.playingAsComputer = nil
+                XCTAssertEqual($0.board.sideWithMoreDisks(), .dark)
             },
             .receive(.saveGame),
             .receive(.saveGameResponse(.success(.saved)))
