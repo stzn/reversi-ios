@@ -87,6 +87,7 @@ var loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> {
         case .success(let response):
             state.loginButtonEnabled = true
         case .failure(let error):
+            state.password = nil
             state.error = error
         }
         return .none
