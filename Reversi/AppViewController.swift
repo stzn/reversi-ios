@@ -29,14 +29,14 @@ class AppViewController: UINavigationController {
             .scope(state: { $0.login }, action: AppAction.login)
             .ifLet { loginState in
                 let login = LoginViewController.instantiate(store: loginState)
-                self.setViewControllers([login], animated: true)
+                self.setViewControllers([login], animated: false)
         }.store(in: &cancellables)
 
         self.store
             .scope(state: { $0.game }, action: AppAction.game)
             .ifLet { gameState in
                 let game = GameViewController.instantiate(store: gameState)
-                self.setViewControllers([game], animated: true)
+                self.setViewControllers([game], animated: false)
         }.store(in: &cancellables)
     }
 }
