@@ -46,7 +46,7 @@ final class FileGameStateManager: GameStateManager {
         case read(path: String, cause: Error?)
     }
 
-    func saveGame(state: AppState) -> Effect<GameStateSaveAction, GameStateManagerError> {
+    func saveGame(state: GameState) -> Effect<GameStateSaveAction, GameStateManagerError> {
         let path = self.path
         return Effect.result {
             var output: String = ""
@@ -135,7 +135,7 @@ final class FileGameStateManager: GameStateManager {
                     return .failure(.read(path: path, cause: nil))
                 }
             }
-            let storedData = AppState(
+            let storedData = GameState(
                 board: board, players: players,
                 turn: turn,
                 shouldSkip: false)

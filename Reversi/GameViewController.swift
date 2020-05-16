@@ -2,14 +2,14 @@ import Combine
 import ComposableArchitecture
 import UIKit
 
-class ViewController: UIViewController {
-    var viewStore: ViewStore<AppState, AppAction>!
+class GameViewController: UIViewController {
+    var viewStore: ViewStore<GameState, GameAction>!
     var cancellables: Set<AnyCancellable> = []
 
-    static func instantiate(store: Store<AppState, AppAction>) -> ViewController {
+    static func instantiate(store: Store<GameState, GameAction>) -> GameViewController {
         let viewController =
             UIStoryboard(name: "Main", bundle: nil).instantiateViewController(
-                identifier: "ViewConteroller") as! ViewController
+                identifier: "GameViewController") as! GameViewController
         viewController.viewStore = ViewStore(store)
         return viewController
     }
@@ -47,6 +47,13 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.navigationItem.title = "ゲーム"
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: "Logout",
+            style: .done,
+            target: self,
+            action: #selector(logout))
 
         boardView.delegate = self
         messageDiskSize = messageDiskSizeConstraint.constant
@@ -123,6 +130,10 @@ class ViewController: UIViewController {
         viewStore.send(.gameStarted)
     }
 
+    @objc private func logout() {
+        self.viewStore.send(.logoutButtonTapped)
+    }
+
     private var viewHasAppeared: Bool = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -148,7 +159,7 @@ class ViewController: UIViewController {
 
 // MARK: Views
 
-extension ViewController {
+extension GameViewController {
     /// 各プレイヤーの獲得したディスクの枚数を表示します。
     func updateCountLabels(on board: Board) {
         for side in Disk.sides {
@@ -263,7 +274,7 @@ extension ViewController {
 
 // MARK: Inputs
 
-extension ViewController {
+extension GameViewController {
     /// リセットボタンが押された場合に呼ばれるハンドラーです。
     /// アラートを表示して、ゲームを初期化して良いか確認し、
     /// "OK" が選択された場合ゲームを初期化します。
@@ -299,7 +310,7 @@ extension ViewController {
     }
 }
 
-extension ViewController: BoardViewDelegate {
+extension GameViewController: BoardViewDelegate {
     /// `boardView` の `x`, `y` で指定されるセルがタップされたときに呼ばれます。
     /// - Parameter boardView: セルをタップされた `BoardView` インスタンスです。
     /// - Parameter x: セルの列です。

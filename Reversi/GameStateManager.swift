@@ -10,12 +10,12 @@ import ComposableArchitecture
 import Foundation
 
 protocol GameStateManager {
-    func saveGame(state: AppState) -> Effect<GameStateSaveAction, GameStateManagerError>
+    func saveGame(state: GameState) -> Effect<GameStateSaveAction, GameStateManagerError>
     func loadGame() -> Effect<GameStateLoadAction, GameStateManagerError>
 }
 
 enum GameStateLoadAction: Equatable {
-    case loaded(AppState)
+    case loaded(GameState)
 }
 
 enum GameStateSaveAction: Equatable {

@@ -1,5 +1,5 @@
 //
-//  AppCoreTests.swift
+//  GameCoreTests.swift
 //  ReversiTests
 //
 //  Created by Shinzan Takata on 2020/05/09.
@@ -14,9 +14,8 @@ import XCTest
 @testable import Reversi
 
 final class InMemoryGameStateManager: GameStateManager {
-    var savedState: AppState?
-    func saveGame(state: AppState) -> Effect<GameStateSaveAction, GameStateManagerError> {
-        print("call")
+    var savedState: GameState?
+    func saveGame(state: GameState) -> Effect<GameStateSaveAction, GameStateManagerError> {
         savedState = state
         return Effect(value: GameStateSaveAction.saved)
     }
@@ -43,18 +42,18 @@ class AppCoreTests: XCTestCase {
     }
 
     func testResetTapped() {
-        let testState = AppState(
+        let testState = GameState(
             board: Board(), players: [.computer, .computer], turn: .light, shouldSkip: true,
             currentTapPosition: nil)
         let store = anyTestStore(with: testState)
         store.assert(
             .send(.gameStarted),
             .receive(.loadGameResponse(.failure(.write(path: "", cause: nil)))) {
-                $0 = AppState.intialState
+                $0 = GameState.intialState
             },
             .receive(.saveGame),
             .receive(.saveGameResponse(.success(.saved))),
-            .send(.resetTapped) { $0 = AppState.intialState },
+            .send(.resetTapped) { $0 = GameState.intialState },
             // mapで繋いだactionは検知できない
             // .receive(.saveGame),
             // .receive(.saveGameResponse(.success(.saved))),
@@ -62,14 +61,14 @@ class AppCoreTests: XCTestCase {
                 self.scheduler.run()
             },
             .receive(.gameStarted),
-            .receive(.loadGameResponse(.success(.loaded(AppState.intialState)))),
+            .receive(.loadGameResponse(.success(.loaded(GameState.intialState)))),
             .receive(.saveGame),
             .receive(.saveGameResponse(.success(.saved)))
         )
     }
 
     func testTurnPassed() {
-        var testState = AppState.intialState
+        var testState = GameState.intialState
         testState.board = fullfillForPassed(
             width: Rule.width, height: Rule.height)
 
@@ -94,7 +93,7 @@ class AppCoreTests: XCTestCase {
     }
 
     func testWonThenGameEnd() {
-        var testState = AppState.intialState
+        var testState = GameState.intialState
         testState.board = fullfillForPassed(
             width: Rule.width, height: Rule.height)
         testState.turn = .light
@@ -127,7 +126,7 @@ class AppCoreTests: XCTestCase {
     }
 
     func testTiedThenGameEnd() {
-        var testState = AppState.intialState
+        var testState = GameState.intialState
         testState.board = fullfillForTied(
             width: Rule.width, height: Rule.height)
         let diskPlacedPosition = DiskPosition(x: 0, y: 0)
@@ -148,11 +147,11 @@ class AppCoreTests: XCTestCase {
 
     func testComputerPlay() {
         let diskPlacedPosition = DiskPosition(x: 2, y: 3)
-        let testState = AppState.intialState
+        let testState = GameState.intialState
         let store = TestStore(
             initialState: testState,
-            reducer: appReducer,
-            environment: AppEnvironment(
+            reducer: gameReducer,
+            environment: GameEnvironment(
                 computer: { _, _ in Effect(value: diskPlacedPosition) },
                 gameStateManager: InMemoryGameStateManager(),
                 mainQueue: scheduler.eraseToAnyScheduler()))
@@ -184,15 +183,15 @@ class AppCoreTests: XCTestCase {
     }
 
     func testComputerPlayedThenGameEndByTied() {
-        var testState = AppState.intialState
+        var testState = GameState.intialState
         testState.board = fullfillForTied(
             width: Rule.width, height: Rule.height)
         testState.turn = .light
         let diskPlacedPosition = DiskPosition(x: 0, y: 0)
         let store = TestStore(
             initialState: testState,
-            reducer: appReducer,
-            environment: AppEnvironment(
+            reducer: gameReducer,
+            environment: GameEnvironment(
                 computer: { _, _ in Effect(value: diskPlacedPosition) },
                 gameStateManager: InMemoryGameStateManager(),
                 mainQueue: scheduler.eraseToAnyScheduler()))
@@ -225,15 +224,15 @@ class AppCoreTests: XCTestCase {
     }
 
     func testComputerPlayedThenGameEndByWon() {
-        var testState = AppState.intialState
+        var testState = GameState.intialState
         testState.board = fullfillForWon(
             width: Rule.width, height: Rule.height)
         testState.turn = .light
         let diskPlacedPosition = DiskPosition(x: 0, y: 0)
         let store = TestStore(
             initialState: testState,
-            reducer: appReducer,
-            environment: AppEnvironment(
+            reducer: gameReducer,
+            environment: GameEnvironment(
                 computer: { _, _ in Effect(value: diskPlacedPosition) },
                 gameStateManager: InMemoryGameStateManager(),
                 mainQueue: scheduler.eraseToAnyScheduler()))
@@ -267,13 +266,13 @@ class AppCoreTests: XCTestCase {
 
     // MARK: -Helpers
 
-    private func anyTestStore(with state: AppState) -> TestStore<
-        AppState, AppState, AppAction, AppAction, AppEnvironment
+    private func anyTestStore(with state: GameState) -> TestStore<
+        GameState, GameState, GameAction, GameAction, GameEnvironment
     > {
         return TestStore(
             initialState: state,
-            reducer: appReducer,
-            environment: AppEnvironment(
+            reducer: gameReducer,
+            environment: GameEnvironment(
                 computer: { _, _ in .fireAndForget {} },
                 gameStateManager: InMemoryGameStateManager(),
                 mainQueue: scheduler.eraseToAnyScheduler()))

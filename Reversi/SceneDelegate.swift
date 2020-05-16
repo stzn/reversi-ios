@@ -26,11 +26,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
 
-    private func composeViewController() -> ViewController {
+    private func composeViewController() -> AppViewController {
         let store = Store<AppState, AppAction>(
-            initialState: AppState.intialState,
+            initialState: AppState(),
             reducer: appReducer,
             environment: AppEnvironment(
+                loginClient: FlakyLoginClient(),
                 computer: { (board, turn) in
                     guard let (x, y) = Rule.validMoves(for: turn, on: board).randomElement() else {
                         return Effect(value: nil)
@@ -41,7 +42,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 mainQueue: DispatchQueue.main.eraseToAnyScheduler()
             )
         )
-        return ViewController.instantiate(store: store)
+        return AppViewController(store: store)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
