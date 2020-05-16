@@ -10,17 +10,45 @@ import ComposableArchitecture
 import Foundation
 
 struct AppState: Equatable {
-    var login: LoginState? = LoginState()
+    var login: LoginState? = nil
     var game: GameState? = nil
 }
 
 enum AppAction: Equatable {
+    case appLaunch
     case login(LoginAction)
     case game(GameAction)
 }
 
+protocol LoginStateHolder {
+    func load() -> Bool
+    func save()
+    func remove()
+}
+
+struct UserDefaultsLoginStateHolder: LoginStateHolder {
+    private let key = "loggedIn"
+    let defaults: UserDefaults
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+    }
+
+    func load() -> Bool {
+        return defaults.bool(forKey: key)
+    }
+
+    func save() {
+        defaults.set(true, forKey: key)
+    }
+
+    func remove() {
+        defaults.removeObject(forKey: key)
+    }
+}
+
 struct AppEnvironment {
     var loginClient: LoginClient
+    var loginStateHolder: LoginStateHolder
     var computer: (Board, Disk) -> Effect<DiskPosition?, Never>
     var gameStateManager: GameStateManager
     var mainQueue: AnySchedulerOf<DispatchQueue>
@@ -29,13 +57,24 @@ struct AppEnvironment {
 let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
     Reducer { state, action, environment in
         switch action {
+        case .appLaunch:
+            if environment.loginStateHolder.load() {
+                state.game = GameState()
+                state.login = nil
+            } else {
+                state.game = nil
+                state.login = LoginState()
+            }
+            return .none
         case .login(.loginResponse(.success(let response))):
+            environment.loginStateHolder.save()
             state.game = GameState()
             state.login = nil
             return .none
         case .login:
             return .none
         case .game(.logoutButtonTapped):
+            environment.loginStateHolder.remove()
             state.game = nil
             state.login = LoginState()
             return environment.gameStateManager

@@ -12,10 +12,12 @@ import ComposableArchitecture
 
 class AppViewController: UINavigationController {
     let store: Store<AppState, AppAction>
+    let viewStore: ViewStore<AppState, AppAction>
     private var cancellables: Set<AnyCancellable> = []
 
     init(store: Store<AppState, AppAction>) {
         self.store = store
+        self.viewStore = ViewStore(store)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -38,5 +40,7 @@ class AppViewController: UINavigationController {
                 let game = GameViewController.instantiate(store: gameState)
                 self.setViewControllers([game], animated: false)
         }.store(in: &cancellables)
+
+        self.viewStore.send(.appLaunch)
     }
 }
