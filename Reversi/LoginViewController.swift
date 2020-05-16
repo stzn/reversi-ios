@@ -30,7 +30,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var loginButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "ログイン"
+        self.navigationItem.title = "Login"
 
         self.viewStore.publisher.loginButtonEnabled
             .assign(to: \.isEnabled, on: loginButton)
@@ -50,7 +50,7 @@ class LoginViewController: UIViewController {
                     // TODO: error handling
                     print(error)
                     let alert = UIAlertController(
-                        title: "エラー", message: "ログインに失敗しました。", preferredStyle: .alert)
+                        title: "Error!", message: "Login Failed", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "OK", style: .default) { _ in
                         self?.viewStore.send(.errorDismissed)
                     }

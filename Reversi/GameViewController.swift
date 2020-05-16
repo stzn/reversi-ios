@@ -48,7 +48,7 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationItem.title = "ゲーム"
+        self.navigationItem.title = "Game"
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: "Logout",
             style: .done,
