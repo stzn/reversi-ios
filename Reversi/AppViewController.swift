@@ -25,7 +25,6 @@ class AppViewController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "ログイン"
         self.store
             .scope(state: { $0.login }, action: AppAction.login)
             .ifLet { loginState in

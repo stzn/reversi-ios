@@ -30,6 +30,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var loginButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.title = "ログイン"
 
         self.viewStore.publisher.loginButtonEnabled
             .assign(to: \.isEnabled, on: loginButton)
