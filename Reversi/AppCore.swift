@@ -27,7 +27,7 @@ struct AppEnvironment {
 }
 
 let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
-    Reducer { state, action, _ in
+    Reducer { state, action, environment in
         switch action {
         case .login(.loginResponse(.success(let response))):
             state.game = GameState()
@@ -38,7 +38,11 @@ let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
         case .game(.logoutButtonTapped):
             state.game = nil
             state.login = LoginState()
-            return .none
+            return environment.gameStateManager
+                .saveGame(state: GameState.intialState)
+                .catchToEffect()
+                .flatMap { _ in Effect<AppAction, Never>.none }
+                .eraseToEffect()
         case .game:
             return .none
         }
