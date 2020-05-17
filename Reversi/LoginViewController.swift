@@ -17,7 +17,7 @@ class LoginViewController: UIViewController {
 
     static func instantiate(store: Store<LoginState, LoginAction>) -> LoginViewController {
         let viewController =
-            UIStoryboard(name: "Main", bundle: nil)
+            UIStoryboard(name: "LoginViewController", bundle: nil)
             .instantiateViewController(identifier: "LoginViewController")
             as! LoginViewController
         viewController.store = store

@@ -8,7 +8,7 @@ class GameViewController: UIViewController {
 
     static func instantiate(store: Store<GameState, GameAction>) -> GameViewController {
         let viewController =
-            UIStoryboard(name: "Main", bundle: nil).instantiateViewController(
+            UIStoryboard(name: "GameViewController", bundle: nil).instantiateViewController(
                 identifier: "GameViewController") as! GameViewController
         viewController.viewStore = ViewStore(store)
         return viewController
