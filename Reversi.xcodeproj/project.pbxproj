@@ -34,7 +34,6 @@
 		D6E392262461583D00CDC38D /* GameStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E392252461583D00CDC38D /* GameStateManager.swift */; };
 		D6E392282461588E00CDC38D /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E392272461588E00CDC38D /* Player.swift */; };
 		D6E8648B24616408003509F6 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E8648A24616408003509F6 /* Board.swift */; };
-		D6FB331124624AA40045D505 /* FileGameStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FB331024624AA40045D505 /* FileGameStateManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,7 +99,6 @@
 		D6E392252461583D00CDC38D /* GameStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStateManager.swift; sourceTree = "<group>"; };
 		D6E392272461588E00CDC38D /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		D6E8648A24616408003509F6 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
-		D6FB331024624AA40045D505 /* FileGameStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileGameStateManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -224,7 +222,6 @@
 		D6FB330F24624A8A0045D505 /* GameStateStore */ = {
 			isa = PBXGroup;
 			children = (
-				D6FB331024624AA40045D505 /* FileGameStateManager.swift */,
 			);
 			name = GameStateStore;
 			sourceTree = "<group>";
@@ -348,7 +345,6 @@
 				D68A5786246FCA21003DD591 /* AppCore.swift in Sources */,
 				D636B39F23D35043007F370F /* DiskView.swift in Sources */,
 				D642BDD623AA0B3900396732 /* CellView.swift in Sources */,
-				D6FB331124624AA40045D505 /* FileGameStateManager.swift in Sources */,
 				D6E392202461538500CDC38D /* GameCore.swift in Sources */,
 				D6E392282461588E00CDC38D /* Player.swift in Sources */,
 				D642BDD823AA0B5700396732 /* Disk.swift in Sources */,

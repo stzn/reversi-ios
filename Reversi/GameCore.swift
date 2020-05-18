@@ -98,7 +98,7 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment> {
         }
         return Effect(value: .placeDisk(position))
     case .resetTapped:
-        return environment.gameStateManager.saveGame(state: GameState.intialState)
+        return environment.gameStateManager.saveGame(GameState.intialState)
             .catchToEffect()
             .map(GameAction.saveGameResponse)
             .receive(on: environment.mainQueue)
@@ -122,7 +122,7 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment> {
         state = GameState.intialState
         return Effect(value: .saveGame)
     case .saveGame:
-        return environment.gameStateManager.saveGame(state: state)
+        return environment.gameStateManager.saveGame(state)
             .catchToEffect()
             .map(GameAction.saveGameResponse)
     case .saveGameResponse(let result):
@@ -174,7 +174,7 @@ let gameReducer = Reducer<GameState, GameAction, GameEnvironment> {
         state = newState
         return Effect(value: GameAction.saveGame)
     case .logoutButtonTapped:
-        return environment.gameStateManager.saveGame(state: GameState.intialState)
+        return environment.gameStateManager.saveGame(GameState.intialState)
             .catchToEffect()
             .map(GameAction.saveGameResponse)
 

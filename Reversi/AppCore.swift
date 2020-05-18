@@ -78,7 +78,7 @@ let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
             state.game = nil
             state.login = LoginState()
             return environment.gameStateManager
-                .saveGame(state: GameState.intialState)
+                .saveGame(GameState.intialState)
                 .catchToEffect()
                 .flatMap { _ in Effect<AppAction, Never>.none }
                 .eraseToEffect()

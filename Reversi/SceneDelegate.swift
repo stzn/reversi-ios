@@ -39,7 +39,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     }
                     return Effect(value: DiskPosition(x: x, y: y))
                 },
-                gameStateManager: FileGameStateManager(path: path),
+                gameStateManager: GameStateManager.live,
                 mainQueue: DispatchQueue.main.eraseToAnyScheduler()
             )
         )
