@@ -9,8 +9,8 @@
 import Foundation
 import ComposableArchitecture
 
-protocol LoginClient {
-    func login(request: LoginRequest) -> Effect<LoginResponse, LoginError>
+struct LoginClient {
+    var login: (LoginRequest) -> Effect<LoginResponse, LoginError>
 }
 
 struct LoginRequest: Equatable {
@@ -20,8 +20,8 @@ struct LoginRequest: Equatable {
 struct LoginResponse: Equatable {}
 struct LoginError: Error, Equatable {}
 
-struct FlakyLoginClient: LoginClient {
-    func login(request: LoginRequest) -> Effect<LoginResponse, LoginError> {
+extension LoginClient {
+    static var live = LoginClient { request in
         Effect.result {
             let isSuccess = Int.random(in: 0...100).isMultiple(of: 2)
             if isSuccess {
@@ -34,5 +34,20 @@ struct FlakyLoginClient: LoginClient {
         .eraseToEffect()
     }
 }
-
+//
+//struct FlakyLoginClient: LoginClient {
+//    func login(request: LoginRequest) -> Effect<LoginResponse, LoginError> {
+//        Effect.result {
+//            let isSuccess = Int.random(in: 0...100).isMultiple(of: 2)
+//            if isSuccess {
+//                return .success(.init())
+//            } else {
+//                return .failure(.init())
+//            }
+//        }
+//        .delay(for: 1.0, scheduler: DispatchQueue.main)
+//        .eraseToEffect()
+//    }
+//}
+//
 
