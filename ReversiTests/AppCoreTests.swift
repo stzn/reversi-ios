@@ -13,22 +13,6 @@ import XCTest
 
 @testable import Reversi
 
-final class InMemoryGameStateManager: GameStateManager {
-    var savedState: AppState?
-    func saveGame(state: AppState) -> Effect<GameStateSaveAction, GameStateManagerError> {
-        print("call")
-        savedState = state
-        return Effect(value: GameStateSaveAction.saved)
-    }
-
-    func loadGame() -> Effect<GameStateLoadAction, GameStateManagerError> {
-        guard let state = savedState else {
-            return Effect(error: .write(path: "", cause: nil))
-        }
-        return Effect(value: GameStateLoadAction.loaded(state))
-    }
-}
-
 class AppCoreTests: XCTestCase {
     let scheduler = DispatchQueue.testScheduler
 
@@ -149,14 +133,11 @@ class AppCoreTests: XCTestCase {
     func testComputerPlay() {
         let diskPlacedPosition = DiskPosition(x: 2, y: 3)
         let testState = AppState.intialState
-        let store = TestStore(
-            initialState: testState,
-            reducer: appReducer,
-            environment: AppEnvironment(
-                computer: { _, _ in Effect(value: diskPlacedPosition) },
-                gameStateManager: InMemoryGameStateManager(),
-                mainQueue: scheduler.eraseToAnyScheduler()))
+        let store = anyTestStore(with: testState)
         store.assert(
+            .environment {
+              $0.computer = { _, _ in Effect(value: diskPlacedPosition) }
+            },
             .send(.computerPlay) {
                 $0.playingAsComputer = .dark
             },
@@ -189,14 +170,11 @@ class AppCoreTests: XCTestCase {
             width: Rule.width, height: Rule.height)
         testState.turn = .light
         let diskPlacedPosition = DiskPosition(x: 0, y: 0)
-        let store = TestStore(
-            initialState: testState,
-            reducer: appReducer,
-            environment: AppEnvironment(
-                computer: { _, _ in Effect(value: diskPlacedPosition) },
-                gameStateManager: InMemoryGameStateManager(),
-                mainQueue: scheduler.eraseToAnyScheduler()))
+        let store = anyTestStore(with: testState)
         store.assert(
+            .environment {
+              $0.computer = { _, _ in Effect(value: diskPlacedPosition) }
+            },
             .send(.computerPlay) {
                 $0.playingAsComputer = .light
             },
@@ -230,14 +208,11 @@ class AppCoreTests: XCTestCase {
             width: Rule.width, height: Rule.height)
         testState.turn = .light
         let diskPlacedPosition = DiskPosition(x: 0, y: 0)
-        let store = TestStore(
-            initialState: testState,
-            reducer: appReducer,
-            environment: AppEnvironment(
-                computer: { _, _ in Effect(value: diskPlacedPosition) },
-                gameStateManager: InMemoryGameStateManager(),
-                mainQueue: scheduler.eraseToAnyScheduler()))
+        let store = anyTestStore(with: testState)
         store.assert(
+            .environment {
+              $0.computer = { _, _ in Effect(value: diskPlacedPosition) }
+            },
             .send(.computerPlay) {
                 $0.playingAsComputer = .light
             },
@@ -267,7 +242,7 @@ class AppCoreTests: XCTestCase {
 
     // MARK: -Helpers
 
-    private func anyTestStore(with state: AppState) -> TestStore<
+    private func anyTestStore(with state: AppState, function: String = #function) -> TestStore<
         AppState, AppState, AppAction, AppAction, AppEnvironment
     > {
         return TestStore(
@@ -275,7 +250,7 @@ class AppCoreTests: XCTestCase {
             reducer: appReducer,
             environment: AppEnvironment(
                 computer: { _, _ in .fireAndForget {} },
-                gameStateManager: InMemoryGameStateManager(),
+                gameStateManager: .mock(id: function),
                 mainQueue: scheduler.eraseToAnyScheduler()))
     }
 

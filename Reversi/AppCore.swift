@@ -1,4 +1,4 @@
-//
+ //
 //  AppCore.swift
 //  Reversi
 //
@@ -97,7 +97,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         }
         return Effect(value: .placeDisk(position))
     case .resetTapped:
-        return environment.gameStateManager.saveGame(state: AppState.intialState)
+        return environment.gameStateManager.saveGame(AppState.intialState)
             .catchToEffect()
             .map(AppAction.saveGameResponse)
             .receive(on: environment.mainQueue)
@@ -121,7 +121,7 @@ let appReducer = Reducer<AppState, AppAction, AppEnvironment> {
         state = AppState.intialState
         return Effect(value: .saveGame)
     case .saveGame:
-        return environment.gameStateManager.saveGame(state: state)
+        return environment.gameStateManager.saveGame(state)
             .catchToEffect()
             .map(AppAction.saveGameResponse)
     case .saveGameResponse(let result):

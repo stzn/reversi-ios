@@ -5,11 +5,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-    private var path: String {
-        (NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true).first!
-            as NSString).appendingPathComponent("Game")
-    }
-
     func scene(
         _ scene: UIScene, willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
@@ -37,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     }
                     return Effect(value: DiskPosition(x: x, y: y))
                 },
-                gameStateManager: FileGameStateManager(path: path),
+                gameStateManager: GameStateManager.live,
                 mainQueue: DispatchQueue.main.eraseToAnyScheduler()
             )
         )
