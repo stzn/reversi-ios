@@ -13,7 +13,7 @@ import XCTest
 
 @testable import Reversi
 
-class AppCoreTests: XCTestCase {
+class GameCoreTests: XCTestCase {
     let scheduler = DispatchQueue.testScheduler
 
     func testGameStarted() {
