@@ -30,8 +30,11 @@ extension LoginClient {
                 return .failure(.init())
             }
         }
-        .delay(for: 1.0, scheduler: DispatchQueue.main)
         .eraseToEffect()
+    }
+
+    static var mock = LoginClient { request in
+        Effect.result { .success(.init()) }
     }
 }
 //

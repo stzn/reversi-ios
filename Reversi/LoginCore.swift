@@ -52,6 +52,7 @@ var loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> {
     case .loginButtonTapped(let request):
         state.loginButtonEnabled = false
         return environment.loginClient.login(request)
+            .delay(for: 1.0, scheduler: environment.mainQueue)
             .catchToEffect()
             .receive(on: environment.mainQueue)
             .eraseToEffect()

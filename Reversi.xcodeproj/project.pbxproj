@@ -23,6 +23,7 @@
 		D68A579024713A12003DD591 /* LoginClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68A578F24713A12003DD591 /* LoginClient.swift */; };
 		D68A579324713AD7003DD591 /* GameViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D68A579224713AD7003DD591 /* GameViewController.storyboard */; };
 		D68A579524713B17003DD591 /* LoginViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D68A579424713B17003DD591 /* LoginViewController.storyboard */; };
+		D68A579824733719003DD591 /* LoginCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68A579724733719003DD591 /* LoginCoreTests.swift */; };
 		D6A1802424665ED8003D70DD /* GameCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A1802324665ED8003D70DD /* GameCoreTests.swift */; };
 		D6E39218246152E500CDC38D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = D6E39217246152E500CDC38D /* ComposableArchitecture */; };
 		D6E3921A246152E500CDC38D /* ComposableArchitecture in Embed Frameworks */ = {isa = PBXBuildFile; productRef = D6E39217246152E500CDC38D /* ComposableArchitecture */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -92,6 +93,7 @@
 		D68A578F24713A12003DD591 /* LoginClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginClient.swift; sourceTree = "<group>"; };
 		D68A579224713AD7003DD591 /* GameViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = GameViewController.storyboard; sourceTree = "<group>"; };
 		D68A579424713B17003DD591 /* LoginViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LoginViewController.storyboard; sourceTree = "<group>"; };
+		D68A579724733719003DD591 /* LoginCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoreTests.swift; sourceTree = "<group>"; };
 		D6A1802324665ED8003D70DD /* GameCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCoreTests.swift; sourceTree = "<group>"; };
 		D6E3921F2461538500CDC38D /* GameCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCore.swift; sourceTree = "<group>"; };
 		D6E392212461546700CDC38D /* DiskPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskPosition.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 			children = (
 				D642BDCC23A9FE4700396732 /* Info.plist */,
 				D6A1802324665ED8003D70DD /* GameCoreTests.swift */,
+				D68A579724733719003DD591 /* LoginCoreTests.swift */,
 			);
 			path = ReversiTests;
 			sourceTree = "<group>";
@@ -364,6 +367,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D68A579824733719003DD591 /* LoginCoreTests.swift in Sources */,
 				D6A1802424665ED8003D70DD /* GameCoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
