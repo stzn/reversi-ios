@@ -37,20 +37,3 @@ extension LoginClient {
         Effect.result { .success(.init()) }
     }
 }
-//
-//struct FlakyLoginClient: LoginClient {
-//    func login(request: LoginRequest) -> Effect<LoginResponse, LoginError> {
-//        Effect.result {
-//            let isSuccess = Int.random(in: 0...100).isMultiple(of: 2)
-//            if isSuccess {
-//                return .success(.init())
-//            } else {
-//                return .failure(.init())
-//            }
-//        }
-//        .delay(for: 1.0, scheduler: DispatchQueue.main)
-//        .eraseToEffect()
-//    }
-//}
-//
-
