@@ -14,7 +14,7 @@ import XCTest
 class LoginCoreTests: XCTestCase {
     let scheduler = DispatchQueue.testScheduler
 
-    func testInitialState() {
+    func testLoginTappedWithValidInputThenSuccessLogin() {
         let state = LoginState(email: nil, password: nil, loginButtonEnabled: false, error: nil)
         let store = TestStore(
             initialState: state,
