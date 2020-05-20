@@ -2,7 +2,7 @@ import Combine
 import ComposableArchitecture
 import UIKit
 
-class GameViewController: UIViewController {
+final class GameViewController: UIViewController {
     var viewStore: ViewStore<GameState, GameAction>!
     var cancellables: Set<AnyCancellable> = []
 
@@ -358,3 +358,58 @@ extension Disk {
         }
     }
 }
+
+#if DEBUG
+import SwiftUI
+
+extension GameViewController: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> GameViewController {
+        let store = Store<GameState, GameAction>(
+            initialState: .init(),
+            reducer: gameReducer,
+            environment: GameEnvironment(
+                computer: { _, _ in .fireAndForget {} },
+                gameStateManager: .mock(id: UUID().uuidString),
+                mainQueue: DispatchQueue.main.eraseToAnyScheduler()))
+        return GameViewController.instantiate(store: store)
+    }
+
+    func updateUIViewController(_ uiViewController: GameViewController, context: Context) {
+    }
+}
+
+struct GameView: PreviewProvider {
+    private static let devices = [
+        "iPhone SE",
+        "iPhone 11",
+        "iPad Pro (11-inch) (2nd generation)",
+    ]
+
+    static var previews: some View {
+        ForEach(devices, id: \.self) { name in
+            Group {
+                self.content
+                    .previewDevice(PreviewDevice(rawValue: name))
+                    .previewDisplayName(name)
+                    .colorScheme(.light)
+                self.content
+                    .previewDevice(PreviewDevice(rawValue: name))
+                    .previewDisplayName(name)
+                    .colorScheme(.dark)
+            }
+        }
+    }
+
+    private static var content: GameViewController {
+        let store = Store<GameState, GameAction>(
+            initialState: GameState.intialState,
+            reducer: gameReducer,
+            environment: GameEnvironment(
+                computer: { _, _ in .fireAndForget {} },
+                gameStateManager: .mock(id: UUID().uuidString),
+                mainQueue: DispatchQueue.main.eraseToAnyScheduler())
+        )
+        return GameViewController.instantiate(store: store)
+    }
+}
+#endif

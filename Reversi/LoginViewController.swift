@@ -10,7 +10,7 @@ import Combine
 import ComposableArchitecture
 import UIKit
 
-class LoginViewController: UIViewController {
+final class LoginViewController: UIViewController {
     var cancellables: Set<AnyCancellable> = []
     var store: Store<LoginState, LoginAction>!
     var viewStore: ViewStore<LoginState, LoginAction>!
@@ -62,9 +62,10 @@ class LoginViewController: UIViewController {
 
     @IBAction func loginButtonTapped(_ sender: UIButton) {
         guard let email = emailTextField.text, !email.isEmpty,
-            let password = passwordTextField.text, !password.isEmpty else {
-                assertionFailure("must input both texts")
-                return
+            let password = passwordTextField.text, !password.isEmpty
+        else {
+            assertionFailure("must input both texts")
+            return
         }
         self.viewStore.send(.loginButtonTapped(.init(email: email, password: password)))
     }
@@ -72,8 +73,60 @@ class LoginViewController: UIViewController {
     @IBAction func emailValueChanged(_ sender: UITextField) {
         self.viewStore.send(.emailChanged(sender.text))
     }
-    
+
     @IBAction func passwordValueChanged(_ sender: UITextField) {
         self.viewStore.send(.passwordChanged(sender.text))
     }
 }
+
+#if DEBUG
+import SwiftUI
+
+extension LoginViewController: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> LoginViewController {
+        let store = Store<LoginState, LoginAction>(
+            initialState: .init(),
+            reducer: loginReducer,
+            environment: LoginEnvironment(
+                loginClient: .mock,
+                mainQueue: DispatchQueue.main.eraseToAnyScheduler()))
+        return LoginViewController.instantiate(store: store)
+    }
+
+    func updateUIViewController(_ uiViewController: LoginViewController, context: Context) {
+    }
+}
+
+struct LoginView: PreviewProvider {
+    private static let devices = [
+        "iPhone SE",
+        "iPhone 11",
+        "iPad Pro (11-inch) (2nd generation)",
+    ]
+
+    static var previews: some View {
+        ForEach(devices, id: \.self) { name in
+            Group {
+                self.content
+                    .previewDevice(PreviewDevice(rawValue: name))
+                    .previewDisplayName(name)
+                    .colorScheme(.light)
+                self.content
+                    .previewDevice(PreviewDevice(rawValue: name))
+                    .previewDisplayName(name)
+                    .colorScheme(.dark)
+            }
+        }
+    }
+
+    private static var content: LoginViewController {
+        let store = Store<LoginState, LoginAction>(
+            initialState: .init(),
+            reducer: loginReducer,
+            environment: LoginEnvironment(
+                loginClient: .mock,
+                mainQueue: DispatchQueue.main.eraseToAnyScheduler()))
+        return LoginViewController.instantiate(store: store)
+    }
+}
+#endif
