@@ -47,6 +47,7 @@
 		D68A57FB2475EEFB003DD591 /* GameCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A1802324665ED8003D70DD /* GameCoreTests.swift */; };
 		D68A57FD2475EFE4003DD591 /* ComposableArchitectureTestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = D68A57FC2475EFE4003DD591 /* ComposableArchitectureTestSupport */; };
 		D68A57FF2475EFE4003DD591 /* ComposableArchitectureTestSupport in Embed Frameworks */ = {isa = PBXBuildFile; productRef = D68A57FC2475EFE4003DD591 /* ComposableArchitectureTestSupport */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		D68A58012475F36F003DD591 /* AppCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68A58002475F36F003DD591 /* AppCoreTests.swift */; };
 		D6E39218246152E500CDC38D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = D6E39217246152E500CDC38D /* ComposableArchitecture */; };
 		D6E3921A246152E500CDC38D /* ComposableArchitecture in Embed Frameworks */ = {isa = PBXBuildFile; productRef = D6E39217246152E500CDC38D /* ComposableArchitecture */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		D6E3921C246152E500CDC38D /* ComposableArchitectureTestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = D6E3921B246152E500CDC38D /* ComposableArchitectureTestSupport */; };
@@ -208,6 +209,7 @@
 		D68A57D12475CA29003DD591 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D68A57D62475CA29003DD591 /* GameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D68A57DF2475CA29003DD591 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D68A58002475F36F003DD591 /* AppCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoreTests.swift; sourceTree = "<group>"; };
 		D6A1802324665ED8003D70DD /* GameCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCoreTests.swift; sourceTree = "<group>"; };
 		D6E3921F2461538500CDC38D /* GameCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCore.swift; sourceTree = "<group>"; };
 		D6E392212461546700CDC38D /* DiskPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskPosition.swift; sourceTree = "<group>"; };
@@ -324,10 +326,13 @@
 		D642BDB223A9FE4500396732 /* Reversi */ = {
 			isa = PBXGroup;
 			children = (
-				D642BDC123A9FE4700396732 /* Info.plist */,
+				D68A5785246FCA21003DD591 /* AppCore.swift */,
+				D642BDB323A9FE4500396732 /* AppDelegate.swift */,
+				D68A5787246FCEDF003DD591 /* AppViewController.swift */,
 				D642BDBC23A9FE4700396732 /* Assets.xcassets */,
-				D68A578C246FE077003DD591 /* App */,
+				D642BDC123A9FE4700396732 /* Info.plist */,
 				D642BDBE23A9FE4700396732 /* LaunchScreen.storyboard */,
+				D642BDB523A9FE4500396732 /* SceneDelegate.swift */,
 			);
 			path = Reversi;
 			sourceTree = "<group>";
@@ -336,19 +341,9 @@
 			isa = PBXGroup;
 			children = (
 				D642BDCC23A9FE4700396732 /* Info.plist */,
+				D68A58002475F36F003DD591 /* AppCoreTests.swift */,
 			);
 			path = ReversiTests;
-			sourceTree = "<group>";
-		};
-		D68A578C246FE077003DD591 /* App */ = {
-			isa = PBXGroup;
-			children = (
-				D68A5785246FCA21003DD591 /* AppCore.swift */,
-				D642BDB323A9FE4500396732 /* AppDelegate.swift */,
-				D68A5787246FCEDF003DD591 /* AppViewController.swift */,
-				D642BDB523A9FE4500396732 /* SceneDelegate.swift */,
-			);
-			name = App;
 			sourceTree = "<group>";
 		};
 		D68A579F2475C78B003DD591 /* Login */ = {
@@ -586,6 +581,7 @@
 					};
 					D642BDC523A9FE4700396732 = {
 						CreatedOnToolsVersion = 11.3;
+						LastSwiftMigration = 1140;
 						TestTargetID = D642BDAF23A9FE4500396732;
 					};
 					D68A579D2475C78B003DD591 = {
@@ -693,6 +689,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D68A58012475F36F003DD591 /* AppCoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -945,6 +942,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ReversiTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -954,6 +952,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.koherent.ReversiTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Reversi.app/Reversi";
@@ -965,6 +964,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ReversiTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
