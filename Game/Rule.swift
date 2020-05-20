@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum Rule {
+public enum Rule {
     /// 盤の幅を表します。
     static let width: Int = 8
 
@@ -75,7 +75,7 @@ enum Rule {
 
     /// `side` で指定された色のディスクを置ける盤上のセルの座標をすべて返します。
     /// - Returns: `side` で指定された色のディスクを置ける盤上のすべてのセルの座標の配列です。
-    static func validMoves(for side: Disk, on board: Board) -> [(x: Int, y: Int)] {
+    public static func validMoves(for side: Disk, on board: Board) -> [(x: Int, y: Int)] {
         var coordinates: [(Int, Int)] = []
 
         for y in yRange {

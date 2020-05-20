@@ -17,7 +17,10 @@ public final class LoginViewController: UIViewController {
 
     public static func instantiate(store: Store<LoginState, LoginAction>) -> LoginViewController {
         let viewController =
-            UIStoryboard(name: "LoginViewController", bundle: nil)
+            UIStoryboard(
+                name: "LoginViewController",
+                bundle: Bundle(for: LoginViewController.self)
+            )
             .instantiateViewController(identifier: "LoginViewController")
             as! LoginViewController
         viewController.store = store
@@ -80,53 +83,55 @@ public final class LoginViewController: UIViewController {
 }
 
 #if DEBUG
-import SwiftUI
+    import SwiftUI
 
-extension LoginViewController: UIViewControllerRepresentable {
-    public func makeUIViewController(context: Context) -> LoginViewController {
-        let store = Store<LoginState, LoginAction>(
-            initialState: .init(),
-            reducer: loginReducer,
-            environment: LoginEnvironment(
-                loginClient: .mock,
-                mainQueue: DispatchQueue.main.eraseToAnyScheduler()))
-        return LoginViewController.instantiate(store: store)
-    }
+    extension LoginViewController: UIViewControllerRepresentable {
+        public func makeUIViewController(context: Context) -> LoginViewController {
+            let store = Store<LoginState, LoginAction>(
+                initialState: .init(),
+                reducer: loginReducer,
+                environment: LoginEnvironment(
+                    loginClient: .mock,
+                    mainQueue: DispatchQueue.main.eraseToAnyScheduler()))
+            return LoginViewController.instantiate(store: store)
+        }
 
-    public func updateUIViewController(_ uiViewController: LoginViewController, context: Context) {
-    }
-}
-
-struct LoginView: PreviewProvider {
-    private static let devices = [
-        "iPhone SE",
-        "iPhone 11",
-        "iPad Pro (11-inch) (2nd generation)",
-    ]
-
-    static var previews: some View {
-        ForEach(devices, id: \.self) { name in
-            Group {
-                self.content
-                    .previewDevice(PreviewDevice(rawValue: name))
-                    .previewDisplayName(name)
-                    .colorScheme(.light)
-                self.content
-                    .previewDevice(PreviewDevice(rawValue: name))
-                    .previewDisplayName(name)
-                    .colorScheme(.dark)
-            }
+        public func updateUIViewController(
+            _ uiViewController: LoginViewController, context: Context
+        ) {
         }
     }
 
-    private static var content: LoginViewController {
-        let store = Store<LoginState, LoginAction>(
-            initialState: .init(),
-            reducer: loginReducer,
-            environment: LoginEnvironment(
-                loginClient: .mock,
-                mainQueue: DispatchQueue.main.eraseToAnyScheduler()))
-        return LoginViewController.instantiate(store: store)
+    struct LoginView: PreviewProvider {
+        private static let devices = [
+            "iPhone SE",
+            "iPhone 11",
+            "iPad Pro (11-inch) (2nd generation)",
+        ]
+
+        static var previews: some View {
+            ForEach(devices, id: \.self) { name in
+                Group {
+                    self.content
+                        .previewDevice(PreviewDevice(rawValue: name))
+                        .previewDisplayName(name)
+                        .colorScheme(.light)
+                    self.content
+                        .previewDevice(PreviewDevice(rawValue: name))
+                        .previewDisplayName(name)
+                        .colorScheme(.dark)
+                }
+            }
+        }
+
+        private static var content: LoginViewController {
+            let store = Store<LoginState, LoginAction>(
+                initialState: .init(),
+                reducer: loginReducer,
+                environment: LoginEnvironment(
+                    loginClient: .mock,
+                    mainQueue: DispatchQueue.main.eraseToAnyScheduler()))
+            return LoginViewController.instantiate(store: store)
+        }
     }
-}
 #endif

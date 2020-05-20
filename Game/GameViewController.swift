@@ -2,13 +2,17 @@ import Combine
 import ComposableArchitecture
 import UIKit
 
-final class GameViewController: UIViewController {
+public final class GameViewController: UIViewController {
     var viewStore: ViewStore<GameState, GameAction>!
     var cancellables: Set<AnyCancellable> = []
 
-    static func instantiate(store: Store<GameState, GameAction>) -> GameViewController {
+    public static func instantiate(store: Store<GameState, GameAction>) -> GameViewController {
         let viewController =
-            UIStoryboard(name: "GameViewController", bundle: nil).instantiateViewController(
+            UIStoryboard(
+                name: "GameViewController",
+                bundle: Bundle(for: GameViewController.self)
+            )
+            .instantiateViewController(
                 identifier: "GameViewController") as! GameViewController
         viewController.viewStore = ViewStore(store)
         return viewController
@@ -45,7 +49,7 @@ final class GameViewController: UIViewController {
     private var animationCanceller: Canceller?
     private var isAnimating: Bool { animationCanceller != nil }
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         self.navigationItem.title = "Game"
@@ -135,7 +139,7 @@ final class GameViewController: UIViewController {
     }
 
     private var viewHasAppeared: Bool = false
-    override func viewDidAppear(_ animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         if viewHasAppeared { return }
@@ -315,7 +319,7 @@ extension GameViewController: BoardViewDelegate {
     /// - Parameter boardView: セルをタップされた `BoardView` インスタンスです。
     /// - Parameter x: セルの列です。
     /// - Parameter y: セルの行です。
-    func boardView(_ boardView: BoardView, didSelectCellAtX x: Int, y: Int) {
+    public func boardView(_ boardView: BoardView, didSelectCellAtX x: Int, y: Int) {
         if isAnimating { return }
         self.viewStore.send(.manualPlayerDiskPlaced(.init(x: x, y: y)))
     }
@@ -360,56 +364,57 @@ extension Disk {
 }
 
 #if DEBUG
-import SwiftUI
+    import SwiftUI
 
-extension GameViewController: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> GameViewController {
-        let store = Store<GameState, GameAction>(
-            initialState: .init(),
-            reducer: gameReducer,
-            environment: GameEnvironment(
-                computer: { _, _ in .fireAndForget {} },
-                gameStateManager: .mock(id: UUID().uuidString),
-                mainQueue: DispatchQueue.main.eraseToAnyScheduler()))
-        return GameViewController.instantiate(store: store)
-    }
+    extension GameViewController: UIViewControllerRepresentable {
+        public func makeUIViewController(context: Context) -> GameViewController {
+            let store = Store<GameState, GameAction>(
+                initialState: .init(),
+                reducer: gameReducer,
+                environment: GameEnvironment(
+                    computer: { _, _ in .fireAndForget {} },
+                    gameStateManager: .mock(id: UUID().uuidString),
+                    mainQueue: DispatchQueue.main.eraseToAnyScheduler()))
+            return GameViewController.instantiate(store: store)
+        }
 
-    func updateUIViewController(_ uiViewController: GameViewController, context: Context) {
-    }
-}
-
-struct GameView: PreviewProvider {
-    private static let devices = [
-        "iPhone SE",
-        "iPhone 11",
-        "iPad Pro (11-inch) (2nd generation)",
-    ]
-
-    static var previews: some View {
-        ForEach(devices, id: \.self) { name in
-            Group {
-                self.content
-                    .previewDevice(PreviewDevice(rawValue: name))
-                    .previewDisplayName(name)
-                    .colorScheme(.light)
-                self.content
-                    .previewDevice(PreviewDevice(rawValue: name))
-                    .previewDisplayName(name)
-                    .colorScheme(.dark)
-            }
+        public func updateUIViewController(_ uiViewController: GameViewController, context: Context)
+        {
         }
     }
 
-    private static var content: GameViewController {
-        let store = Store<GameState, GameAction>(
-            initialState: GameState.intialState,
-            reducer: gameReducer,
-            environment: GameEnvironment(
-                computer: { _, _ in .fireAndForget {} },
-                gameStateManager: .mock(id: UUID().uuidString),
-                mainQueue: DispatchQueue.main.eraseToAnyScheduler())
-        )
-        return GameViewController.instantiate(store: store)
+    struct GameView: PreviewProvider {
+        private static let devices = [
+            "iPhone SE",
+            "iPhone 11",
+            "iPad Pro (11-inch) (2nd generation)",
+        ]
+
+        static var previews: some View {
+            ForEach(devices, id: \.self) { name in
+                Group {
+                    self.content
+                        .previewDevice(PreviewDevice(rawValue: name))
+                        .previewDisplayName(name)
+                        .colorScheme(.light)
+                    self.content
+                        .previewDevice(PreviewDevice(rawValue: name))
+                        .previewDisplayName(name)
+                        .colorScheme(.dark)
+                }
+            }
+        }
+
+        private static var content: GameViewController {
+            let store = Store<GameState, GameAction>(
+                initialState: GameState.intialState,
+                reducer: gameReducer,
+                environment: GameEnvironment(
+                    computer: { _, _ in .fireAndForget {} },
+                    gameStateManager: .mock(id: UUID().uuidString),
+                    mainQueue: DispatchQueue.main.eraseToAnyScheduler())
+            )
+            return GameViewController.instantiate(store: store)
+        }
     }
-}
 #endif

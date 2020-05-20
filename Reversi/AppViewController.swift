@@ -10,6 +10,7 @@ import Combine
 import UIKit
 import ComposableArchitecture
 import Login
+import Game
 
 class AppViewController: UINavigationController {
     let store: Store<AppState, AppAction>

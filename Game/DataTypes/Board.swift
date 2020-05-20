@@ -8,13 +8,16 @@
 
 import Foundation
 
-final class Board: Equatable {
-    static func == (lhs: Board, rhs: Board) -> Bool {
+public final class Board: Equatable {
+    public static func == (lhs: Board, rhs: Board) -> Bool {
         return lhs.disks == rhs.disks
     }
 
     private(set) var disks: [DiskPosition: Disk] = [:]
 
+    public init() {
+        
+    }
     /// 盤をゲーム開始時に状態に戻します。
     static func reset() -> Board {
         let board = Board()

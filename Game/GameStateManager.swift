@@ -9,16 +9,16 @@
 import ComposableArchitecture
 import Foundation
 
-enum GameStateLoadAction: Equatable {
+public enum GameStateLoadAction: Equatable {
     case loaded( GameState)
 }
 
-enum GameStateSaveAction: Equatable {
+public enum GameStateSaveAction: Equatable {
     case saved
 }
 
-enum GameStateManagerError: Error, Equatable {
-    static func == (lhs: GameStateManagerError, rhs: GameStateManagerError) -> Bool {
+public enum GameStateManagerError: Error, Equatable {
+    public static func == (lhs: GameStateManagerError, rhs: GameStateManagerError) -> Bool {
         switch (lhs, rhs) {
         case let (.read(lPath, lReason), .read(rPath, rReason)):
             return lPath == rPath
@@ -35,9 +35,9 @@ enum GameStateManagerError: Error, Equatable {
     case read(path: String, cause: Error?)
 }
 
-struct GameStateManager {
-    var saveGame: ( GameState) -> Effect<GameStateSaveAction, GameStateManagerError>
-    var loadGame: () -> Effect<GameStateLoadAction, GameStateManagerError>
+public struct GameStateManager {
+    public var saveGame: ( GameState) -> Effect<GameStateSaveAction, GameStateManagerError>
+    public var loadGame: () -> Effect<GameStateLoadAction, GameStateManagerError>
 }
 
 extension GameStateManager {
@@ -46,7 +46,7 @@ extension GameStateManager {
             as NSString).appendingPathComponent("Game")
     }
 
-    static var live = GameStateManager(
+    public static var live = GameStateManager(
         saveGame: { state in
             return Effect.result {
                 var output: String = ""

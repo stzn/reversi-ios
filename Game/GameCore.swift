@@ -9,7 +9,7 @@
 import ComposableArchitecture
 import Foundation
 
-struct GameState: Equatable {
+public struct GameState: Equatable {
     var board: Board = Board()
     var players: [Player] = [.manual, .manual]
     var turn: Disk? = nil
@@ -17,15 +17,32 @@ struct GameState: Equatable {
     var currentTapPosition: DiskPosition? = nil
     var playingAsComputer: Disk? = nil
 
-    static var intialState: GameState {
+    public static var intialState: GameState {
         .init(
             board: Board.reset(),
             players: [.manual, .manual], turn: .dark,
             shouldSkip: false, currentTapPosition: nil)
     }
+
+    public init(
+        board: Board = Board(),
+        players: [Player] = [.manual, .manual],
+        turn: Disk? = nil,
+        shouldSkip: Bool = false,
+        currentTapPosition: DiskPosition? = nil,
+        playingAsComputer: Disk? = nil
+    ) {
+        self.board = board
+        self.players = players
+        self.turn = turn
+        self.shouldSkip = shouldSkip
+        self.currentTapPosition = currentTapPosition
+        self.playingAsComputer = playingAsComputer
+    }
+
 }
 
-enum GameAction: Equatable {
+public enum GameAction: Equatable {
     case gameStarted
     case manualPlayerDiskPlaced(DiskPosition)
     case resetTapped
@@ -41,13 +58,23 @@ enum GameAction: Equatable {
     case logoutButtonTapped
 }
 
-struct GameEnvironment {
+public struct GameEnvironment {
     var computer: (Board, Disk) -> Effect<DiskPosition?, Never>
     var gameStateManager: GameStateManager
     var mainQueue: AnySchedulerOf<DispatchQueue>
+
+    public init(
+        computer: @escaping (Board, Disk) -> Effect<DiskPosition?, Never>,
+        gameStateManager: GameStateManager,
+        mainQueue: AnySchedulerOf<DispatchQueue>
+    ) {
+        self.computer = computer
+        self.gameStateManager = gameStateManager
+        self.mainQueue = mainQueue
+    }
 }
 
-let gameReducer = Reducer<GameState, GameAction, GameEnvironment> {
+public let gameReducer = Reducer<GameState, GameAction, GameEnvironment> {
     state, action, environment in
 
     struct CancelId: Hashable {}

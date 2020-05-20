@@ -11,7 +11,7 @@ import ComposableArchitecture
 import ComposableArchitectureTestSupport
 import XCTest
 
-@testable import Reversi
+@testable import Game
 
 class GameCoreTests: XCTestCase {
     let scheduler = DispatchQueue.testScheduler

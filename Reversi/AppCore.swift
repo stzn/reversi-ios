@@ -9,6 +9,7 @@
 import ComposableArchitecture
 import Foundation
 import Login
+import Game
 
 struct AppState: Equatable {
     var login: LoginState? = nil
