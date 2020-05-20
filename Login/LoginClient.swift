@@ -9,19 +9,19 @@
 import Foundation
 import ComposableArchitecture
 
-struct LoginClient {
+public struct LoginClient {
     var login: (LoginRequest) -> Effect<LoginResponse, LoginError>
 }
 
-struct LoginRequest: Equatable {
+public struct LoginRequest: Equatable {
     var email: String
     var password: String
 }
-struct LoginResponse: Equatable {}
-struct LoginError: Error, Equatable {}
+public struct LoginResponse: Equatable {}
+public struct LoginError: Error, Equatable {}
 
 extension LoginClient {
-    static var live = LoginClient { request in
+    public static var live = LoginClient { request in
         Effect.result {
             let isSuccess = Int.random(in: 0...100).isMultiple(of: 2)
             if isSuccess {
@@ -33,7 +33,7 @@ extension LoginClient {
         .eraseToEffect()
     }
 
-    static var mock = LoginClient { request in
+    public static var mock = LoginClient { request in
         Effect.result { .success(.init()) }
     }
 }

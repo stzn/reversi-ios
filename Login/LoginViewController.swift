@@ -10,12 +10,12 @@ import Combine
 import ComposableArchitecture
 import UIKit
 
-final class LoginViewController: UIViewController {
+public final class LoginViewController: UIViewController {
     var cancellables: Set<AnyCancellable> = []
     var store: Store<LoginState, LoginAction>!
     var viewStore: ViewStore<LoginState, LoginAction>!
 
-    static func instantiate(store: Store<LoginState, LoginAction>) -> LoginViewController {
+    public static func instantiate(store: Store<LoginState, LoginAction>) -> LoginViewController {
         let viewController =
             UIStoryboard(name: "LoginViewController", bundle: nil)
             .instantiateViewController(identifier: "LoginViewController")
@@ -28,7 +28,7 @@ final class LoginViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Login"
 
@@ -83,7 +83,7 @@ final class LoginViewController: UIViewController {
 import SwiftUI
 
 extension LoginViewController: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> LoginViewController {
+    public func makeUIViewController(context: Context) -> LoginViewController {
         let store = Store<LoginState, LoginAction>(
             initialState: .init(),
             reducer: loginReducer,
@@ -93,7 +93,7 @@ extension LoginViewController: UIViewControllerRepresentable {
         return LoginViewController.instantiate(store: store)
     }
 
-    func updateUIViewController(_ uiViewController: LoginViewController, context: Context) {
+    public func updateUIViewController(_ uiViewController: LoginViewController, context: Context) {
     }
 }
 

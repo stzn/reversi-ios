@@ -9,14 +9,22 @@
 import Foundation
 import ComposableArchitecture
 
-struct LoginState: Equatable {
+public struct LoginState: Equatable {
     var email: String? = nil
     var password: String? = nil
     var loginButtonEnabled: Bool = false
     var error: LoginError? = nil
+
+    public init(email: String? = nil, password: String? = nil,
+                loginButtonEnabled: Bool = false, error: LoginError? = nil) {
+        self.email = email
+        self.password = password
+        self.loginButtonEnabled = loginButtonEnabled
+        self.error = error
+    }
 }
 
-enum LoginAction: Equatable {
+public enum LoginAction: Equatable {
     case emailChanged(String?)
     case passwordChanged(String?)
     case loginButtonTapped(LoginRequest)
@@ -24,12 +32,17 @@ enum LoginAction: Equatable {
     case errorDismissed
 }
 
-struct LoginEnvironment {
+public struct LoginEnvironment {
     var loginClient: LoginClient
     var mainQueue: AnySchedulerOf<DispatchQueue>
+
+    public init(loginClient: LoginClient, mainQueue: AnySchedulerOf<DispatchQueue>) {
+        self.loginClient = loginClient
+        self.mainQueue = mainQueue
+    }
 }
 
-var loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> {
+public var loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> {
     state, action, environment in
 
     func configureLoginButton() {

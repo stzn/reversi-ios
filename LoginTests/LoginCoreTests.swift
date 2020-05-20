@@ -10,7 +10,7 @@ import ComposableArchitecture
 import ComposableArchitectureTestSupport
 import XCTest
 
-@testable import Reversi
+@testable import Login
 
 class LoginCoreTests: XCTestCase {
     let scheduler = DispatchQueue.testScheduler
