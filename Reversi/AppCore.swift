@@ -22,32 +22,6 @@ enum AppAction: Equatable {
     case game(GameAction)
 }
 
-protocol LoginStateHolder {
-    func load() -> Bool
-    func save()
-    func remove()
-}
-
-struct UserDefaultsLoginStateHolder: LoginStateHolder {
-    private let key = "loggedIn"
-    let defaults: UserDefaults
-    init(defaults: UserDefaults = .standard) {
-        self.defaults = defaults
-    }
-
-    func load() -> Bool {
-        return defaults.bool(forKey: key)
-    }
-
-    func save() {
-        defaults.set(true, forKey: key)
-    }
-
-    func remove() {
-        defaults.removeObject(forKey: key)
-    }
-}
-
 struct AppEnvironment {
     var loginClient: LoginClient
     var loginStateHolder: LoginStateHolder

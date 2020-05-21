@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D62A6B0624770BE600F682D8 /* LoginStateHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62A6B0524770BE600F682D8 /* LoginStateHolder.swift */; };
 		D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDB323A9FE4500396732 /* AppDelegate.swift */; };
 		D642BDB623A9FE4500396732 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDB523A9FE4500396732 /* SceneDelegate.swift */; };
 		D642BDBD23A9FE4700396732 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D642BDBC23A9FE4700396732 /* Assets.xcassets */; };
@@ -178,6 +179,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D62A6B0524770BE600F682D8 /* LoginStateHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStateHolder.swift; sourceTree = "<group>"; };
 		D636B39E23D35043007F370F /* DiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskView.swift; sourceTree = "<group>"; };
 		D642BDB023A9FE4500396732 /* Reversi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reversi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D642BDB323A9FE4500396732 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 				D642BDC123A9FE4700396732 /* Info.plist */,
 				D642BDBE23A9FE4700396732 /* LaunchScreen.storyboard */,
 				D642BDB523A9FE4500396732 /* SceneDelegate.swift */,
+				D62A6B0524770BE600F682D8 /* LoginStateHolder.swift */,
 			);
 			path = Reversi;
 			sourceTree = "<group>";
@@ -681,6 +684,7 @@
 				D68A5786246FCA21003DD591 /* AppCore.swift in Sources */,
 				D68A5788246FCEDF003DD591 /* AppViewController.swift in Sources */,
 				D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */,
+				D62A6B0624770BE600F682D8 /* LoginStateHolder.swift in Sources */,
 				D642BDB623A9FE4500396732 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

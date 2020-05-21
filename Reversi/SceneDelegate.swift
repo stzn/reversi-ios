@@ -34,7 +34,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             reducer: appReducer,
             environment: AppEnvironment(
                 loginClient: LoginClient.live,
-                loginStateHolder: UserDefaultsLoginStateHolder(),
+                loginStateHolder: .live,
                 computer: { (board, turn) in
                     guard let (x, y) = Rule.validMoves(for: turn, on: board).randomElement() else {
                         return Effect(value: nil)
