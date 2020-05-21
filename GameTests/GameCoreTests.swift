@@ -296,5 +296,4 @@ class GameCoreTests: XCTestCase {
         board.setDisks(.light, at: [.init(x: lastX, y: lastY)])
         return board
     }
-
 }
