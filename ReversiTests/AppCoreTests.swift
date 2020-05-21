@@ -63,6 +63,19 @@ class AppCoreTests: XCTestCase {
         )
     }
 
+    func testLogoutActionResponseThenUserLoggedOut() {
+        let loggedInState = AppState(login: nil, game: GameState())
+        let store = anyTestStore(with: loggedInState)
+        store.assert(
+            .send(.game(.logoutButtonTapped)),
+            .receive(.logoutActionResponse) {
+                $0.login = LoginState()
+                $0.game = nil
+            },
+            .receive(.game(.saveGameResponse(.success(.saved))))
+        )
+    }
+
     // MARK: -Helpers
 
     private func anyTestStore(with state: AppState, function: String = #function) -> TestStore<
