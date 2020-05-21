@@ -334,8 +334,8 @@
 				D642BDBC23A9FE4700396732 /* Assets.xcassets */,
 				D642BDC123A9FE4700396732 /* Info.plist */,
 				D642BDBE23A9FE4700396732 /* LaunchScreen.storyboard */,
-				D642BDB523A9FE4500396732 /* SceneDelegate.swift */,
 				D62A6B0524770BE600F682D8 /* LoginStateHolder.swift */,
+				D642BDB523A9FE4500396732 /* SceneDelegate.swift */,
 			);
 			path = Reversi;
 			sourceTree = "<group>";
