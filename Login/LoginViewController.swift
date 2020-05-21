@@ -31,9 +31,38 @@ public final class LoginViewController: UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
+    private lazy var lodingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        view.addSubview(indicator)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        NSLayoutConstraint.activate([
+            indicator.topAnchor.constraint(equalTo: view.topAnchor),
+            indicator.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            indicator.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            indicator.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+        return indicator
+    }()
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Login"
+
+        self.viewStore.publisher.loginRequesting
+            .sink { [weak self] requesting in
+                guard let self = self else {
+                    return
+                }
+                if requesting {
+                    self.view.isUserInteractionEnabled = false
+                    self.lodingIndicator.startAnimating()
+                } else {
+                    self.view.isUserInteractionEnabled = true
+                    self.lodingIndicator.stopAnimating()
+                }
+            }
+            .store(in: &cancellables)
 
         self.viewStore.publisher.loginButtonEnabled
             .assign(to: \.isEnabled, on: loginButton)
@@ -83,55 +112,55 @@ public final class LoginViewController: UIViewController {
 }
 
 #if DEBUG
-    import SwiftUI
+import SwiftUI
 
-    extension LoginViewController: UIViewControllerRepresentable {
-        public func makeUIViewController(context: Context) -> LoginViewController {
-            let store = Store<LoginState, LoginAction>(
-                initialState: .init(),
-                reducer: loginReducer,
-                environment: LoginEnvironment(
-                    loginClient: .mock,
-                    mainQueue: DispatchQueue.main.eraseToAnyScheduler()))
-            return LoginViewController.instantiate(store: store)
-        }
-
-        public func updateUIViewController(
-            _ uiViewController: LoginViewController, context: Context
-        ) {
-        }
+extension LoginViewController: UIViewControllerRepresentable {
+    public func makeUIViewController(context: Context) -> LoginViewController {
+        let store = Store<LoginState, LoginAction>(
+            initialState: .init(),
+            reducer: loginReducer,
+            environment: LoginEnvironment(
+                loginClient: .mock,
+                mainQueue: DispatchQueue.main.eraseToAnyScheduler()))
+        return LoginViewController.instantiate(store: store)
     }
 
-    struct LoginView: PreviewProvider {
-        private static let devices = [
-            "iPhone SE",
-            "iPhone 11",
-            "iPad Pro (11-inch) (2nd generation)",
-        ]
+    public func updateUIViewController(
+        _ uiViewController: LoginViewController, context: Context
+    ) {
+    }
+}
 
-        static var previews: some View {
-            ForEach(devices, id: \.self) { name in
-                Group {
-                    self.content
-                        .previewDevice(PreviewDevice(rawValue: name))
-                        .previewDisplayName(name)
-                        .colorScheme(.light)
-                    self.content
-                        .previewDevice(PreviewDevice(rawValue: name))
-                        .previewDisplayName(name)
-                        .colorScheme(.dark)
-                }
+struct LoginView: PreviewProvider {
+    private static let devices = [
+        "iPhone SE",
+        "iPhone 11",
+        "iPad Pro (11-inch) (2nd generation)",
+    ]
+
+    static var previews: some View {
+        ForEach(devices, id: \.self) { name in
+            Group {
+                self.content
+                    .previewDevice(PreviewDevice(rawValue: name))
+                    .previewDisplayName(name)
+                    .colorScheme(.light)
+                self.content
+                    .previewDevice(PreviewDevice(rawValue: name))
+                    .previewDisplayName(name)
+                    .colorScheme(.dark)
             }
         }
-
-        private static var content: LoginViewController {
-            let store = Store<LoginState, LoginAction>(
-                initialState: .init(),
-                reducer: loginReducer,
-                environment: LoginEnvironment(
-                    loginClient: .mock,
-                    mainQueue: DispatchQueue.main.eraseToAnyScheduler()))
-            return LoginViewController.instantiate(store: store)
-        }
     }
+
+    private static var content: LoginViewController {
+        let store = Store<LoginState, LoginAction>(
+            initialState: .init(),
+            reducer: loginReducer,
+            environment: LoginEnvironment(
+                loginClient: .mock,
+                mainQueue: DispatchQueue.main.eraseToAnyScheduler()))
+        return LoginViewController.instantiate(store: store)
+    }
+}
 #endif

@@ -13,6 +13,7 @@ public struct LoginState: Equatable {
     var email: String? = nil
     var password: String? = nil
     var loginButtonEnabled: Bool = false
+    var loginRequesting: Bool = false
     var error: LoginError? = nil
 
     public init(email: String? = nil, password: String? = nil,
@@ -63,6 +64,7 @@ public var loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> {
         configureLoginButton()
         return .none
     case .loginButtonTapped(let request):
+        state.loginRequesting = true
         state.loginButtonEnabled = false
         return environment.loginClient.login(request)
             .delay(for: 1.0, scheduler: environment.mainQueue)
@@ -78,6 +80,7 @@ public var loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> {
             state.password = nil
             state.error = error
         }
+        state.loginRequesting = false
         return .none
     case .errorDismissed:
         state.error = nil

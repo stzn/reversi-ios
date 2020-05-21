@@ -53,10 +53,12 @@ class LoginCoreTests: XCTestCase {
             },
             .send(.loginButtonTapped(.init(email: "hoge", password: "hoge"))) {
                 $0.loginButtonEnabled = false
+                $0.loginRequesting = true
             },
             .do { self.scheduler.run() },
             .receive(.loginResponse(.success(.init()))) {
                 $0.loginButtonEnabled = true
+                $0.loginRequesting = false
             }
         )
     }
@@ -79,11 +81,13 @@ class LoginCoreTests: XCTestCase {
             },
             .send(.loginButtonTapped(.init(email: "hoge", password: "hoge"))) {
                 $0.loginButtonEnabled = false
+                $0.loginRequesting = true
             },
             .do { self.scheduler.run() },
             .receive(.loginResponse(.failure(expectedError))) {
                 $0.password = nil
                 $0.loginButtonEnabled = false
+                $0.loginRequesting = false
                 $0.error = expectedError
             }
         )
