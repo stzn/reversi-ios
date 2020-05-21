@@ -11,8 +11,8 @@ import Foundation
 
 struct LoginStateHolder {
     var load: () -> Effect<Bool, Never>
-    var loggedIn: () -> Effect<Never, Never>
-    var loggedOut: () -> Effect<Never, Never>
+    var login: () -> Effect<Bool, Never>
+    var logout: () -> Effect<Bool, Never>
 }
 
 extension LoginStateHolder {
@@ -20,11 +20,13 @@ extension LoginStateHolder {
         load: {
             Effect(value: defaults.bool(forKey: key))
         },
-        loggedIn: {
-            .fireAndForget { defaults.set(true, forKey: key) }
+        login: {
+            defaults.set(true, forKey: key)
+            return Effect(value: true)
         },
-        loggedOut: {
-            .fireAndForget { defaults.removeObject(forKey: key) }
+        logout: {
+            defaults.removeObject(forKey: key)
+            return Effect(value: true)
         })
 }
 
@@ -38,11 +40,13 @@ extension LoginStateHolder {
         load: {
             Effect(value: isLoggedIn)
         },
-        loggedIn: {
-            .fireAndForget { isLoggedIn = true }
+        login: {
+            isLoggedIn = true
+            return Effect(value: true)
         },
-        loggedOut: {
-            .fireAndForget { isLoggedIn = false }
+        logout: {
+            isLoggedIn = false
+            return Effect(value: true)
         })
 }
 

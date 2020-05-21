@@ -145,7 +145,7 @@ extension GameStateManager {
 #if DEBUG
 
 extension GameStateManager {
-    public static func mock(id: String) -> GameStateManager {
+    static func mock(id: String) -> GameStateManager {
         GameStateManager(
             saveGame: { state in
                 savedState[id] = state

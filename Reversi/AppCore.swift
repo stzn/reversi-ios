@@ -18,10 +18,10 @@ struct AppState: Equatable {
 
 enum AppAction: Equatable {
     case appLaunch
-    case loadLoggedInResponse(Bool)
+    case loadLoginStateResponse(Bool)
+    case loginActionResponse
+    case logoutActionResponse
     case login(LoginAction)
-    case loggedInResponse
-    case loggedOutResponse
     case game(GameAction)
 }
 
@@ -38,8 +38,8 @@ let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
         switch action {
         case .appLaunch:
             return environment.loginStateHolder.load()
-                .map(AppAction.loadLoggedInResponse)
-        case .loadLoggedInResponse(let loggedIn):
+                .map(AppAction.loadLoginStateResponse)
+        case .loadLoginStateResponse(let loggedIn):
             if loggedIn {
                 state.game = GameState()
                 state.login = nil
@@ -48,21 +48,11 @@ let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
                 state.login = LoginState()
             }
             return .none
-        case .login(.loginResponse(.success(let response))):
-            return environment.loginStateHolder.loggedIn()
-                .map { _ in AppAction.loggedInResponse }
-        case .login:
-            return .none
-        case .game(.logoutButtonTapped):
-            return environment.loginStateHolder.loggedOut()
-                .map { _ in AppAction.loggedOutResponse }
-        case .game:
-            return .none
-        case .loggedInResponse:
+        case .loginActionResponse:
             state.game = GameState()
             state.login = nil
             return .none
-        case .loggedOutResponse:
+        case .logoutActionResponse:
             state.game = nil
             state.login = LoginState()
             return environment.gameStateManager
@@ -70,6 +60,16 @@ let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
                 .catchToEffect()
                 .flatMap { _ in Effect<AppAction, Never>.none }
                 .eraseToEffect()
+        case .login(.loginResponse(.success(let response))):
+            return environment.loginStateHolder.login()
+                .map { _ in AppAction.loginActionResponse }
+        case .login:
+            return .none
+        case .game(.logoutButtonTapped):
+            return environment.loginStateHolder.logout()
+                .map { _ in AppAction.logoutActionResponse }
+        case .game:
+            return .none
         }
     },
     loginReducer.optional.pullback(

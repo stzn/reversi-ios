@@ -8,10 +8,10 @@
 
 import ComposableArchitecture
 import ComposableArchitectureTestSupport
-import Game
-import Login
 import XCTest
 
+@testable import Game
+@testable import Login
 @testable import Reversi
 
 class AppCoreTests: XCTestCase {
@@ -23,28 +23,28 @@ class AppCoreTests: XCTestCase {
         XCTAssertEqual(state.game, nil)
     }
 
-    func testAppLaunchWhenNotLoggedInThenShowLoginScreen() {
+    func testAppLaunchWhenNotLoginThenUserNotLoggedIn() {
         let store = anyTestStore(with: AppState())
         store.assert(
             .send(.appLaunch),
-            .receive(.loadLoggedInResponse(false)) {
+            .receive(.loadLoginStateResponse(false)) {
                 $0.login = LoginState()
                 $0.game = nil
             }
         )
     }
 
-    func testAppLaunchWhenLoggedInThenShowGameScreen() {
+    func testAppLaunchWhenAlreadyLoggedInThenUserLoggedIn() {
         let store = anyTestStore(with: AppState())
         store.assert(
             .environment {
                 $0.loginStateHolder = LoginStateHolder(
                     load: { Effect(value: true) },
-                    loggedIn: LoginStateHolder.mock.loggedIn,
-                    loggedOut: LoginStateHolder.mock.loggedOut)
+                    login: LoginStateHolder.mock.login,
+                    logout: LoginStateHolder.mock.logout)
             },
             .send(.appLaunch),
-            .receive(.loadLoggedInResponse(true)) {
+            .receive(.loadLoginStateResponse(true)) {
                 $0.login = nil
                 $0.game = GameState()
             }
@@ -52,21 +52,14 @@ class AppCoreTests: XCTestCase {
         )
     }
 
-    func testLoginButtonTappedThenLoggedIn() {
+    func testLoginActionResponseThenUserLoggedIn() {
         let store = anyTestStore(with: AppState())
         store.assert(
-            .environment {
-                $0.loginStateHolder = LoginStateHolder(
-                    load: { Effect(value: true) },
-                    loggedIn: LoginStateHolder.mock.loggedIn,
-                    loggedOut: LoginStateHolder.mock.loggedOut)
-            },
-            .send(.appLaunch),
-            .receive(.loadLoggedInResponse(true)) {
+            .send(.login(.loginResponse(.success(.init())))),
+            .receive(.loginActionResponse) {
                 $0.login = nil
                 $0.game = GameState()
             }
-
         )
     }
 
