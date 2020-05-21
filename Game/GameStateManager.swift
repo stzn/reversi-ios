@@ -10,7 +10,7 @@ import ComposableArchitecture
 import Foundation
 
 public enum GameStateLoadAction: Equatable {
-    case loaded( GameState)
+    case loaded(GameState)
 }
 
 public enum GameStateSaveAction: Equatable {
@@ -36,7 +36,7 @@ public enum GameStateManagerError: Error, Equatable {
 }
 
 public struct GameStateManager {
-    public var saveGame: ( GameState) -> Effect<GameStateSaveAction, GameStateManagerError>
+    public var saveGame: (GameState) -> Effect<GameStateSaveAction, GameStateManagerError>
     public var loadGame: () -> Effect<GameStateLoadAction, GameStateManagerError>
 }
 
@@ -133,7 +133,7 @@ extension GameStateManager {
                         return .failure(.read(path: path, cause: nil))
                     }
                 }
-                let storedData =  GameState(
+                let storedData = GameState(
                     board: board, players: players,
                     turn: turn,
                     shouldSkip: false)
@@ -147,21 +147,21 @@ extension GameStateManager {
 extension GameStateManager {
     public static func mock(id: String) -> GameStateManager {
         GameStateManager(
-        saveGame: { state in
-            savedState[id] = state
-            return Effect(value: GameStateSaveAction.saved)
-        },
-        loadGame: {
-            guard let state = savedState[id] else {
-                return Effect(error: .write(path: "", cause: nil))
-            }
-            savedState[id] = nil
-            return Effect(value: GameStateLoadAction.loaded(state))
-        })
+            saveGame: { state in
+                savedState[id] = state
+                return Effect(value: GameStateSaveAction.saved)
+            },
+            loadGame: {
+                guard let state = savedState[id] else {
+                    return Effect(error: .write(path: "", cause: nil))
+                }
+                savedState[id] = nil
+                return Effect(value: GameStateLoadAction.loaded(state))
+            })
     }
 }
 
-private var savedState: [String:  GameState] = [:]
+private var savedState: [String: GameState] = [:]
 
 #endif
 
