@@ -9,15 +9,15 @@
 import Combine
 import UIKit
 import ComposableArchitecture
-import Login
 import Game
+import Login
 
-class AppViewController: UINavigationController {
+public class AppViewController: UINavigationController {
     let store: Store<AppState, AppAction>
     let viewStore: ViewStore<AppState, AppAction>
     private var cancellables: Set<AnyCancellable> = []
 
-    init(store: Store<AppState, AppAction>) {
+    public init(store: Store<AppState, AppAction>) {
         self.store = store
         self.viewStore = ViewStore(store)
         super.init(nibName: nil, bundle: nil)
@@ -27,7 +27,7 @@ class AppViewController: UINavigationController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         self.store
             .scope(state: { $0.login }, action: AppAction.login)

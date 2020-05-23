@@ -9,14 +9,14 @@
 import ComposableArchitecture
 import Foundation
 
-struct LoginStateHolder {
+public struct LoginStateHolder {
     var load: () -> Effect<Bool, Never>
     var login: () -> Effect<Bool, Never>
     var logout: () -> Effect<Bool, Never>
 }
 
 extension LoginStateHolder {
-    static let live = LoginStateHolder(
+    public static let live = LoginStateHolder(
         load: {
             Effect(value: defaults.bool(forKey: key))
         },

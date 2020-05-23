@@ -11,12 +11,20 @@ import Foundation
 import Game
 import Login
 
-struct AppState: Equatable {
-    var login: LoginState? = nil
-    var game: GameState? = nil
+public struct AppState: Equatable {
+    public var login: LoginState? = nil
+    public var game: GameState? = nil
+
+    public init(
+        login: LoginState? = nil,
+        game: GameState? = nil
+    ) {
+        self.login = login
+        self.game = game
+    }
 }
 
-enum AppAction: Equatable {
+public enum AppAction: Equatable {
     case appLaunch
     case loadLoginStateResponse(Bool)
     case loginActionResponse
@@ -25,15 +33,29 @@ enum AppAction: Equatable {
     case game(GameAction)
 }
 
-struct AppEnvironment {
-    var loginClient: LoginClient
-    var loginStateHolder: LoginStateHolder
-    var computer: (Board, Disk) -> Effect<DiskPosition?, Never>
-    var gameStateManager: GameStateManager
-    var mainQueue: AnySchedulerOf<DispatchQueue>
+public struct AppEnvironment {
+    public var loginClient: LoginClient
+    public var loginStateHolder: LoginStateHolder
+    public var computer: (Board, Disk) -> Effect<DiskPosition?, Never>
+    public var gameStateManager: GameStateManager
+    public var mainQueue: AnySchedulerOf<DispatchQueue>
+
+    public init(
+        loginClient: LoginClient,
+        loginStateHolder: LoginStateHolder,
+        computer: @escaping (Board, Disk) -> Effect<DiskPosition?, Never>,
+        gameStateManager: GameStateManager,
+        mainQueue: AnySchedulerOf<DispatchQueue>
+    ) {
+        self.loginClient = loginClient
+        self.loginStateHolder = loginStateHolder
+        self.computer = computer
+        self.gameStateManager = gameStateManager
+        self.mainQueue = mainQueue
+    }
 }
 
-let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
+public let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
     Reducer { state, action, environment in
         switch action {
         case .appLaunch:

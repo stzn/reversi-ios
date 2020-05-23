@@ -1,7 +1,8 @@
 import ComposableArchitecture
 import UIKit
-import Login
+import App
 import Game
+import Login
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
