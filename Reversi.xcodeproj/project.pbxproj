@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D61FE9FB2478D2840030ABB9 /* ReversiCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = D61FE9F92478D2840030ABB9 /* ReversiCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D61FE9FE2478D2840030ABB9 /* ReversiCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D61FE9F72478D2840030ABB9 /* ReversiCommon.framework */; };
+		D61FE9FF2478D2840030ABB9 /* ReversiCommon.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D61FE9F72478D2840030ABB9 /* ReversiCommon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D61FEA042478D2970030ABB9 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = D61FEA032478D2970030ABB9 /* ComposableArchitecture */; };
+		D61FEA052478D2BE0030ABB9 /* ReversiCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D61FE9F72478D2840030ABB9 /* ReversiCommon.framework */; };
+		D61FEA062478D2BE0030ABB9 /* ReversiCommon.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D61FE9F72478D2840030ABB9 /* ReversiCommon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D61FEA092478D2C80030ABB9 /* ReversiCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D61FE9F72478D2840030ABB9 /* ReversiCommon.framework */; };
+		D61FEA0A2478D2C80030ABB9 /* ReversiCommon.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D61FE9F72478D2840030ABB9 /* ReversiCommon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D61FEA0D2478D4AA0030ABB9 /* ReversiCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D61FE9F72478D2840030ABB9 /* ReversiCommon.framework */; };
+		D61FEA0E2478D4B00030ABB9 /* ReversiCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D61FE9F72478D2840030ABB9 /* ReversiCommon.framework */; };
+		D61FEA0F2478D4B50030ABB9 /* ReversiCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D61FE9F72478D2840030ABB9 /* ReversiCommon.framework */; };
 		D62A6B0624770BE600F682D8 /* LoginStateHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62A6B0524770BE600F682D8 /* LoginStateHolder.swift */; };
 		D642BDB423A9FE4500396732 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDB323A9FE4500396732 /* AppDelegate.swift */; };
 		D642BDB623A9FE4500396732 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDB523A9FE4500396732 /* SceneDelegate.swift */; };
@@ -21,11 +32,7 @@
 		D68A57BB2475C79E003DD591 /* LoginCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68A5783246FC159003DD591 /* LoginCore.swift */; };
 		D68A57BC2475C79E003DD591 /* LoginClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68A578F24713A12003DD591 /* LoginClient.swift */; };
 		D68A57BD2475C79E003DD591 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68A5789246FD0BB003DD591 /* LoginViewController.swift */; };
-		D68A57C02475C7CE003DD591 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = D68A57BF2475C7CE003DD591 /* ComposableArchitecture */; };
-		D68A57C22475C7CE003DD591 /* ComposableArchitecture in Embed Frameworks */ = {isa = PBXBuildFile; productRef = D68A57BF2475C7CE003DD591 /* ComposableArchitecture */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		D68A57C32475C8EA003DD591 /* LoginCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68A579724733719003DD591 /* LoginCoreTests.swift */; };
-		D68A57C52475C934003DD591 /* ComposableArchitectureTestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = D68A57C42475C934003DD591 /* ComposableArchitectureTestSupport */; };
-		D68A57C72475C934003DD591 /* ComposableArchitectureTestSupport in Embed Frameworks */ = {isa = PBXBuildFile; productRef = D68A57C42475C934003DD591 /* ComposableArchitectureTestSupport */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		D68A57C82475C9DF003DD591 /* LoginViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D68A579424713B17003DD591 /* LoginViewController.storyboard */; };
 		D68A57D72475CA29003DD591 /* Game.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D68A57CE2475CA29003DD591 /* Game.framework */; };
 		D68A57E02475CA29003DD591 /* Game.h in Headers */ = {isa = PBXBuildFile; fileRef = D68A57D02475CA29003DD591 /* Game.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -36,8 +43,6 @@
 		D68A57ED2475CA3B003DD591 /* Rule.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E39223246155F800CDC38D /* Rule.swift */; };
 		D68A57EE2475CA3B003DD591 /* GameStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E392252461583D00CDC38D /* GameStateManager.swift */; };
 		D68A57EF2475CA41003DD591 /* GameViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D68A579224713AD7003DD591 /* GameViewController.storyboard */; };
-		D68A57F12475CA51003DD591 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = D68A57F02475CA51003DD591 /* ComposableArchitecture */; };
-		D68A57F22475CA51003DD591 /* ComposableArchitecture in Embed Frameworks */ = {isa = PBXBuildFile; productRef = D68A57F02475CA51003DD591 /* ComposableArchitecture */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		D68A57F42475CB47003DD591 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E8648A24616408003509F6 /* Board.swift */; };
 		D68A57F52475CB4C003DD591 /* Disk.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDD723AA0B5700396732 /* Disk.swift */; };
 		D68A57F62475CB4F003DD591 /* DiskPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E392212461546700CDC38D /* DiskPosition.swift */; };
@@ -46,16 +51,31 @@
 		D68A57F92475CB6A003DD591 /* CellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642BDD523AA0B3900396732 /* CellView.swift */; };
 		D68A57FA2475CB6E003DD591 /* DiskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D636B39E23D35043007F370F /* DiskView.swift */; };
 		D68A57FB2475EEFB003DD591 /* GameCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A1802324665ED8003D70DD /* GameCoreTests.swift */; };
-		D68A57FD2475EFE4003DD591 /* ComposableArchitectureTestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = D68A57FC2475EFE4003DD591 /* ComposableArchitectureTestSupport */; };
-		D68A57FF2475EFE4003DD591 /* ComposableArchitectureTestSupport in Embed Frameworks */ = {isa = PBXBuildFile; productRef = D68A57FC2475EFE4003DD591 /* ComposableArchitectureTestSupport */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		D68A58012475F36F003DD591 /* AppCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68A58002475F36F003DD591 /* AppCoreTests.swift */; };
-		D6E39218246152E500CDC38D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = D6E39217246152E500CDC38D /* ComposableArchitecture */; };
-		D6E3921A246152E500CDC38D /* ComposableArchitecture in Embed Frameworks */ = {isa = PBXBuildFile; productRef = D6E39217246152E500CDC38D /* ComposableArchitecture */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		D6E3921C246152E500CDC38D /* ComposableArchitectureTestSupport in Frameworks */ = {isa = PBXBuildFile; productRef = D6E3921B246152E500CDC38D /* ComposableArchitectureTestSupport */; };
-		D6E3921D246152E500CDC38D /* ComposableArchitectureTestSupport in Embed Frameworks */ = {isa = PBXBuildFile; productRef = D6E3921B246152E500CDC38D /* ComposableArchitectureTestSupport */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		D61FE9FC2478D2840030ABB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D642BDA823A9FE4500396732 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D61FE9F62478D2840030ABB9;
+			remoteInfo = ReversiCommon;
+		};
+		D61FEA072478D2BE0030ABB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D642BDA823A9FE4500396732 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D61FE9F62478D2840030ABB9;
+			remoteInfo = ReversiCommon;
+		};
+		D61FEA0B2478D2C80030ABB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D642BDA823A9FE4500396732 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D61FE9F62478D2840030ABB9;
+			remoteInfo = ReversiCommon;
+		};
 		D642BDC723A9FE4700396732 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D642BDA823A9FE4500396732 /* Project object */;
@@ -114,7 +134,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D68A57C22475C7CE003DD591 /* ComposableArchitecture in Embed Frameworks */,
+				D61FEA062478D2BE0030ABB9 /* ReversiCommon.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -125,7 +145,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D68A57C72475C934003DD591 /* ComposableArchitectureTestSupport in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,7 +155,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D68A57F22475CA51003DD591 /* ComposableArchitecture in Embed Frameworks */,
+				D61FEA0A2478D2C80030ABB9 /* ReversiCommon.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -147,7 +166,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D68A57FF2475EFE4003DD591 /* ComposableArchitectureTestSupport in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -158,9 +176,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				D61FE9FF2478D2840030ABB9 /* ReversiCommon.framework in Embed Frameworks */,
 				D68A57B42475C78B003DD591 /* Login.framework in Embed Frameworks */,
 				D68A57E42475CA29003DD591 /* Game.framework in Embed Frameworks */,
-				D6E3921A246152E500CDC38D /* ComposableArchitecture in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -171,7 +189,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D6E3921D246152E500CDC38D /* ComposableArchitectureTestSupport in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -179,6 +196,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D61FE9F72478D2840030ABB9 /* ReversiCommon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReversiCommon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D61FE9F92478D2840030ABB9 /* ReversiCommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReversiCommon.h; sourceTree = "<group>"; };
+		D61FE9FA2478D2840030ABB9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D62A6B0524770BE600F682D8 /* LoginStateHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStateHolder.swift; sourceTree = "<group>"; };
 		D636B39E23D35043007F370F /* DiskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskView.swift; sourceTree = "<group>"; };
 		D642BDB023A9FE4500396732 /* Reversi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Reversi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -222,13 +242,21 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D61FE9F42478D2840030ABB9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D61FEA042478D2970030ABB9 /* ComposableArchitecture in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D642BDAD23A9FE4500396732 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D61FE9FE2478D2840030ABB9 /* ReversiCommon.framework in Frameworks */,
 				D68A57B32475C78B003DD591 /* Login.framework in Frameworks */,
 				D68A57E32475CA29003DD591 /* Game.framework in Frameworks */,
-				D6E39218246152E500CDC38D /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,7 +264,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6E3921C246152E500CDC38D /* ComposableArchitectureTestSupport in Frameworks */,
+				D61FEA0F2478D4B50030ABB9 /* ReversiCommon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,7 +272,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D68A57C02475C7CE003DD591 /* ComposableArchitecture in Frameworks */,
+				D61FEA052478D2BE0030ABB9 /* ReversiCommon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,7 +280,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D68A57C52475C934003DD591 /* ComposableArchitectureTestSupport in Frameworks */,
+				D61FEA0E2478D4B00030ABB9 /* ReversiCommon.framework in Frameworks */,
 				D68A57A72475C78B003DD591 /* Login.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -261,7 +289,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D68A57F12475CA51003DD591 /* ComposableArchitecture in Frameworks */,
+				D61FEA092478D2C80030ABB9 /* ReversiCommon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,7 +297,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D68A57FD2475EFE4003DD591 /* ComposableArchitectureTestSupport in Frameworks */,
+				D61FEA0D2478D4AA0030ABB9 /* ReversiCommon.framework in Frameworks */,
 				D68A57D72475CA29003DD591 /* Game.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -277,6 +305,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D61FE9F82478D2840030ABB9 /* ReversiCommon */ = {
+			isa = PBXGroup;
+			children = (
+				D61FE9F92478D2840030ABB9 /* ReversiCommon.h */,
+				D61FE9FA2478D2840030ABB9 /* Info.plist */,
+			);
+			path = ReversiCommon;
+			sourceTree = "<group>";
+		};
 		D636B3A123D43203007F370F /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -308,6 +345,7 @@
 				D68A57AC2475C78B003DD591 /* LoginTests */,
 				D642BDB123A9FE4500396732 /* Products */,
 				D642BDB223A9FE4500396732 /* Reversi */,
+				D61FE9F82478D2840030ABB9 /* ReversiCommon */,
 				D642BDC923A9FE4700396732 /* ReversiTests */,
 			);
 			sourceTree = "<group>";
@@ -321,6 +359,7 @@
 				D68A57A62475C78B003DD591 /* LoginTests.xctest */,
 				D68A57CE2475CA29003DD591 /* Game.framework */,
 				D68A57D62475CA29003DD591 /* GameTests.xctest */,
+				D61FE9F72478D2840030ABB9 /* ReversiCommon.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -415,6 +454,14 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		D61FE9F22478D2840030ABB9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D61FE9FB2478D2840030ABB9 /* ReversiCommon.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D68A57992475C78B003DD591 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -434,6 +481,27 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		D61FE9F62478D2840030ABB9 /* ReversiCommon */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D61FEA002478D2840030ABB9 /* Build configuration list for PBXNativeTarget "ReversiCommon" */;
+			buildPhases = (
+				D61FE9F22478D2840030ABB9 /* Headers */,
+				D61FE9F32478D2840030ABB9 /* Sources */,
+				D61FE9F42478D2840030ABB9 /* Frameworks */,
+				D61FE9F52478D2840030ABB9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ReversiCommon;
+			packageProductDependencies = (
+				D61FEA032478D2970030ABB9 /* ComposableArchitecture */,
+			);
+			productName = ReversiCommon;
+			productReference = D61FE9F72478D2840030ABB9 /* ReversiCommon.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		D642BDAF23A9FE4500396732 /* Reversi */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D642BDCF23A9FE4800396732 /* Build configuration list for PBXNativeTarget "Reversi" */;
@@ -448,10 +516,10 @@
 			dependencies = (
 				D68A57B22475C78B003DD591 /* PBXTargetDependency */,
 				D68A57E22475CA29003DD591 /* PBXTargetDependency */,
+				D61FE9FD2478D2840030ABB9 /* PBXTargetDependency */,
 			);
 			name = Reversi;
 			packageProductDependencies = (
-				D6E39217246152E500CDC38D /* ComposableArchitecture */,
 			);
 			productName = Reversi;
 			productReference = D642BDB023A9FE4500396732 /* Reversi.app */;
@@ -473,7 +541,6 @@
 			);
 			name = ReversiTests;
 			packageProductDependencies = (
-				D6E3921B246152E500CDC38D /* ComposableArchitectureTestSupport */,
 			);
 			productName = ReversiTests;
 			productReference = D642BDC623A9FE4700396732 /* ReversiTests.xctest */;
@@ -492,10 +559,10 @@
 			buildRules = (
 			);
 			dependencies = (
+				D61FEA082478D2BE0030ABB9 /* PBXTargetDependency */,
 			);
 			name = Login;
 			packageProductDependencies = (
-				D68A57BF2475C7CE003DD591 /* ComposableArchitecture */,
 			);
 			productName = Login;
 			productReference = D68A579E2475C78B003DD591 /* Login.framework */;
@@ -518,7 +585,6 @@
 			);
 			name = LoginTests;
 			packageProductDependencies = (
-				D68A57C42475C934003DD591 /* ComposableArchitectureTestSupport */,
 			);
 			productName = LoginTests;
 			productReference = D68A57A62475C78B003DD591 /* LoginTests.xctest */;
@@ -537,10 +603,10 @@
 			buildRules = (
 			);
 			dependencies = (
+				D61FEA0C2478D2C80030ABB9 /* PBXTargetDependency */,
 			);
 			name = Game;
 			packageProductDependencies = (
-				D68A57F02475CA51003DD591 /* ComposableArchitecture */,
 			);
 			productName = Game;
 			productReference = D68A57CE2475CA29003DD591 /* Game.framework */;
@@ -563,7 +629,6 @@
 			);
 			name = GameTests;
 			packageProductDependencies = (
-				D68A57FC2475EFE4003DD591 /* ComposableArchitectureTestSupport */,
 			);
 			productName = GameTests;
 			productReference = D68A57D62475CA29003DD591 /* GameTests.xctest */;
@@ -579,6 +644,9 @@
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Yuta Koshizawa";
 				TargetAttributes = {
+					D61FE9F62478D2840030ABB9 = {
+						CreatedOnToolsVersion = 11.5;
+					};
 					D642BDAF23A9FE4500396732 = {
 						CreatedOnToolsVersion = 11.3;
 					};
@@ -623,11 +691,19 @@
 				D68A57A52475C78B003DD591 /* LoginTests */,
 				D68A57CD2475CA29003DD591 /* Game */,
 				D68A57D52475CA29003DD591 /* GameTests */,
+				D61FE9F62478D2840030ABB9 /* ReversiCommon */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D61FE9F52478D2840030ABB9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D642BDAE23A9FE4500396732 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -677,6 +753,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D61FE9F32478D2840030ABB9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D642BDAC23A9FE4500396732 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -744,6 +827,21 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		D61FE9FD2478D2840030ABB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D61FE9F62478D2840030ABB9 /* ReversiCommon */;
+			targetProxy = D61FE9FC2478D2840030ABB9 /* PBXContainerItemProxy */;
+		};
+		D61FEA082478D2BE0030ABB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D61FE9F62478D2840030ABB9 /* ReversiCommon */;
+			targetProxy = D61FEA072478D2BE0030ABB9 /* PBXContainerItemProxy */;
+		};
+		D61FEA0C2478D2C80030ABB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D61FE9F62478D2840030ABB9 /* ReversiCommon */;
+			targetProxy = D61FEA0B2478D2C80030ABB9 /* PBXContainerItemProxy */;
+		};
 		D642BDC823A9FE4700396732 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D642BDAF23A9FE4500396732 /* Reversi */;
@@ -793,6 +891,60 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		D61FEA012478D2840030ABB9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = ReversiCommon/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = shiz.sample.ReversiCommon;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		D61FEA022478D2840030ABB9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = ReversiCommon/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = shiz.sample.ReversiCommon;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		D642BDCD23A9FE4800396732 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1175,6 +1327,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D61FEA002478D2840030ABB9 /* Build configuration list for PBXNativeTarget "ReversiCommon" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D61FEA012478D2840030ABB9 /* Debug */,
+				D61FEA022478D2840030ABB9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D642BDAB23A9FE4500396732 /* Build configuration list for PBXProject "Reversi" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1246,41 +1407,16 @@
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.0;
+				minimumVersion = 0.2.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D68A57BF2475C7CE003DD591 /* ComposableArchitecture */ = {
+		D61FEA032478D2970030ABB9 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D6E39216246152E500CDC38D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
-		};
-		D68A57C42475C934003DD591 /* ComposableArchitectureTestSupport */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D6E39216246152E500CDC38D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
-			productName = ComposableArchitectureTestSupport;
-		};
-		D68A57F02475CA51003DD591 /* ComposableArchitecture */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D6E39216246152E500CDC38D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
-			productName = ComposableArchitecture;
-		};
-		D68A57FC2475EFE4003DD591 /* ComposableArchitectureTestSupport */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D6E39216246152E500CDC38D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
-			productName = ComposableArchitectureTestSupport;
-		};
-		D6E39217246152E500CDC38D /* ComposableArchitecture */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D6E39216246152E500CDC38D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
-			productName = ComposableArchitecture;
-		};
-		D6E3921B246152E500CDC38D /* ComposableArchitectureTestSupport */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D6E39216246152E500CDC38D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
-			productName = ComposableArchitectureTestSupport;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

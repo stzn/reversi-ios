@@ -7,7 +7,6 @@
 //
 
 import ComposableArchitecture
-import ComposableArchitectureTestSupport
 import XCTest
 
 @testable import Login
