@@ -21,7 +21,8 @@ class ReversiTests: XCTestCase {
         let store = TestStore(
             initialState: state, reducer: appReducer,
             environment: AppEnvironment(
-                loginClient: .mock, loginStateHolder: .mock,
+                loginClient: .mock,
+                loginStateHolder: .mock,
                 computer: { _, _ in .fireAndForget {} },
                 gameStateManager: .mock(id: UUID().uuidString),
                 mainQueue: scheduler.eraseToAnyScheduler()))
@@ -50,6 +51,34 @@ class ReversiTests: XCTestCase {
                 $0.login = nil
                 $0.game = GameState()
             },
+            .send(.game(.logoutButtonTapped)),
+            .receive(.logoutActionResponse) {
+                $0.login = LoginState()
+                $0.game = nil
+            },
+            .receive(.game(.saveGameResponse(.success(.saved)))),
+        ])
+    }
+
+    func testWhenPlayingAndLogoutThenGoToLogin() {
+        let state = AppState()
+        var loginStateHolder = LoginStateHolder.mock
+        loginStateHolder.load = { Effect(value: true) }
+        let store = TestStore(
+            initialState: state, reducer: appReducer,
+            environment: AppEnvironment(
+                loginClient: .mock,
+                loginStateHolder: loginStateHolder,
+                computer: { _, _ in .fireAndForget {} },
+                gameStateManager: .mock(id: UUID().uuidString),
+                mainQueue: scheduler.eraseToAnyScheduler()))
+        store.assert([
+            .send(.appLaunch),
+            .receive(.loadLoginStateResponse(true)) {
+                $0.login = nil
+                $0.game = GameState()
+            },
+            .send(.game(.manualPlayerDiskPlaced(.init(x: 0, y: 0)))),
             .send(.game(.logoutButtonTapped)),
             .receive(.logoutActionResponse) {
                 $0.login = LoginState()
