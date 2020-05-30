@@ -4,29 +4,26 @@ import UIKit
 
 public final class GameViewController: UIViewController {
     struct ViewState: Equatable {
-        let board: Board = Board()
+        let board: Board
+        let players: [Player]
         let turn: Disk?
+        let playingAsComputer: Disk?
         let shouldSkip: Bool
         let isComputerPlaying: Bool
+        let tapPosition: DiskPosition?
     }
 
     enum ViewAction {
-//        case gameStarted
-//        case manualPlayerDiskPlaced(DiskPosition)
-//        case resetTapped
-//        case playerChanged(Disk, Player)
-//        case loadGameResponse(Result<GameStateLoadAction, GameStateManagerError>)
-//        case saveGame
-//        case saveGameResponse(Result<GameStateSaveAction, GameStateManagerError>)
-//        case computerPlay
-//        case computerPlayResponse(DiskPosition?)
-//        case turnSkipped
-//        case placeDisk(DiskPosition)
-//        case updateState(GameState)
-//        case logoutButtonTapped
+        case gameStarted
+        case resetTapped
+        case computerPlay
+        case playerChanged(Disk, Player)
+        case turnSkipped
+        case placeDisk(DiskPosition)
+        case logoutButtonTapped
     }
 
-    var viewStore: ViewStore<GameState, GameAction>!
+    var viewStore: ViewStore<ViewState, ViewAction>!
     var cancellables: Set<AnyCancellable> = []
 
     public static func instantiate(store: Store<GameState, GameAction>) -> GameViewController {
@@ -37,7 +34,8 @@ public final class GameViewController: UIViewController {
             )
             .instantiateViewController(
                 identifier: "GameViewController") as! GameViewController
-        viewController.viewStore = ViewStore(store)
+        viewController.viewStore = ViewStore(
+            store.scope(state: { $0.view }, action: GameAction.view))
         return viewController
     }
 
@@ -133,7 +131,7 @@ public final class GameViewController: UIViewController {
                 return
             }
 
-            guard let currentTapPosition = state.currentTapPosition else {
+            guard let currentTapPosition = state.tapPosition else {
                 for (position, disk) in state.board.disks {
                     self.boardView.setDisk(
                         disk,
@@ -180,6 +178,41 @@ public final class GameViewController: UIViewController {
             break
         case .computer:
             viewStore.send(.computerPlay)
+        }
+    }
+}
+
+extension GameState {
+    var view: GameViewController.ViewState {
+        .init(
+            board: self.board, players: self.players,
+            turn: self.turn,
+            playingAsComputer: self.playingAsComputer,
+            shouldSkip: self.shouldSkip,
+            isComputerPlaying: turn == nil
+                ? false
+                : self.players[turn!.index] == .computer,
+            tapPosition: self.currentTapPosition)
+    }
+}
+
+extension GameAction {
+    static func view(_ localAction: GameViewController.ViewAction) -> Self {
+        switch localAction {
+        case .gameStarted:
+            return .gameStarted
+        case .resetTapped:
+            return .resetTapped
+        case .turnSkipped:
+            return .turnSkipped
+        case .placeDisk(let position):
+            return .placeDisk(position)
+        case .logoutButtonTapped:
+            return .logoutButtonTapped
+        case .computerPlay:
+            return .computerPlay
+        case .playerChanged(let turn, let playerType):
+            return .playerChanged(turn, playerType)
         }
     }
 }
@@ -334,7 +367,7 @@ extension GameViewController: BoardViewDelegate {
     /// - Parameter y: セルの行です。
     public func boardView(_ boardView: BoardView, didSelectCellAtX x: Int, y: Int) {
         if isAnimating { return }
-        self.viewStore.send(.manualPlayerDiskPlaced(.init(x: x, y: y)))
+        self.viewStore.send(.placeDisk(.init(x: x, y: y)))
     }
 }
 
