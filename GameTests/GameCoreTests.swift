@@ -37,7 +37,7 @@ class GameCoreTests: XCTestCase {
             },
             .receive(.saveGame),
             .receive(.saveGameResponse(.success(.saved))),
-            .send(.resetTapped) { $0 = GameState.intialState },
+            .send(.reset) { $0 = GameState.intialState },
             // mapで繋いだactionは検知できない
             // .receive(.saveGame),
             // .receive(.saveGameResponse(.success(.saved))),

@@ -128,7 +128,7 @@ extension LoginState {
     var view: LoginViewController.ViewState {
         .init(email: self.email,
               password: self.password,
-              isLoginButtonEnabled: self.loginButtonEnabled,
+              isLoginButtonEnabled: self.canRequestLogin,
               isIndicatorHidden: !self.loginRequesting,
               needErrorShow: self.error != nil)
     }
@@ -142,7 +142,7 @@ extension LoginAction {
         case .passwordChanged(let password):
             return .passwordChanged(password)
         case .loginButtonTapped(let request):
-            return .loginButtonTapped(request)
+            return .requestLogin(request)
         case .errorDismissed:
             return .errorDismissed
         }

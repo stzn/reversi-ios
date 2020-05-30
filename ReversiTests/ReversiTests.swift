@@ -51,7 +51,7 @@ class ReversiTests: XCTestCase {
                 $0.login = nil
                 $0.game = GameState()
             },
-            .send(.game(.logoutButtonTapped)),
+            .send(.game(.logout)),
             .receive(.logoutActionResponse) {
                 $0.login = LoginState()
                 $0.game = nil
@@ -79,7 +79,7 @@ class ReversiTests: XCTestCase {
                 $0.game = GameState()
             },
             .send(.game(.manualPlayerDiskPlaced(.init(x: 0, y: 0)))),
-            .send(.game(.logoutButtonTapped)),
+            .send(.game(.logout)),
             .receive(.logoutActionResponse) {
                 $0.login = LoginState()
                 $0.game = nil

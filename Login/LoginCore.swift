@@ -12,7 +12,7 @@ import ComposableArchitecture
 public struct LoginState: Equatable {
     var email: String? = nil
     var password: String? = nil
-    var loginButtonEnabled: Bool = false
+    var canRequestLogin: Bool = false
     var loginRequesting: Bool = false
     var error: LoginError? = nil
 
@@ -20,7 +20,7 @@ public struct LoginState: Equatable {
                 loginButtonEnabled: Bool = false, error: LoginError? = nil) {
         self.email = email
         self.password = password
-        self.loginButtonEnabled = loginButtonEnabled
+        self.canRequestLogin = loginButtonEnabled
         self.error = error
     }
 }
@@ -28,7 +28,7 @@ public struct LoginState: Equatable {
 public enum LoginAction: Equatable {
     case emailChanged(String?)
     case passwordChanged(String?)
-    case loginButtonTapped(LoginRequest)
+    case requestLogin(LoginRequest)
     case loginResponse(Result<LoginResponse, LoginError>)
     case errorDismissed
 }
@@ -51,7 +51,7 @@ public var loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> {
             let password = state.password else {
                 return
         }
-        state.loginButtonEnabled = !email.isEmpty && !password.isEmpty
+        state.canRequestLogin = !email.isEmpty && !password.isEmpty
     }
 
     switch action {
@@ -63,9 +63,9 @@ public var loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> {
         state.password = password
         configureLoginButton()
         return .none
-    case .loginButtonTapped(let request):
+    case .requestLogin(let request):
         state.loginRequesting = true
-        state.loginButtonEnabled = false
+        state.canRequestLogin = false
         return environment.loginClient.login(request)
             .delay(for: 1.0, scheduler: environment.mainQueue)
             .catchToEffect()
@@ -75,7 +75,7 @@ public var loginReducer = Reducer<LoginState, LoginAction, LoginEnvironment> {
     case .loginResponse(let result):
         switch result {
         case .success(let response):
-            state.loginButtonEnabled = true
+            state.canRequestLogin = true
         case .failure(let error):
             state.password = nil
             state.error = error

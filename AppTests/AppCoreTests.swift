@@ -66,7 +66,7 @@ class AppCoreTests: XCTestCase {
         let loggedInState = AppState(login: nil, game: GameState())
         let store = anyTestStore(with: loggedInState)
         store.assert(
-            .send(.game(.logoutButtonTapped)),
+            .send(.game(.logout)),
             .receive(.logoutActionResponse) {
                 $0.login = LoginState()
                 $0.game = nil

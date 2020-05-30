@@ -203,13 +203,13 @@ extension GameAction {
         case .gameStarted:
             return .gameStarted
         case .resetTapped:
-            return .resetTapped
+            return .reset
         case .turnSkipped:
             return .turnSkipped
         case .placeDisk(let position):
             return .placeDisk(position)
         case .logoutButtonTapped:
-            return .logoutButtonTapped
+            return .logout
         case .computerPlay:
             return .computerPlay
         case .playerChanged(let turn, let playerType):

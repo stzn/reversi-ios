@@ -87,7 +87,7 @@ public let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.co
                 .map { _ in AppAction.loginActionResponse }
         case .login:
             return .none
-        case .game(.logoutButtonTapped):
+        case .game(.logout):
             return environment.loginStateHolder.logout()
                 .map { _ in AppAction.logoutActionResponse }
         case .game:

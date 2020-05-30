@@ -45,7 +45,7 @@ public struct GameState: Equatable {
 public enum GameAction: Equatable {
     case gameStarted
     case manualPlayerDiskPlaced(DiskPosition)
-    case resetTapped
+    case reset
     case playerChanged(Disk, Player)
     case loadGameResponse(Result<GameStateLoadAction, GameStateManagerError>)
     case saveGame
@@ -55,7 +55,7 @@ public enum GameAction: Equatable {
     case turnSkipped
     case placeDisk(DiskPosition)
     case updateState(GameState)
-    case logoutButtonTapped
+    case logout
 }
 
 public struct GameEnvironment {
@@ -124,7 +124,7 @@ public let gameReducer = Reducer<GameState, GameAction, GameEnvironment> {
             return .none
         }
         return Effect(value: .placeDisk(position))
-    case .resetTapped:
+    case .reset:
         return environment.gameStateManager.saveGame(GameState.intialState)
             .catchToEffect()
             .map(GameAction.saveGameResponse)
@@ -200,7 +200,7 @@ public let gameReducer = Reducer<GameState, GameAction, GameEnvironment> {
         newState.playingAsComputer = nil
         state = newState
         return Effect(value: GameAction.saveGame)
-    case .logoutButtonTapped:
+    case .logout:
         return environment.gameStateManager.saveGame(GameState.intialState)
             .catchToEffect()
             .map(GameAction.saveGameResponse)
