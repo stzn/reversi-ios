@@ -126,31 +126,32 @@ public final class GameViewController: UIViewController {
             }
         }.store(in: &cancellables)
 
-        self.viewStore.publisher.sink { [weak self] state in
-            guard let self = self else {
-                return
-            }
-
-            guard let currentTapPosition = state.tapPosition else {
-                for (position, disk) in state.board.disks {
-                    self.boardView.setDisk(
-                        disk,
-                        atX: position.x, y: position.y,
-                        animated: false)
+        self.viewStore.publisher.map { ($0.board, $0.tapPosition, $0.turn) }
+            .sink { [weak self] (board, tapPosition, turn) in
+                guard let self = self else {
+                    return
                 }
-                self.updateMessageViews(turn: state.turn, board: state.board)
-                self.updateCountLabels(on: state.board)
-                return
-            }
 
-            self.playing = true
-            let currentTurn = self.messageDiskView.disk
-            self.placeDisk(
-                currentTurn,
-                atX: currentTapPosition.x, y: currentTapPosition.y,
-                animated: true
-            )
-        }.store(in: &cancellables)
+                guard let currentTapPosition = tapPosition else {
+                    for (position, disk) in board.disks {
+                        self.boardView.setDisk(
+                            disk,
+                            atX: position.x, y: position.y,
+                            animated: false)
+                    }
+                    self.updateMessageViews(turn: turn, board: board)
+                    self.updateCountLabels(on: board)
+                    return
+                }
+
+                self.playing = true
+                let currentTurn = self.messageDiskView.disk
+                self.placeDisk(
+                    currentTurn,
+                    atX: currentTapPosition.x, y: currentTapPosition.y,
+                    animated: true
+                )
+            }.store(in: &cancellables)
 
         viewStore.send(.gameStarted)
     }
