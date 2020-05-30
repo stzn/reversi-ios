@@ -264,16 +264,6 @@ extension GameViewController {
             }
         }
     }
-
-    //    /// "Computer" が選択されている場合のプレイヤーの行動を決定します。
-    //    private func playTurnOfComputer(
-    //        turn: Disk, position: DiskPosition,
-    //        completion: ((Bool) -> Void)?
-    //    ) {
-    //        self.placeDisk(
-    //            turn, atX: position.x, y: position.y, animated: true,
-    //            completion: completion)
-    //    }
 }
 
 // MARK: Inputs
