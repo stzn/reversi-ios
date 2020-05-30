@@ -11,9 +11,24 @@ import ComposableArchitecture
 import UIKit
 
 public final class LoginViewController: UIViewController {
+    struct ViewState: Equatable {
+        let email: String?
+        let password: String?
+        let isLoginButtonEnabled: Bool
+        let isIndicatorHidden: Bool
+        let needErrorShown: Bool
+    }
+
+    enum ViewAction {
+        case emailChanged(String?)
+        case passwordChanged(String?)
+        case loginButtonTapped(LoginRequest)
+        case errorDismissed
+    }
+
     var cancellables: Set<AnyCancellable> = []
     var store: Store<LoginState, LoginAction>!
-    var viewStore: ViewStore<LoginState, LoginAction>!
+    var viewStore: ViewStore<ViewState, ViewAction>!
 
     public static func instantiate(store: Store<LoginState, LoginAction>) -> LoginViewController {
         let viewController =
@@ -24,7 +39,7 @@ public final class LoginViewController: UIViewController {
             .instantiateViewController(identifier: "LoginViewController")
             as! LoginViewController
         viewController.store = store
-        viewController.viewStore = ViewStore(store)
+        viewController.viewStore = ViewStore(store.scope(state: { $0.view }, action: LoginAction.view))
         return viewController
     }
 
@@ -49,22 +64,22 @@ public final class LoginViewController: UIViewController {
         super.viewDidLoad()
         self.navigationItem.title = "Login"
 
-        self.viewStore.publisher.loginRequesting
-            .sink { [weak self] requesting in
+        self.viewStore.publisher.isIndicatorHidden
+            .sink { [weak self] hidden in
                 guard let self = self else {
                     return
                 }
-                if requesting {
-                    self.view.isUserInteractionEnabled = false
-                    self.lodingIndicator.startAnimating()
-                } else {
+                if hidden {
                     self.view.isUserInteractionEnabled = true
                     self.lodingIndicator.stopAnimating()
+                } else {
+                    self.view.isUserInteractionEnabled = false
+                    self.lodingIndicator.startAnimating()
                 }
             }
             .store(in: &cancellables)
 
-        self.viewStore.publisher.loginButtonEnabled
+        self.viewStore.publisher.isLoginButtonEnabled
             .assign(to: \.isEnabled, on: loginButton)
             .store(in: &cancellables)
 
@@ -76,11 +91,9 @@ public final class LoginViewController: UIViewController {
             .assign(to: \.text, on: passwordTextField)
             .store(in: &cancellables)
 
-        self.viewStore.publisher.error
-            .sink { [weak self] error in
-                if let error = error {
-                    // TODO: error handling
-                    print(error)
+        self.viewStore.publisher.needErrorShown
+            .sink { [weak self] isShown in
+                if isShown {
                     let alert = UIAlertController(
                         title: "Error!", message: "Login Failed", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "OK", style: .default) { _ in
@@ -108,6 +121,31 @@ public final class LoginViewController: UIViewController {
 
     @IBAction func passwordValueChanged(_ sender: UITextField) {
         self.viewStore.send(.passwordChanged(sender.text))
+    }
+}
+
+extension LoginState {
+    var view: LoginViewController.ViewState {
+        .init(email: self.email,
+              password: self.password,
+              isLoginButtonEnabled: self.loginButtonEnabled,
+              isIndicatorHidden: !self.loginRequesting,
+              needErrorShown: self.error != nil)
+    }
+}
+
+extension LoginAction {
+    static func view(_ localAction: LoginViewController.ViewAction) -> Self {
+        switch localAction {
+        case .emailChanged(let email):
+            return .emailChanged(email)
+        case .passwordChanged(let password):
+            return .passwordChanged(password)
+        case .loginButtonTapped(let request):
+            return .loginButtonTapped(request)
+        case .errorDismissed:
+            return .errorDismissed
+        }
     }
 }
 
