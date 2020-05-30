@@ -3,6 +3,29 @@ import ComposableArchitecture
 import UIKit
 
 public final class GameViewController: UIViewController {
+    struct ViewState: Equatable {
+        let board: Board = Board()
+        let turn: Disk?
+        let shouldSkip: Bool
+        let isComputerPlaying: Bool
+    }
+
+    enum ViewAction {
+//        case gameStarted
+//        case manualPlayerDiskPlaced(DiskPosition)
+//        case resetTapped
+//        case playerChanged(Disk, Player)
+//        case loadGameResponse(Result<GameStateLoadAction, GameStateManagerError>)
+//        case saveGame
+//        case saveGameResponse(Result<GameStateSaveAction, GameStateManagerError>)
+//        case computerPlay
+//        case computerPlayResponse(DiskPosition?)
+//        case turnSkipped
+//        case placeDisk(DiskPosition)
+//        case updateState(GameState)
+//        case logoutButtonTapped
+    }
+
     var viewStore: ViewStore<GameState, GameAction>!
     var cancellables: Set<AnyCancellable> = []
 

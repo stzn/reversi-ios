@@ -16,7 +16,7 @@ public final class LoginViewController: UIViewController {
         let password: String?
         let isLoginButtonEnabled: Bool
         let isIndicatorHidden: Bool
-        let needErrorShown: Bool
+        let needErrorShow: Bool
     }
 
     enum ViewAction {
@@ -91,9 +91,9 @@ public final class LoginViewController: UIViewController {
             .assign(to: \.text, on: passwordTextField)
             .store(in: &cancellables)
 
-        self.viewStore.publisher.needErrorShown
-            .sink { [weak self] isShown in
-                if isShown {
+        self.viewStore.publisher.needErrorShow
+            .sink { [weak self] needShown in
+                if needShown {
                     let alert = UIAlertController(
                         title: "Error!", message: "Login Failed", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "OK", style: .default) { _ in
@@ -130,7 +130,7 @@ extension LoginState {
               password: self.password,
               isLoginButtonEnabled: self.loginButtonEnabled,
               isIndicatorHidden: !self.loginRequesting,
-              needErrorShown: self.error != nil)
+              needErrorShow: self.error != nil)
     }
 }
 
